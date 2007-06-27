@@ -1,7 +1,7 @@
 %define name networkmanager
 %define rname NetworkManager
 %define version 0.6.4
-%define release %mkrel 5
+%define release %mkrel 6
 
 %define glib_name     %{name}-glib
 %define util_name     %{name}-util
@@ -24,12 +24,16 @@ License: GPL
 Group: System/Configuration/Networking
 Url: http://www.gnome.org/projects/NetworkManager/
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: libnl-devel dhcdbd wpa_supplicant libiw-devel
+BuildRequires: libnl-devel
+BuildRequires: dhcdbd
+BuildRequires: wpa_supplicant
+BuildRequires: libiw-devel
 BuildRequires: perl(XML::Parser)
 BuildRequires: hal-devel >= 0.5.0
 BuildRequires: libglade2.0-devel
 BuildRequires: libGConf2-devel
 BuildRequires: gnome-keyring-devel
+BuildRequires: dbus-glib-devel
 BuildRequires: gnome-panel-devel
 Requires: dhcdbd wpa_supplicant wireless-tools
 Requires(post): rpm-helper
