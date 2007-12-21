@@ -23,6 +23,7 @@ Patch2: NetworkManager-dbus-dcl.patch
 License: GPL
 Group: System/Configuration/Networking
 Url: http://www.gnome.org/projects/NetworkManager/
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildRequires: libnl-devel
 BuildRequires: dhcdbd
 BuildRequires: wpa_supplicant
