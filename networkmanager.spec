@@ -23,7 +23,7 @@ License:	GPLv2+
 Group:		System/Configuration/Networking
 Url:		http://www.gnome.org/projects/NetworkManager/
 BuildRequires:	libnl-devel dhcdbd wpa_supplicant libiw-devel dbus-glib-devel
-BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel
+BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel intltool
 Requires:	dhcdbd wpa_supplicant wireless-tools
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
