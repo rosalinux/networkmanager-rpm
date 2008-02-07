@@ -1,43 +1,32 @@
-%define name networkmanager
-%define rname NetworkManager
-%define version 0.6.4
-%define release %mkrel 6
+%define	glib_name	%{name}-glib
+%define	util_name	%{name}-util
 
-%define glib_name     %{name}-glib
-%define util_name     %{name}-util
+%define glib_major	0
+%define util_major	0
 
-%define glib_major 0
-%define util_major 0
+%define lib_glib_name	%mklibname %{glib_name} %{glib_major}
+%define	lib_glib_dev	%mklibname -d %{glib_name}
+%define lib_util_name	%mklibname %{util_name} %{util_major}
+%define	lib_util_dev	%mklibname -d %{util_name}
 
-%define lib_glib_name %mklibname %{glib_name} %{glib_major}
-%define lib_util_name %mklibname %{util_name} %{util_major}
+%define	rname	NetworkManager
 
-Summary: NetworkManager
-Name: %{name}
-Version: %{version}
-Release: %{release}
-Source0: %{rname}-%{version}.tar.bz2
-Patch0: NetworkManager-0.6.4-linux_if.patch
-Patch1: NetworkManager-0.6.4-close.patch
-Patch2: NetworkManager-dbus-dcl.patch
-License: GPL
-Group: System/Configuration/Networking
-Url: http://www.gnome.org/projects/NetworkManager/
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-BuildRequires: libnl-devel
-BuildRequires: dhcdbd
-BuildRequires: wpa_supplicant
-BuildRequires: libiw-devel
-BuildRequires: perl(XML::Parser)
-BuildRequires: hal-devel >= 0.5.0
-BuildRequires: libglade2.0-devel
-BuildRequires: libGConf2-devel
-BuildRequires: gnome-keyring-devel
-BuildRequires: dbus-glib-devel
-BuildRequires: gnome-panel-devel
-Requires: dhcdbd wpa_supplicant wireless-tools
-Requires(post): rpm-helper
-Requires(preun): rpm-helper
+Summary:	%{rname}
+Name:		networkmanager
+Version:	0.7.0
+Release:	%mkrel 0.1
+Source0:	%{rname}-%{version}.tar.bz2
+Patch0:		NetworkManager-0.7.0-fix-build.patch
+Patch1:		NetworkManager-0.7.0-fix-undefined-reference.patch
+Patch2:		NetworkManager-0.7.0-mdkconf.patch
+License:	GPLv2+
+Group:		System/Configuration/Networking
+Url:		http://www.gnome.org/projects/NetworkManager/
+BuildRequires:	libnl-devel dhcdbd wpa_supplicant libiw-devel dbus-glib-devel
+BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel
+Requires:	dhcdbd wpa_supplicant wireless-tools
+Requires(post):	rpm-helper
+Requires(preun):rpm-helper
 
 %description
 NetworkManager attempts to keep an active network connection available
@@ -48,70 +37,76 @@ obtain IP addresses from a DHCP server, and change nameservers
 whenever it sees fit.  In effect, the goal of NetworkManager is to
 make networking Just Work.
 
-%package -n %{lib_glib_name}
-Group: System/Libraries
-Summary: Library for %{glib_name}
-%description -n %{lib_glib_name}
+%package -n 	%{lib_glib_name}
+Group:		System/Libraries
+Summary:	Library for %{glib_name}
+
+%description -n	%{lib_glib_name}
 Library for %{glib_name}.
 
-%package -n %{lib_util_name}
-Group: System/Libraries
-Summary: Library for %{util_name}
-%description -n %{lib_util_name}
+%package -n	%{lib_util_name}
+Group:		System/Libraries
+Summary:	Library for %{util_name}
+
+%description -n	%{lib_util_name}
 Library for %{util_name}.
 
-%package -n %{lib_glib_name}-devel
-Group: Development/C
-Summary: Devel library for %{glib_name}
-Provides: lib%{glib_name}-devel = %{version}-%{release}
-Requires: %{lib_glib_name} = %{version}
-%description -n %{lib_glib_name}-devel
+%package -n	%{lib_glib_dev}
+Group:		Development/C
+Summary:	Devel library for %{glib_name}
+Provides:	%{glib_name}-devel = %{version}-%{release}
+Requires:	%{lib_glib_name} = %{version}
+
+%description -n	%{lib_glib_dev}
 Devel library for %{glib_name}.
 
-%package -n %{lib_util_name}-devel
-Group: Development/C
-Summary: Devel library for %{util_name}
-Provides: lib%{util_name}-devel = %{version}-%{release}
-Requires: %{lib_util_name} = %{version}
-%description -n %{lib_util_name}-devel
-Devel library for %{util_name}.
+%package -n	%{lib_util_dev}
+Group:		Development/C
+Summary:	Devel library for %{util_name}
+Provides:	%{util_name}-devel = %{version}-%{release}
+Requires:	%{lib_util_name} = %{version}
 
-%package devel
-Group: Development/C
-Summary: Devel library for %{rname}
-%description devel
-Devel library for %{rname}.
+%description -n	%{lib_util_dev}
+Devel library for %{util_name}.
 
 %prep
 %setup -q -n %{rname}-%{version}
-%patch0 -p1 -b .linux_if
-%patch1 -p1 -b .close
-%patch2 -p0 -b .dbus-dcl
+%patch0 -p1 -b .buildfix
+%patch1 -p1 -b .fix_undefined_reference
+%patch2 -p1 -b .mandriva
 
 %build
-%configure2_5x --localstatedir=%{_var}
+libtoolize --force
+autoreconf -i --force
+intltoolize --force
+# Even though we don't require named, we still build with it
+# so that if the user installs it, NM will use it automatically
+%configure2_5x	--localstatedir=%{_var} \
+		--disable-static \
+		--with-named=%{_sbindir}/named \
+		--with-named-dir=%{_var}/named/data \
+		--with-named-user=named \
+		--with-distro=mandriva
 %make
 
 %install
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 %makeinstall_std
+
 %find_lang %{rname}
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+find %{buildroot} -name \*.la|xargs rm -f
 
+%clean
+rm -rf %{buildroot}
 
 %post
-%_post_service %{rname}
-%_post_service %{rname}Dispatcher
-%update_icon_cache hicolor
-
-%postun
-%clean_icon_cache hicolor
+%_post_service %{name}
+%_post_service %{name}dispatcher
 
 %preun
-%_preun_service %{rname}Dispatcher
-%_preun_service %{rname}
+%_preun_service %{name}dispatcher
+%_preun_service %{name}
 
 %post -n %{lib_glib_name} -p /sbin/ldconfig
 %postun -n %{lib_glib_name} -p /sbin/ldconfig
@@ -123,55 +118,40 @@ rm -rf $RPM_BUILD_ROOT
 %files -f %{rname}.lang
 %defattr(-,root,root)
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
-%{_bindir}/nm-applet
-%{_bindir}/nm-vpn-properties
+%{_sysconfdir}/dbus-1/system.d/NetworkManager.conf
+%{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
+%{_initrddir}/%{name}
+%{_initrddir}/%{name}dispatcher
 %{_sbindir}/%{rname}
 %{_sbindir}/%{rname}Dispatcher
-%{_initrddir}/%{rname}
-%{_initrddir}/%{rname}Dispatcher
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/%{rname}.conf
-%config(noreplace) %{_sysconfdir}/dbus-1/system.d/nm-applet.conf
 %dir %{_sysconfdir}/%{rname}
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
-%dir %{_var}/run/%{rname}
-%{_libdir}/nm-crash-logger
-%{_datadir}/icons/hicolor/*/apps/*.png
-%{_datadir}/gnome/autostart/nm-applet.desktop
-%dir %{_datadir}/%{rname}
-%{_datadir}/%{rname}/*
-%dir %{_datadir}/nm-applet
-%{_datadir}/nm-applet/applet.glade
-%{_datadir}/nm-applet/keyring.png
-%dir %{_datadir}/gnome-vpn-properties
-%{_datadir}/gnome-vpn-properties/nm-vpn-properties.glade
+%{_bindir}/nm-tool
+%{_libexecdir}/nm-dhcp-client.action
 %{_mandir}/man1/*.1*
+%{_mandir}/man8/*.8*
+%dir %{_var}/run/%{rname}
+%{_libexecdir}/nm-crash-logger
+%dir %{_datadir}/%{rname}
+%{_datadir}/%{rname}/gdb-cmd
 
 %files -n %{lib_glib_name}
 %{_libdir}/libnm_glib.so.*
+%{_libdir}/libnm_glib_vpn.so.*
 
 %files -n %{lib_util_name}
 %{_libdir}/libnm-util.so.*
-
-
-%files devel
-%dir %{_includedir}/%{rname}
-%{_includedir}/%{rname}/%{rname}*.h
-%{_includedir}/%{rname}/nm-vpn-ui-interface.h
+%{_libdir}/nm-pppd-plugin.so
+%{_includedir}/%{rname}/*.h
 %{_libdir}/pkgconfig/%{rname}.pc
 
-%files -n %{lib_glib_name}-devel
-%{_includedir}/%{rname}/libnm_glib.h
+%files -n %{lib_glib_dev}
+%dir %{_includedir}/libnm-glib
+%{_includedir}/libnm-glib/*.h
 %{_libdir}/libnm_glib.so
-%{_libdir}/libnm_glib.la
-%{_libdir}/libnm_glib.a
+%{_libdir}/libnm_glib_vpn.so
 %{_libdir}/pkgconfig/libnm_glib.pc
 
-%files -n %{lib_util_name}-devel
-%{_includedir}/%{rname}/cipher*.h
-%{_includedir}/%{rname}/dbus-*.h
+%files -n %{lib_util_dev}
 %{_libdir}/libnm-util.so
-%{_libdir}/libnm-util.la
-%{_libdir}/libnm-util.a
 %{_libdir}/pkgconfig/libnm-util.pc
-
-
