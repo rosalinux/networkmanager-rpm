@@ -14,7 +14,7 @@
 Summary:	%{rname}
 Name:		networkmanager
 Version:	0.7.0
-Release:	%mkrel 0.1
+Release:	%mkrel 0.2
 Source0:	%{rname}-%{version}.tar.bz2
 Patch0:		NetworkManager-0.7.0-fix-build.patch
 Patch1:		NetworkManager-0.7.0-fix-undefined-reference.patch
@@ -66,6 +66,8 @@ Group:		Development/C
 Summary:	Devel library for %{util_name}
 Provides:	%{util_name}-devel = %{version}-%{release}
 Requires:	%{lib_util_name} = %{version}
+Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:	%{name}-devel
 
 %description -n	%{lib_util_dev}
 Devel library for %{util_name}.
@@ -136,15 +138,14 @@ rm -rf %{buildroot}
 %dir %{_datadir}/%{rname}
 %{_datadir}/%{rname}/gdb-cmd
 
+
 %files -n %{lib_glib_name}
-%{_libdir}/libnm_glib.so.*
-%{_libdir}/libnm_glib_vpn.so.*
+%{_libdir}/libnm_glib.so.%{glib_major}*
+%{_libdir}/libnm_glib_vpn.so.%{glib_major}*
 
 %files -n %{lib_util_name}
-%{_libdir}/libnm-util.so.*
+%{_libdir}/libnm-util.so.%{util_major}*
 %{_libdir}/nm-pppd-plugin.so
-%{_includedir}/%{rname}/*.h
-%{_libdir}/pkgconfig/%{rname}.pc
 
 %files -n %{lib_glib_dev}
 %dir %{_includedir}/libnm-glib
@@ -154,5 +155,9 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/libnm_glib.pc
 
 %files -n %{lib_util_dev}
+%dir %{_includedir}/%{rname}
+%{_includedir}/%{rname}/*.h
+%{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/libnm-util.so
 %{_libdir}/pkgconfig/libnm-util.pc
+
