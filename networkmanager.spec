@@ -21,6 +21,7 @@ Patch1:		NetworkManager-0.7.0-fix-undefined-reference.patch
 Patch2:		NetworkManager-0.7.0-mdkconf.patch
 License:	GPLv2+
 Group:		System/Configuration/Networking
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Url:		http://www.gnome.org/projects/NetworkManager/
 BuildRequires:	libnl-devel dhcdbd wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel intltool
