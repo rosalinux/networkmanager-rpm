@@ -14,7 +14,7 @@
 Summary:	%{rname}
 Name:		networkmanager
 Version:	0.7.0
-Release:	%mkrel 0.2
+Release:	%mkrel 0.3
 Source0:	%{rname}-%{version}.tar.bz2
 Patch0:		NetworkManager-0.7.0-fix-build.patch
 Patch1:		NetworkManager-0.7.0-fix-undefined-reference.patch
@@ -26,7 +26,8 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 BuildRequires:	libnl-devel dhcdbd wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	ppp-devel
-Requires:	dhcdbd wpa_supplicant wireless-tools
+Requires:	wpa_supplicant wireless-tools
+Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
 
