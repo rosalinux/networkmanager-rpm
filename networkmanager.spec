@@ -24,7 +24,7 @@ License:	GPLv2+
 Group:		System/Configuration/Networking
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Url:		http://www.gnome.org/projects/NetworkManager/
-BuildRequires:	libnl-devel dhcdbd wpa_supplicant libiw-devel dbus-glib-devel
+BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	ppp-devel
 Requires:	wpa_supplicant wireless-tools
