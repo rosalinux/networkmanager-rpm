@@ -14,11 +14,12 @@
 Summary:	%{rname}
 Name:		networkmanager
 Version:	0.7.0
-Release:	%mkrel 0.3
-Source0:	%{rname}-%{version}.tar.bz2
-Patch0:		NetworkManager-0.7.0-fix-build.patch
-Patch1:		NetworkManager-0.7.0-fix-undefined-reference.patch
+Release:	%mkrel 0.4
+Source0:	%{rname}-%{version}.tar.lzma
+#Patch0:		NetworkManager-0.7.0-fix-build.patch
+#Patch1:		NetworkManager-0.7.0-fix-undefined-reference.patch
 Patch2:		NetworkManager-0.7.0-mdkconf.patch
+Patch3:		no-strict-aliasing.patch
 License:	GPLv2+
 Group:		System/Configuration/Networking
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -76,9 +77,10 @@ Devel library for %{util_name}.
 
 %prep
 %setup -q -n %{rname}-%{version}
-%patch0 -p1 -b .buildfix
-%patch1 -p1 -b .fix_undefined_reference
+#%%patch0 -p1 -b .buildfix
+#%%patch1 -p1 -b .fix_undefined_reference
 %patch2 -p1 -b .mandriva
+%patch3 -p1 -b .nostrictaliasing
 
 %build
 libtoolize --force
@@ -91,12 +93,18 @@ intltoolize --force
 		--with-named=%{_sbindir}/named \
 		--with-named-dir=%{_var}/named/data \
 		--with-named-user=named \
-		--with-distro=mandriva
+		--with-distro=mandriva \
+		--with-mdns-provider=avahi
 %make
 
 %install
 rm -rf %{buildroot}
 %makeinstall_std
+
+cat > %{buildroot}%{_sysconfdir}/nm-system-settings.conf << EOF
+[main]
+plugins=ifcfg-fedora
+EOF
 
 %find_lang %{rname}
 
@@ -125,8 +133,11 @@ rm -rf %{buildroot}
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
 %{_sysconfdir}/dbus-1/system.d/NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
+%{_sysconfdir}/dbus-1/system.d/nm-system-settings.conf
 %{_initrddir}/%{name}
 %{_initrddir}/%{name}dispatcher
+%{_sbindir}/nm-system-settings
+%{_sysconfdir}/nm-system-settings.conf
 %{_sbindir}/%{rname}
 %{_sbindir}/%{rname}Dispatcher
 %dir %{_sysconfdir}/%{rname}
@@ -135,11 +146,13 @@ rm -rf %{buildroot}
 %{_libexecdir}/nm-dhcp-client.action
 %{_mandir}/man1/*.1*
 %{_mandir}/man8/*.8*
+%dir %{_libdir}/NetworkManager
+%{_libdir}/NetworkManager/*.so
 %dir %{_var}/run/%{rname}
 %{_libexecdir}/nm-crash-logger
 %dir %{_datadir}/%{rname}
 %{_datadir}/%{rname}/gdb-cmd
-
+%{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManagerSystemSettings.service
 
 %files -n %{lib_glib_name}
 %{_libdir}/libnm_glib.so.%{glib_major}*
@@ -147,7 +160,7 @@ rm -rf %{buildroot}
 
 %files -n %{lib_util_name}
 %{_libdir}/libnm-util.so.%{util_major}*
-%{_libdir}/nm-pppd-plugin.so
+%{_libdir}/pppd/2.4.4/nm-pppd-plugin.so
 
 %files -n %{lib_glib_dev}
 %dir %{_includedir}/libnm-glib
@@ -162,4 +175,3 @@ rm -rf %{buildroot}
 %{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/libnm-util.so
 %{_libdir}/pkgconfig/libnm-util.pc
-
