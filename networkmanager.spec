@@ -23,7 +23,7 @@ Name: networkmanager
 Summary: Network connection manager and user applications
 Epoch: 1
 Version: 0.7.0
-Release: %mkrel 0.9.3.%{snapshot}.1
+Release: %mkrel 0.9.3.%{snapshot}.2
 Group: System/Base
 License: GPLv2+
 URL: http://www.gnome.org/projects/NetworkManager/
@@ -88,7 +88,7 @@ from a DHCP server, and change nameservers whenever it sees fit.
 %package -n %{libnm_util}
 Summary: Shared library for nm_util
 Group: System/Libraries
-Obsoletes: %{mklibname networkmanger-util 0} < %{epoch}:%{version}-%{release}
+Obsoletes: %{mklibname networkmanager-util 0} < %{epoch}:%{version}-%{release}
 
 %description -n %{libnm_util}
 Shared library for nm_util.
@@ -135,7 +135,7 @@ functionality from applications.
 %package -n %{libnm_util_devel}
 Summary: Development files for nm_util
 Group: Development/C
-Obsoletes: %{mklibname networkmanger-util 0 -d} < %{epoch}:%{version}-%{release}
+Obsoletes: %{mklibname networkmanager-util 0 -d} < %{epoch}:%{version}-%{release}
 Provides: libnm_util-devel = %{epoch}:%{version}-%{release}
 
 %description -n %{libnm_util_devel}
@@ -159,7 +159,7 @@ NetworkManager functionality from applications that use glib.
 %package -n %{libnm_glib}
 Summary: Shared library for nm_glib
 Group: System/Libraries
-Obsoletes: %{mklibname networkmanger-glib 0} < %{epoch}:%{version}-%{release}
+Obsoletes: %{mklibname networkmanager-glib 0} < %{epoch}:%{version}-%{release}
 
 %description -n %{libnm_glib}
 Shared library for nm_glib.
@@ -195,7 +195,7 @@ glib.
 Summary: Development files for nm_glib
 Group: Development/C
 Provides: nm_glib-devel = %{epoch}:%{version}-%{release}
-Obsoletes: %{mklibname networkmanger-glib 0 -d} < %{epoch}:%{version}-%{release}
+Obsoletes: %{mklibname networkmanager-glib 0 -d} < %{epoch}:%{version}-%{release}
 
 %description -n %{libnm_glib_devel}
 Development files for nm_glib.
