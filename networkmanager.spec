@@ -21,7 +21,7 @@ ExcludeArch: s390 s390x
 
 Name: networkmanager
 Summary: Network connection manager and user applications
-#Epoch: 1
+Epoch: 1
 Version: 0.7.0
 Release: %mkrel 0.9.3.%{snapshot}.1
 Group: System/Base
