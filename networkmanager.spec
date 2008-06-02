@@ -318,7 +318,7 @@ install -m 0755 test/.libs/nm-online %{buildroot}/%{_bindir}
 %{_libdir}/NetworkManager/*.so*
 %{_mandir}/man1/*
 %{_mandir}/man8/*
-%dir %{_localstatedir}/run/NetworkManager
+%dir %{_localstatedir}/lib/run/NetworkManager
 %{_libdir}/nm-crash-logger
 %dir %{_datadir}/NetworkManager
 %{_datadir}/NetworkManager/gdb-cmd
