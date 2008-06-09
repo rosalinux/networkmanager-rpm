@@ -278,17 +278,29 @@ install -m 0755 test/.libs/nm-online %{buildroot}/%{_bindir}
 %preun
 %_preun_service %{name}
 
+%if %mdkversion < 200900
 %post -n %{libnm_util} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{libnm_util} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{libnm_glib} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{libnm_glib} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %post -n %{libnm_glib_vpn} -p /sbin/ldconfig
+%endif
 
+%if %mdkversion < 200900
 %postun -n %{libnm_glib_vpn} -p /sbin/ldconfig
+%endif
 
 %post -n nm-applet
 %update_icon_cache hicolor
