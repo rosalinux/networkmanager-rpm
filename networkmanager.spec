@@ -24,6 +24,7 @@ Requires:	wpa_supplicant wireless-tools
 Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 NetworkManager attempts to keep an active network connection available at all
