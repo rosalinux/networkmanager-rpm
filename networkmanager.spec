@@ -1,3 +1,5 @@
+%define _requires_exceptions devel\(libnss3\)\\|devel\(libnspr4\)\\|devel\(libsmime3\)
+
 %define	major	0
 %define libnm_glib           %mklibname nm_glib %{major}
 %define libnm_glib_devel     %mklibname -d nm_glib
@@ -5,15 +7,15 @@
 %define libnm_util_devel     %mklibname -d nm_util
 
 %define	rname	NetworkManager
-%define	svnrel	svn3675
+%define	svnrel	3675
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.0
-Release:	%mkrel 0.5.%{svnrel}
+Release:	%mkrel 0.%{svnrel}.1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-Source0:	%{rname}-%{version}.%{svnrel}.tar.gz
+Source0:	%{rname}-%{version}.svn%{svnrel}.tar.gz
 Patch0:		NetworkManager-0.7.0-64-bit-fix.patch
 Patch1:		NetworkManager-0.7.0-fix-parallel-build.patch
 Patch2:		NetworkManager-0.7.0-optionally-wait-for-network.patch
