@@ -1,4 +1,4 @@
-%define _requires_exceptions devel\(libnss3\)\\|devel\(libnspr4\)\\|devel\(libsmime3\)
+%define _requires_exceptions devel\(libnss3.*\)\\|devel\(libnspr4.*\)\\|devel\(libsmime3.*\)
 
 %define	major	0
 %define libnm_glib           %mklibname nm_glib %{major}
@@ -11,7 +11,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.0
-Release:	%mkrel 0.%{svnrel}.2
+Release:	%mkrel 0.%{svnrel}.3
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -20,7 +20,7 @@ Patch0:		NetworkManager-0.7.0-64-bit-fix.patch
 Patch1:		NetworkManager-0.7.0-fix-parallel-build.patch
 Patch2:		NetworkManager-0.7.0-optionally-wait-for-network.patch
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
-BuildRequires:	perl(XML::Parser) hal-devel >= 0.5.0 nss-devel intltool
+BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	ppp-devel polkit-devel policykit-gnome-devel
 Requires:	wpa_supplicant wireless-tools
 Obsoletes:	dhcdbd
@@ -84,9 +84,6 @@ autoreconf -i
 # Even though we don't require named, we still build with it
 # so that if the user installs it, NM will use it automatically
 %configure2_5x	--disable-static \
-		--with-named=%{_sbindir}/named \
-		--with-named-dir=%{_var}/named/data \
-		--with-named-user=named \
 		--with-distro=mandriva \
 		--with-mdns-provider=avahi
 %make
