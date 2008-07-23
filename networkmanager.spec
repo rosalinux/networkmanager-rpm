@@ -11,7 +11,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.0
-Release:	%mkrel 0.%{svnrel}.1
+Release:	%mkrel 0.%{svnrel}.2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -49,6 +49,7 @@ Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
 Provides:	libnm_util-devel = %{version}-%{release}
+Requires:	%libnm_util = %version-%release
 
 %description -n %{libnm_util_devel}
 Development files for nm_util.
@@ -67,6 +68,7 @@ Summary:	Development files for nm_glib
 Group:		Development/C
 Provides:	libnm_glib-devel = %{version}-%{release}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
+Requires:	%libnm_glib = %version-%release
 
 %description -n %{libnm_glib_devel}
 Development files for nm_glib.
