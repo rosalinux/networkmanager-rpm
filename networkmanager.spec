@@ -78,11 +78,9 @@ Development files for nm_glib.
 #%patch0 -p1 -b .64bit
 %patch1 -p1 -b .parallel
 %patch2 -p1 -b .waitfornetwork
+autoreconf -i
 
 %build
-autoreconf -i
-# Even though we don't require named, we still build with it
-# so that if the user installs it, NM will use it automatically
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
 		--with-mdns-provider=avahi
