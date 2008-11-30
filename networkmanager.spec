@@ -7,22 +7,19 @@
 %define libnm_util_devel     %mklibname -d nm_util
 
 %define	rname	NetworkManager
-%define	svnrel	3675
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.0
-Release:	%mkrel 0.%{svnrel}.3
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-Source0:	%{rname}-%{version}.svn%{svnrel}.tar.gz
-Patch0:		NetworkManager-0.7.0-64-bit-fix.patch
-Patch1:		NetworkManager-0.7.0-fix-parallel-build.patch
-Patch2:		NetworkManager-0.7.0-optionally-wait-for-network.patch
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
+BuildRequires:	gtk-doc ext2fs-devel
 BuildRequires:	ppp-devel polkit-devel policykit-gnome-devel
-Requires:	wpa_supplicant wireless-tools
+Requires:	wpa_supplicant wireless-tools dhcp-client
 Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
@@ -75,9 +72,6 @@ Development files for nm_glib.
 
 %prep
 %setup -q -n %{rname}-%{version}
-#%patch0 -p1 -b .64bit
-%patch1 -p1 -b .parallel
-%patch2 -p1 -b .waitfornetwork
 autoreconf -i
 
 %build
@@ -123,6 +117,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
 %{_sysconfdir}/dbus-1/system.d/NetworkManager.conf
+%{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-system-settings.conf
@@ -137,9 +132,9 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/NetworkManager/VPN
 %{_bindir}/nm-tool
 %{_bindir}/nm-online
-%{_libdir}/nm-dhcp-client.action
 %{_libdir}/nm-dispatcher.action
 %{_libexecdir}/nm-dhcp-client.action
+%{_libexecdir}/nm-avahi-autoipd.action
 %{_mandir}/man1/*.1*
 %{_mandir}/man8/*.8*
 %dir %{_libdir}/NetworkManager
@@ -151,6 +146,7 @@ rm -rf %{buildroot}
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManagerSystemSettings.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/PolicyKit/policy/*.policy
+%{_datadir}/gtk-doc/html/*
 
 %files -n %{libnm_util}
 %defattr(-,root,root)
@@ -175,5 +171,6 @@ rm -rf %{buildroot}
 %dir %{_includedir}/libnm-glib
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm_glib.pc
+%{_libdir}/pkgconfig/libnm_glib_vpn.pc
 %{_libdir}/libnm_glib.so
 %{_libdir}/libnm_glib_vpn.so
