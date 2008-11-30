@@ -76,8 +76,7 @@ autoreconf -i
 
 %build
 %configure2_5x	--disable-static \
-		--with-distro=mandriva \
-		--with-mdns-provider=avahi
+		--with-distro=mandriva
 %make
 
 %install
