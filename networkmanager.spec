@@ -10,7 +10,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.0
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -20,7 +20,7 @@ BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
 BuildRequires:	ppp-devel polkit-devel policykit-gnome-devel
 Requires:	wpa_supplicant wireless-tools dhcp-client
-Provides:	NetworkManager = %{name}-%{version}
+Provides:	NetworkManager = %{version}-%{release}
 Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
@@ -47,8 +47,8 @@ Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
 Provides:	libnm_util-devel = %{version}-%{release}
-Provides:	%{name}-devel = %{name}-%{version}
-Provides:	NetworkManager-devel = %{name}-%{version}
+Provides:	%{name}-devel = %{version}-%{release}
+Provides:	NetworkManager-devel = %{version}-%{release}
 Requires:	%libnm_util = %version-%release
 
 %description -n %{libnm_util_devel}
@@ -67,7 +67,7 @@ NetworkManager functionality from applications that use glib.
 Summary:	Development files for nm_glib
 Group:		Development/C
 Provides:	libnm_glib-devel = %{version}-%{release}
-Provides:       NetworkManager-glib-devel = %{name}-%{version}
+Provides:       NetworkManager-glib-devel = %{version}-%{release}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
 Requires:	%libnm_glib = %version-%release
 
