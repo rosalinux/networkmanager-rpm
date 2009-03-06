@@ -1,20 +1,22 @@
 %define _requires_exceptions devel\(libnss3.*\)\\|devel\(libnspr4.*\)\\|devel\(libsmime3.*\)
 
-%define	major	0
-%define libnm_glib           %mklibname nm_glib %{major}
+%define	major_glib	0
+%define major_util      1
+%define libnm_glib           %mklibname nm_glib %{major_glib}
 %define libnm_glib_devel     %mklibname -d nm_glib
-%define libnm_util           %mklibname nm_util %{major}
+%define libnm_util           %mklibname nm_util %{major_util}
 %define libnm_util_devel     %mklibname -d nm_util
 
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.7.0
-Release:	%mkrel 3
+Version:	0.7.0.99
+Release:	%mkrel 1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
+Source1: nm-system-settings.conf
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
@@ -76,7 +78,6 @@ Development files for nm_glib.
 
 %prep
 %setup -q -n %{rname}-%{version}
-autoreconf -i
 
 %build
 %configure2_5x	--disable-static \
@@ -150,10 +151,12 @@ rm -rf %{buildroot}
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/PolicyKit/policy/*.policy
 %{_datadir}/gtk-doc/html/*
+/lib/udev/nm-modem-probe
+/lib/udev/rules.d/77-nm-probe-modem-capabilities.rules
 
 %files -n %{libnm_util}
 %defattr(-,root,root)
-%{_libdir}/libnm-util.so.%{major}*
+%{_libdir}/libnm-util.so.%{major_util}*
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 
 %files -n %{libnm_util_devel}
@@ -166,8 +169,8 @@ rm -rf %{buildroot}
 
 %files -n %{libnm_glib}
 %defattr(-,root,root)
-%{_libdir}/libnm_glib.so.%{major}*
-%{_libdir}/libnm_glib_vpn.so.%{major}*
+%{_libdir}/libnm_glib.so.%{major_glib}*
+%{_libdir}/libnm_glib_vpn.so.%{major_glib}*
 
 %files -n %{libnm_glib_devel}
 %defattr(-,root,root)
