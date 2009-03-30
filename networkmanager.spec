@@ -97,6 +97,8 @@ EOF
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 
+sed -i -e "s/\/etc\/NetworkManager\/nm-system-settings.conf/\etc\/nm-settings.conf/g" %{buildroot}/%{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManagerSystemSettings.service
+
 %find_lang %{rname}
 
 find %{buildroot} -name \*.la|xargs rm -f
