@@ -11,7 +11,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.0.99
-Release:	%mkrel 1
+Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
