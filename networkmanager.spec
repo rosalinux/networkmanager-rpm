@@ -10,7 +10,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.7.0.99
+Version:	0.7.1
 Release:	%mkrel 2
 Group:		System/Base
 License:	GPLv2+
