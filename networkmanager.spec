@@ -11,7 +11,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.1
-Release:	%mkrel 2
+Release:	%mkrel 3
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -21,6 +21,7 @@ BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
 BuildRequires:	ppp-devel polkit-devel policykit-gnome-devel
+BuildRequires:	libuuid-devel
 Requires:	wpa_supplicant wireless-tools dhcp-client
 Provides:	NetworkManager = %{version}-%{release}
 Obsoletes:	dhcdbd
