@@ -31,13 +31,17 @@ BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
 BuildRequires:	ppp-devel polkit-1-devel 
 BuildRequires:	libuuid-devel
+BuildRequires:	libgudev-devel
+BuildRequires:	dhcp-client
+BuildRequires:	iptables
 Requires:	wpa_supplicant wireless-tools dhcp-client
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
-Requires:	dchlcient
+Requires:	dhcp-client
 Requires:	dnsmasq-base
 Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
 Requires:	iproute2
+Requires:	iptables
 Provides:	NetworkManager = %{version}-%{release}
 Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
