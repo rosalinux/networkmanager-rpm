@@ -1,32 +1,48 @@
 %define _requires_exceptions devel\(libnss3.*\)\\|devel\(libnspr4.*\)\\|devel\(libsmime3.*\)
 
-%define	major_glib	0
-%define major_util      1
-%define libnm_glib           %mklibname nm_glib %{major_glib}
-%define libnm_glib_devel     %mklibname -d nm_glib
-%define libnm_util           %mklibname nm_util %{major_util}
-%define libnm_util_devel     %mklibname -d nm_util
+%define	major_glib	2
+%define major_glib_vpn	1
+%define major_util	1
+%define libnm_glib		%mklibname nm-glib %{major_glib}
+%define libnm_glib_devel	%mklibname -d nm-glib
+%define libnm_glib_vpn		%mklibname nm-glib-vpn %{major_glib_vpn}
+%define libnm_glib_vpn_devel	%mklibname -d nm-glib-vpn
+%define libnm_util		%mklibname nm-util %{major_util}
+%define libnm_util_devel	%mklibname -d nm-util
+
+%define snapshot git20091021
+%define applet_snapshot git20091021
 
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.7.1
-Release:	%mkrel 3
+Version:	0.7.996
+Release:	%mkrel 0.%{snapshot}.1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
-Source1: nm-system-settings.conf
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.bz2
+Source1:	network-manager-applet-%{version}.%{applet_snapshot}.tar.bz2
+# Fedora patches
+Patch1:		pppoe-auth-fix-82011dff04123d.patch
+Patch2:		explain-dns1-dns2.patch
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
-BuildRequires:	ppp-devel polkit-devel policykit-gnome-devel
+BuildRequires:	ppp-devel polkit-1-devel 
 BuildRequires:	libuuid-devel
 Requires:	wpa_supplicant wireless-tools dhcp-client
+Requires:	mobile-broadband-provider-info
+Requires:	modemmanager
+Requires:	dchlcient
+Requires:	dnsmasq-base
+Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
+Requires:	iproute2
 Provides:	NetworkManager = %{version}-%{release}
 Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
+Conflicts:	%{_lib}nm_util1 < 0.7.996
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -43,19 +59,20 @@ Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
 
 %description -n %{libnm_util}
-Shared library for nm_util.
+Shared library for nm-util.
 
 %package -n	%{libnm_util_devel}
 Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
-Provides:	libnm_util-devel = %{version}-%{release}
+Provides:	libnm-util-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	NetworkManager-devel = %{version}-%{release}
-Requires:	%libnm_util = %version-%release
+Requires:	%{libnm_util} = %version-%release
+Obsoletes:	%{_lib}nm_util-devel < 0.7.996
 
 %description -n %{libnm_util_devel}
-Development files for nm_util.
+Development files for nm-util.
 
 %package -n	%{libnm_glib}
 Summary:	Shared library for nm_glib
@@ -69,27 +86,57 @@ NetworkManager functionality from applications that use glib.
 %package -n	%{libnm_glib_devel}
 Summary:	Development files for nm_glib
 Group:		Development/C
-Provides:	libnm_glib-devel = %{version}-%{release}
+Provides:	libnm-glib-devel = %{version}-%{release}
 Provides:       NetworkManager-glib-devel = %{version}-%{release}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
-Requires:	%libnm_glib = %version-%release
+Requires:	%{libnm_glib} = %version-%release
+Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
 
 %description -n %{libnm_glib_devel}
-Development files for nm_glib.
+Development files for nm-glib.
+
+%package -n	%{libnm_glib_vpn}
+Summary:	Shared library for nm-glib-vpn
+Group:		System/Libraries
+
+%description -n	%{libnm_glib_vpn}
+This package contains the libraries that make it easier to use some
+NetworkManager VPN functionality from applications that use glib.
+
+%package -n	%{libnm_glib_vpn_devel}
+Summary:	Development files for nm_glib
+Group:		Development/C
+Provides:	libnm-glib-devel = %{version}-%{release}
+Provides:       NetworkManager-glib-devel = %{version}-%{release}
+Requires:	%{libnm_glib_vpn} = %version-%release
+Conflicts:	%{_lib}nm_glib-devel < 0.7.996
+
+%description -n %{libnm_glib_vpn_devel}
+Development files for nm-glib-vpn.
 
 %prep
 %setup -q -n %{rname}-%{version}
+%patch1 -p1 -b .pppoe-authfix
+%patch2 -p1 -b .explain-dns1-dns2
 
 %build
 %configure2_5x	--disable-static \
-		--with-distro=mandriva
+		--with-distro=mandriva \
+		--with-dhcp-client=dhclient \
+		--with-crypto=nss \
+		--enable-more-warnings=yes \
+		--with-docs=yes \
+		--with-system-ca-path=/etc/pki/tls/certs \
+		--with-resolvconf=yes \
+		--with-tests=yes
+
 %make
 
 %install
 rm -rf %{buildroot}
 %makeinstall_std
 
-cat > %{buildroot}%{_sysconfdir}/nm-system-settings.conf << EOF
+cat > %{buildroot}%{_sysconfdir}/NetworkManager/nm-system-settings.conf << EOF
 [main]
 plugins=ifcfg-fedora
 EOF
@@ -97,8 +144,6 @@ EOF
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
-
-sed -i -e "s/\/etc\/NetworkManager\/nm-system-settings.conf/\etc\/nm-settings.conf/g" %{buildroot}/%{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManagerSystemSettings.service
 
 %find_lang %{rname}
 
@@ -113,13 +158,6 @@ rm -rf %{buildroot}
 %preun
 %_preun_service %{name}
 
-%if %mdkversion < 200900
-%post -n %{libnm_util} -p /sbin/ldconfig
-%postun -n %{libnm_util} -p /sbin/ldconfig
-%post -n %{libnm_glib} -p /sbin/ldconfig
-%postun -n %{libnm_glib} -p /sbin/ldconfig
-%endif
-
 %files -f %{rname}.lang
 %defattr(-,root,root)
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
@@ -127,11 +165,10 @@ rm -rf %{buildroot}
 %{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
-%{_sysconfdir}/dbus-1/system.d/nm-system-settings.conf
 %{_initrddir}/%{name}
 #%{_initrddir}/%{rname}dispatcher
-%{_sbindir}/nm-system-settings
-%{_sysconfdir}/nm-system-settings.conf
+%dir %{_sysconfdir}/%{rname}
+%{_sysconfdir}/%{rname}/nm-system-settings.conf
 %{_sbindir}/%{rname}
 #%{_sbindir}/%{rname}Dispatcher
 %dir %{_sysconfdir}/%{rname}
@@ -146,21 +183,19 @@ rm -rf %{buildroot}
 %{_mandir}/man8/*.8*
 %dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
+%{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/run/%{rname}
 %{_libexecdir}/nm-crash-logger
 %dir %{_datadir}/%{rname}
 %{_datadir}/%{rname}/gdb-cmd
-%{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManagerSystemSettings.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
-%{_datadir}/PolicyKit/policy/*.policy
+%{_datadir}/polkit-1/actions/org.freedesktop.network-manager-settings.system.policy
 %{_datadir}/gtk-doc/html/*
-/lib/udev/nm-modem-probe
-/lib/udev/rules.d/77-nm-probe-modem-capabilities.rules
+/lib/udev/rules.d/*.rules
 
 %files -n %{libnm_util}
 %defattr(-,root,root)
 %{_libdir}/libnm-util.so.%{major_util}*
-%{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 
 %files -n %{libnm_util_devel}
 %defattr(-,root,root)
@@ -172,14 +207,23 @@ rm -rf %{buildroot}
 
 %files -n %{libnm_glib}
 %defattr(-,root,root)
-%{_libdir}/libnm_glib.so.%{major_glib}*
-%{_libdir}/libnm_glib_vpn.so.%{major_glib}*
+%{_libdir}/libnm-glib.so.%{major_glib}*
+
+%files -n %{libnm_glib_vpn}
+%defattr(-,root,root)
+%{_libdir}/libnm-glib-vpn.so.%{major_glib_vpn}*
 
 %files -n %{libnm_glib_devel}
 %defattr(-,root,root)
 %dir %{_includedir}/libnm-glib
+%exclude %{_includedir}/libnm-glib/nm-vpn*.h
 %{_includedir}/libnm-glib/*.h
-%{_libdir}/pkgconfig/libnm_glib.pc
-%{_libdir}/pkgconfig/libnm_glib_vpn.pc
-%{_libdir}/libnm_glib.so
-%{_libdir}/libnm_glib_vpn.so
+%{_libdir}/pkgconfig/libnm-glib.pc
+%{_libdir}/libnm-glib.so
+
+%files -n %{libnm_glib_vpn_devel}
+%defattr(-,root,root)
+%{_includedir}/libnm-glib/nm-vpn*.h
+%{_libdir}/pkgconfig/libnm-glib-vpn.pc
+%{_libdir}/libnm-glib-vpn.so
+
