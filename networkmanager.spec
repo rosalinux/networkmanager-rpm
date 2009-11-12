@@ -17,7 +17,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.996
-Release:	%mkrel 0.%{snapshot}.1
+Release:	%mkrel 0.%{snapshot}.2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -61,6 +61,8 @@ from a DHCP server, and change nameservers whenever it sees fit.
 Summary:	Shared library for nm_util
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
+Obsoletes:	%{_lib}nm_util1 < 0.7.996
+Provides:	%{_lib}nm_util1 = %{version}-%{release}
 
 %description -n %{libnm_util}
 Shared library for nm-util.
@@ -102,6 +104,7 @@ Development files for nm-glib.
 %package -n	%{libnm_glib_vpn}
 Summary:	Shared library for nm-glib-vpn
 Group:		System/Libraries
+Conflicts:	%{_lib}nm-glib1 < 0.7.996
 
 %description -n	%{libnm_glib_vpn}
 This package contains the libraries that make it easier to use some
