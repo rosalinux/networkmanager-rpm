@@ -10,24 +10,20 @@
 %define libnm_util		%mklibname nm-util %{major_util}
 %define libnm_util_devel	%mklibname -d nm-util
 
-%define snapshot git20091021
-%define applet_snapshot git20091021
+%define snapshot git20091117
 
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.996
-Release:	%mkrel 0.%{snapshot}.4
+Release:	%mkrel 0.%{snapshot}.1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.bz2
-Source1:	network-manager-applet-%{version}.%{applet_snapshot}.tar.bz2
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.xz
 # Fedora patches
-Patch1:		pppoe-auth-fix-82011dff04123d.patch
 Patch2:		explain-dns1-dns2.patch
 # (fhimpe) Make it use correct location for dhclient lease files
-Patch3:		network-manager-dhclient-leases.patch
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
@@ -125,9 +121,7 @@ Development files for nm-glib-vpn.
 
 %prep
 %setup -q -n %{rname}-%{version}
-%patch1 -p1 -b .pppoe-authfix
 %patch2 -p1 -b .explain-dns1-dns2
-%patch3 -p1 -b .lease
 
 %build
 %configure2_5x	--disable-static \
