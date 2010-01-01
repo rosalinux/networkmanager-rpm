@@ -10,7 +10,7 @@
 %define libnm_util		%mklibname nm-util %{major_util}
 %define libnm_util_devel	%mklibname -d nm-util
 
-%define snapshot git20091117
+%define snapshot git20100101
 
 %define	rname	NetworkManager
 Name:		networkmanager
@@ -124,6 +124,7 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2
 
 %build
+autoreconf -fis
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
 		--with-dhcp-client=dhclient \
