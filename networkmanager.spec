@@ -10,17 +10,25 @@
 %define libnm_util		%mklibname nm-util %{major_util}
 %define libnm_util_devel	%mklibname -d nm-util
 
-%define snapshot git20100101
+%define snapshot 0
 
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.7.996
+Version:	0.7.999
+%if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
+%else
+Release:        %mkrel 1
+%endif
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
+%if %snapshot
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.xz
+%else
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
+%endif
 # Fedora patches
 Patch2:		explain-dns1-dns2.patch
 # (fhimpe) Make it use correct location for dhclient lease files
