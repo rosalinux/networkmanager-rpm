@@ -117,10 +117,9 @@ This package contains the libraries that make it easier to use some
 NetworkManager VPN functionality from applications that use glib.
 
 %package -n	%{libnm_glib_vpn_devel}
-Summary:	Development files for nm_glib
+Summary:	Development files for nm-glib-vpn
 Group:		Development/C
 Provides:	libnm-glib-vpn-devel = %{version}-%{release}
-Provides:       NetworkManager-glib-devel = %{version}-%{release}
 Requires:	%{libnm_glib_vpn} = %version-%release
 Conflicts:	%{_lib}nm_glib-devel < 0.7.996
 
