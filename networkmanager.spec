@@ -17,9 +17,9 @@ Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.999
 %if %{snapshot}
-Release:	%mkrel 0.%{snapshot}.2
+Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 1
+Release:        %mkrel 2
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -133,6 +133,7 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2
 
 %build
+
 autoreconf -fis
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
