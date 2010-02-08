@@ -17,7 +17,7 @@ Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.7.999
 %if %{snapshot}
-Release:	%mkrel 0.%{snapshot}.1
+Release:	%mkrel 0.%{snapshot}.2
 %else
 Release:        %mkrel 1
 %endif
