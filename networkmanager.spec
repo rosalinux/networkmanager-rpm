@@ -29,6 +29,7 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{ve
 %else
 Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
 %endif
+Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		explain-dns1-dns2.patch
 # (fhimpe) Make it use correct location for dhclient lease files
@@ -128,6 +129,7 @@ Development files for nm-glib-vpn.
 
 %prep
 %setup -q -n %{rname}-%{version}
+%patch1 -p0 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
 
 %build
