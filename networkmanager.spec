@@ -19,7 +19,7 @@ Version:	0.7.999
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 2
+Release:        %mkrel 3
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -129,7 +129,7 @@ Development files for nm-glib-vpn.
 
 %prep
 %setup -q -n %{rname}-%{version}
-%patch1 -p0 -b .networkmanager-mdv
+%patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
 
 %build
@@ -153,7 +153,7 @@ rm -rf %{buildroot}
 
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/nm-system-settings.conf << EOF
 [main]
-plugins=ifcfg-fedora
+plugins=ifcfg-mdv
 EOF
 
 # create a VPN directory
