@@ -160,6 +160,9 @@ EOF
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 
+# create keyfile plugin system-settings directory
+install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
+
 %find_lang %{rname}
 
 find %{buildroot} -name \*.la|xargs rm -f
@@ -188,6 +191,7 @@ rm -rf %{buildroot}
 #%{_sbindir}/%{rname}Dispatcher
 %dir %{_sysconfdir}/%{rname}
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
+%dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
 %{_bindir}/nm-tool
 %{_bindir}/nm-online
