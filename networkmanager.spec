@@ -186,7 +186,7 @@ rm -rf %{buildroot}
 %{_initrddir}/%{name}
 #%{_initrddir}/%{rname}dispatcher
 %dir %{_sysconfdir}/%{rname}
-%{_sysconfdir}/%{rname}/nm-system-settings.conf
+%config(noreplace) %{_sysconfdir}/%{rname}/nm-system-settings.conf
 %{_sbindir}/%{rname}
 #%{_sbindir}/%{rname}Dispatcher
 %dir %{_sysconfdir}/%{rname}
