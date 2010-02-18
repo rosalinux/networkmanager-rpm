@@ -28,6 +28,7 @@ URL:		http://www.gnome.org/projects/NetworkManager/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.xz
 %else
 Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
+Source1:	README.urpmi
 %endif
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
 # DO NOT CHANGE IT MANUALLY.
@@ -168,6 +169,9 @@ install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 
+# Add readme displayed by urpmi
+cp %{SOURCE1} .
+
 %find_lang %{rname}
 
 find %{buildroot} -name \*.la|xargs rm -f
@@ -184,6 +188,7 @@ rm -rf %{buildroot}
 %files -f %{rname}.lang
 %defattr(-,root,root)
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
+%doc README.urpmi
 %{_sysconfdir}/dbus-1/system.d/NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
