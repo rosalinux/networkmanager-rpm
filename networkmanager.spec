@@ -29,6 +29,11 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{ve
 %else
 Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
 %endif
+# This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
+# DO NOT CHANGE IT MANUALLY.
+# To generate patch use
+#	git diff master..mdv
+# Current mdv tip: 329ddd9
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		explain-dns1-dns2.patch
