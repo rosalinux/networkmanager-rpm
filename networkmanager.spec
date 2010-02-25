@@ -28,8 +28,8 @@ URL:		http://www.gnome.org/projects/NetworkManager/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.xz
 %else
 Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
-Source1:	README.urpmi
 %endif
+Source1:	README.urpmi
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
