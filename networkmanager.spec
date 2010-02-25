@@ -15,11 +15,11 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.7.999
+Version:	0.8
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 4
+Release:        %mkrel 1
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -193,6 +193,7 @@ rm -rf %{buildroot}
 %{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
+%{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %{_initrddir}/%{name}
 #%{_initrddir}/%{rname}dispatcher
 %dir %{_sysconfdir}/%{rname}
