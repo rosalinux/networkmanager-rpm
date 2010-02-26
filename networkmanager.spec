@@ -19,7 +19,7 @@ Version:	0.8
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 1
+Release:        %mkrel 2
 %endif
 Group:		System/Base
 License:	GPLv2+
