@@ -19,7 +19,7 @@ Version:	0.8
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 2
+Release:        %mkrel 3
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -34,7 +34,7 @@ Source1:	README.urpmi
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
-# Current mdv tip: 329ddd9
+# Current mdv tip: d3cbbce
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		explain-dns1-dns2.patch
