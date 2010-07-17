@@ -38,6 +38,8 @@ Source1:	README.urpmi
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		explain-dns1-dns2.patch
+# Fix ifcfg-rh build with strict format
+Patch3:                0001-test-ifcfg-rh.c-fix-gcc-Werror-format-security-failu.patch
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
@@ -137,6 +139,7 @@ Development files for nm-glib-vpn.
 %setup -q -n %{rname}-%{version}
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
+%patch3 -p1 -b .ifcfg-rh-strict_format
 
 %build
 
