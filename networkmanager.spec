@@ -15,19 +15,19 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8
+Version:	0.8.0.999
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 3
+Release:        %mkrel 1
 %endif
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
 %if %snapshot
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.%{snapshot}.tar.xz
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.%{snapshot}.tar.xz
 %else
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.7/%{rname}-%{version}.tar.bz2
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.tar.bz2
 %endif
 Source1:	README.urpmi
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
@@ -45,7 +45,7 @@ BuildRequires:	gtk-doc ext2fs-devel
 BuildRequires:	ppp-devel polkit-1-devel 
 BuildRequires:	libuuid-devel
 BuildRequires:	libgudev-devel
-BuildRequires:	dhcp-client
+#BuildRequires:	dhcp-client
 BuildRequires:	iptables
 Requires:	wpa_supplicant wireless-tools dhcp-client
 Requires:	mobile-broadband-provider-info
@@ -143,7 +143,6 @@ Development files for nm-glib-vpn.
 autoreconf -fis
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
-		--with-dhcp-client=dhclient \
 		--with-crypto=nss \
 		--enable-more-warnings=yes \
 		--with-docs=yes \
@@ -204,12 +203,14 @@ rm -rf %{buildroot}
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
+%{_bindir}/nmcli
 %{_bindir}/nm-tool
 %{_bindir}/nm-online
 %{_libdir}/nm-dispatcher.action
 %{_libexecdir}/nm-dhcp-client.action
 %{_libexecdir}/nm-avahi-autoipd.action
 %{_mandir}/man1/*.1*
+%{_mandir}/man5/*.5*
 %{_mandir}/man8/*.8*
 %dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
