@@ -15,7 +15,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8.0.999
+Version:	0.8.1
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
@@ -142,8 +142,7 @@ Development files for nm-glib-vpn.
 %patch3 -p1 -b .ifcfg-rh-strict_format
 
 %build
-
-autoreconf -fis
+autoreconf -fi
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
 		--with-crypto=nss \
