@@ -12,10 +12,12 @@
 
 %define snapshot 0
 
+%define _with_systemd 0
+
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8.1
+Version:	0.8.1.999
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
@@ -34,12 +36,11 @@ Source1:	README.urpmi
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
-# Current mdv tip: ac83a966
+# Current mdv tip: e112685
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
-Patch2:		explain-dns1-dns2.patch
-# Fix ifcfg-rh build with strict format
-Patch3:                0001-test-ifcfg-rh.c-fix-gcc-Werror-format-security-failu.patch
+Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
+
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
@@ -49,6 +50,10 @@ BuildRequires:	libuuid-devel
 BuildRequires:	libgudev-devel
 #BuildRequires:	dhcp-client
 BuildRequires:	iptables
+%if %{_with_systemd}
+# (bor) for systemd support, pkg-config; move to systemd?
+BuildRequires:	systemd-units
+%endif
 Requires:	wpa_supplicant wireless-tools dhcp-client
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
@@ -139,7 +144,6 @@ Development files for nm-glib-vpn.
 %setup -q -n %{rname}-%{version}
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
-%patch3 -p1 -b .ifcfg-rh-strict_format
 
 %build
 autoreconf -fi
@@ -150,6 +154,9 @@ autoreconf -fi
 		--with-docs=yes \
 		--with-system-ca-path=/etc/pki/tls/certs \
 		--with-resolvconf=yes \
+%if !%{_with_systemd}
+		--without-systemdsystemunitdir \
+%endif
 		--with-tests=yes
 
 %make
@@ -201,7 +208,6 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/%{rname}/nm-system-settings.conf
 %{_sbindir}/%{rname}
 #%{_sbindir}/%{rname}Dispatcher
-%dir %{_sysconfdir}/%{rname}
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
@@ -223,8 +229,13 @@ rm -rf %{buildroot}
 %{_datadir}/%{rname}/gdb-cmd
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.network-manager-settings.system.policy
+%{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 %{_datadir}/gtk-doc/html/*
 /lib/udev/rules.d/*.rules
+%if %{_with_systemd}
+/lib/systemd/system/NetworkManager.service
+%{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
+%endif
 
 %files -n %{libnm_util}
 %defattr(-,root,root)
