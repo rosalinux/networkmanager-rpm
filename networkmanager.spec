@@ -17,7 +17,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8.1.999
+Version:	0.8.2
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
@@ -36,7 +36,7 @@ Source1:	README.urpmi
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
-# Current mdv tip: e112685
+# Current mdv tip: a012d8c
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
