@@ -21,7 +21,7 @@ Version:	0.8.2
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 1
+Release:        %mkrel 2
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -36,11 +36,13 @@ Source1:	README.urpmi
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
-# Current mdv tip: a012d8c
+# Current mdv tip: 083f33a1
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 
+Patch3:		update-connection.patch
+Patch4:		ifcfg-mdv-connection.patch
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
@@ -144,6 +146,8 @@ Development files for nm-glib-vpn.
 %setup -q -n %{rname}-%{version}
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
+%patch3 -p1
+%patch4 -p1
 
 %build
 autoreconf -fi
