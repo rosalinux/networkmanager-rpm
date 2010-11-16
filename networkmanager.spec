@@ -41,8 +41,6 @@ Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 
-Patch3:		update-connection.patch
-Patch4:		ifcfg-mdv-connection.patch
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
