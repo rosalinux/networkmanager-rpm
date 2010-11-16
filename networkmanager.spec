@@ -144,8 +144,6 @@ Development files for nm-glib-vpn.
 %setup -q -n %{rname}-%{version}
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
-%patch3 -p1
-%patch4 -p1
 
 %build
 autoreconf -fi
