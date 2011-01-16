@@ -12,7 +12,7 @@
 
 %define snapshot 0
 
-%define _with_systemd 0
+%define _with_systemd 1
 
 %define	rname	NetworkManager
 Name:		networkmanager
@@ -21,7 +21,7 @@ Version:	0.8.2
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 3
+Release:        %mkrel 4
 %endif
 Group:		System/Base
 License:	GPLv2+
