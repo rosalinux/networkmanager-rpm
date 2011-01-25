@@ -21,7 +21,7 @@ Version:	0.8.2
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 4
+Release:        %mkrel 5
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -180,6 +180,11 @@ install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 # Add readme displayed by urpmi
 cp %{SOURCE1} .
 
+# provide networkmanager daemon via systemd as well
+pushd %{buildroot}/lib/systemd/system
+ln -s NetworkManager.service %{name}.service
+popd
+
 %find_lang %{rname}
 
 find %{buildroot} -name \*.la|xargs rm -f
@@ -234,6 +239,7 @@ rm -rf %{buildroot}
 /lib/udev/rules.d/*.rules
 %if %{_with_systemd}
 /lib/systemd/system/NetworkManager.service
+/lib/systemd/system/networkmanager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 %endif
 
