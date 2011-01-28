@@ -21,7 +21,7 @@ Version:	0.8.2
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 5
+Release:        %mkrel 6
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -181,8 +181,10 @@ install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 cp %{SOURCE1} .
 
 # provide networkmanager daemon via systemd as well
+# also provide it under lowercase name, symlinking NetworkManager to it
 pushd %{buildroot}/lib/systemd/system
-ln -s NetworkManager.service %{name}.service
+mv %{rname}.service %{name}.service
+ln -s %{name}.service %{rname}.service
 popd
 
 %find_lang %{rname}
