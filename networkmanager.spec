@@ -165,7 +165,7 @@ autoreconf -fi
 rm -rf %{buildroot}
 %makeinstall_std
 
-cat > %{buildroot}%{_sysconfdir}/NetworkManager/nm-system-settings.conf << EOF
+cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-mdv
 EOF
@@ -212,7 +212,7 @@ rm -rf %{buildroot}
 %{_initrddir}/%{name}
 #%{_initrddir}/%{rname}dispatcher
 %dir %{_sysconfdir}/%{rname}
-%config(noreplace) %{_sysconfdir}/%{rname}/nm-system-settings.conf
+%config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %{_sbindir}/%{rname}
 #%{_sbindir}/%{rname}Dispatcher
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
