@@ -73,7 +73,7 @@ Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
 Conflicts:	%{_lib}nm_util1 < 0.7.996
-Conflicts:	initscripts < 9.24-4
+Conflicts:	initscripts < 9.24-5
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
