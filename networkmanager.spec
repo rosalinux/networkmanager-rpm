@@ -21,7 +21,7 @@ Version:	0.8.2
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 7
+Release:        %mkrel 8
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -36,7 +36,7 @@ Source1:	README.urpmi
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
-# Current mdv tip: e521d383
+# Current mdv tip: d2eab663
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
@@ -73,6 +73,7 @@ Obsoletes:	dhcdbd
 Requires(post):	rpm-helper
 Requires(preun):rpm-helper
 Conflicts:	%{_lib}nm_util1 < 0.7.996
+Conflicts:	initscripts < 9.24-4
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
