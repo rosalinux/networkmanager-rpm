@@ -40,6 +40,8 @@ Source1:	README.urpmi
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
+# Mandriva specific patches
+Patch50:	networkmanager-0.8.2-systemd-start-after-resolvconf.patch
 # upstream patches
 # (bor) fix crash on shutdown (GIT) This is really systemd design bug,
 #       but it is not clear when it is fixed
