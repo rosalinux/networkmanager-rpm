@@ -192,6 +192,14 @@ mv %{rname}.service %{name}.service
 ln -s %{name}.service %{rname}.service
 popd
 
+# (bor) clean up on uninstall
+install -d %{buildroot}%{_localstatedir}/lib/%{rname}
+pushd %{buildroot}%{_localstatedir}/lib/%{rname} && {
+	touch %{rname}.state
+	touch timestamps
+popd
+}
+
 %find_lang %{rname}
 
 find %{buildroot} -name \*.la|xargs rm -f
@@ -236,6 +244,8 @@ rm -rf %{buildroot}
 %{_libdir}/NetworkManager/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/run/%{rname}
+%dir %{_localstatedir}/lib/%{rname}
+%ghost %{_localstatedir}/lib/%{rname}/*
 %{_libexecdir}/nm-crash-logger
 %dir %{_datadir}/%{rname}
 %{_datadir}/%{rname}/gdb-cmd
