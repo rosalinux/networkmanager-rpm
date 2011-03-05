@@ -17,11 +17,11 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8.2
+Version:	0.8.3.997
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 8
+Release:        %mkrel 1
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -36,18 +36,13 @@ Source1:	README.urpmi
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
-# Current mdv tip: d2eab663
+# Current mdv tip: 0debf4f0
 Patch1:		networkmanager-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.8.2-systemd-start-after-resolvconf.patch
 # upstream patches
-# (bor) fix crash on shutdown (GIT) This is really systemd design bug,
-#       but it is not clear when it is fixed
-Patch100:	0001-policy-don-t-update-hostname-on-exit.patch
-Patch101:	0002-core-handle-D-Bus-disconnect-better-on-exit.patch
-Patch102:	0001-core-fix-dbus-glib-crash-on-shutdown-with-systemd.patch
 
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
@@ -153,9 +148,7 @@ Development files for nm-glib-vpn.
 %setup -q -n %{rname}-%{version}
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
-%patch100 -p1
-%patch101 -p1
-%patch102 -p1
+%patch50 -p1 -b .after-resolvconf
 
 %build
 autoreconf -fi
