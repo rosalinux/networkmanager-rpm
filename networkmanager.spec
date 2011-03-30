@@ -172,7 +172,7 @@ rm -rf %{buildroot}
 
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
-plugins=ifcfg-mdv
+plugins=ifcfg-mdv,keyfile
 EOF
 
 # create a VPN directory
