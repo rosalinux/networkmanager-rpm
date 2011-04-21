@@ -155,7 +155,7 @@ autoreconf -fi
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
 		--with-crypto=nss \
-		--enable-more-warnings=yes \
+		--enable-more-warnings=no \
 		--with-docs=yes \
 		--with-system-ca-path=/etc/pki/tls/certs \
 		--with-resolvconf=yes \
