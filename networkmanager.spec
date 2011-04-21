@@ -17,7 +17,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8.3.999
+Version:	0.8.4.0
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
