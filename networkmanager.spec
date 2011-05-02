@@ -46,7 +46,7 @@ Patch50:	networkmanager-0.8.2-systemd-start-after-resolvconf.patch
 
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
-BuildRequires:	hal-devel >= 0.5.0 nss-devel intltool
+BuildRequires:	nss-devel intltool
 BuildRequires:	gtk-doc ext2fs-devel
 BuildRequires:	ppp-devel polkit-1-devel 
 BuildRequires:	libuuid-devel
