@@ -57,6 +57,9 @@ BuildRequires:	iptables
 # (bor) for systemd support, pkg-config; move to systemd?
 BuildRequires:	systemd-units
 %endif
+Requires(post):	systemd-units, rpm-helper
+Requires(preun):	systemd-units, rpm-helper
+Requires(postun):systemd-units
 Requires:	wpa_supplicant wireless-tools dhcp-client
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
@@ -67,11 +70,8 @@ Requires:	iproute2
 Requires:	iptables
 Provides:	NetworkManager = %{version}-%{release}
 Obsoletes:	dhcdbd
-Requires(post):	rpm-helper
-Requires(preun):rpm-helper
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 NetworkManager attempts to keep an active network connection available at all
@@ -204,17 +204,30 @@ popd
 
 find %{buildroot} -name \*.la|xargs rm -f
 
-%clean
-rm -rf %{buildroot}
 
 %post
 %_post_service %{name}
+# Zé: install; upgrade
+if [ "$1" -ge 1 ]; then 
+    /bin/systemctl enable NetworkManager.service
+fi
 
 %preun
 %_preun_service %{name}
+# Zé: upgrade, not removal
+if [ "$1" -eq 1 ] ; then
+    /bin/systemctl try-restart NetworkManager.service
+fi
+
+%postun
+# Zé: removal
+if [ "$1" -eq 0 ]; then
+    /bin/systemctl --no-reload NetworkManager.service
+    /bin/systemctl stop gpm.service
+fi
+
 
 %files -f %{rname}.lang
-%defattr(-,root,root)
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
 %doc README.urpmi
 %{_sysconfdir}/dbus-1/system.d/NetworkManager.conf
@@ -261,11 +274,9 @@ rm -rf %{buildroot}
 %endif
 
 %files -n %{libnm_util}
-%defattr(-,root,root)
 %{_libdir}/libnm-util.so.%{major_util}*
 
 %files -n %{libnm_util_devel}
-%defattr(-,root,root)
 %dir %{_includedir}/%{rname}
 %{_includedir}/%{rname}/*.h
 %{_libdir}/pkgconfig/%{rname}.pc
@@ -273,15 +284,12 @@ rm -rf %{buildroot}
 %{_libdir}/libnm-util.so
 
 %files -n %{libnm_glib}
-%defattr(-,root,root)
 %{_libdir}/libnm-glib.so.%{major_glib}*
 
 %files -n %{libnm_glib_vpn}
-%defattr(-,root,root)
 %{_libdir}/libnm-glib-vpn.so.%{major_glib_vpn}*
 
 %files -n %{libnm_glib_devel}
-%defattr(-,root,root)
 %dir %{_includedir}/libnm-glib
 %exclude %{_includedir}/libnm-glib/nm-vpn*.h
 %{_includedir}/libnm-glib/*.h
@@ -289,8 +297,6 @@ rm -rf %{buildroot}
 %{_libdir}/libnm-glib.so
 
 %files -n %{libnm_glib_vpn_devel}
-%defattr(-,root,root)
 %{_includedir}/libnm-glib/nm-vpn*.h
 %{_libdir}/pkgconfig/libnm-glib-vpn.pc
 %{_libdir}/libnm-glib-vpn.so
-
