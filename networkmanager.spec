@@ -223,7 +223,7 @@ fi
 # Zé: removal
 if [ "$1" -eq 0 ]; then
     /bin/systemctl --no-reload NetworkManager.service
-    /bin/systemctl stop gpm.service
+    /bin/systemctl stop NetworkManager.service
 fi
 
 
