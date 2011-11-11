@@ -21,7 +21,7 @@ Version:	0.8.4.0
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
-Release:        %mkrel 1
+Release:        %mkrel 0
 %endif
 Group:		System/Base
 License:	GPLv2+
@@ -29,7 +29,7 @@ URL:		http://www.gnome.org/projects/NetworkManager/
 %if %snapshot
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.%{snapshot}.tar.xz
 %else
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.tar.bz2
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.tar.xz
 %endif
 Source1:	README.urpmi
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
