@@ -17,7 +17,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.2.0
+Version:	0.8.6.0
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
@@ -27,9 +27,9 @@ Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
 %if %snapshot
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/%{rname}-%{version}.%{snapshot}.tar.xz
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.%{snapshot}.tar.xz
 %else
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/%{rname}-%{version}.tar.xz
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.tar.xz
 %endif
 Source1:	README.urpmi
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
@@ -42,8 +42,8 @@ Patch1:		networkmanager-mdv.patch
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.8.2-systemd-start-after-resolvconf.patch
+Patch51:	NetworkManager-0.8.6.0-glib-2.31.0.diff
 # upstream patches
-
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
 BuildRequires:	nss-devel intltool
@@ -149,6 +149,7 @@ Development files for nm-glib-vpn.
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
 %patch50 -p1 -b .after-resolvconf
+%patch51 -p1 -b .glib-2.31.0
 
 %build
 autoreconf -fi
@@ -161,6 +162,8 @@ autoreconf -fi
 		--with-resolvconf=yes \
 %if !%{_with_systemd}
 		--without-systemdsystemunitdir \
+%else
+		--with-systemdsystemunitdir=%{_unitdir} \
 %endif
 		--with-tests=yes
 
