@@ -95,7 +95,7 @@ Shared library for nm-util.
 Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
-Provides:	libnm-util-devel = %{version}-%{release}
+Provides:	nm-util-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 Provides:	NetworkManager-devel = %{version}-%{release}
 Requires:	%{libnm_util} = %version-%release
@@ -116,7 +116,7 @@ NetworkManager functionality from applications that use glib.
 %package -n	%{libnm_glib_devel}
 Summary:	Development files for nm_glib
 Group:		Development/C
-Provides:	libnm-glib-devel = %{version}-%{release}
+Provides:	nm-glib-devel = %{version}-%{release}
 Provides:       NetworkManager-glib-devel = %{version}-%{release}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
 Requires:	%{libnm_glib} = %version-%release
@@ -137,7 +137,7 @@ NetworkManager VPN functionality from applications that use glib.
 %package -n	%{libnm_glib_vpn_devel}
 Summary:	Development files for nm-glib-vpn
 Group:		Development/C
-Provides:	libnm-glib-vpn-devel = %{version}-%{release}
+Provides:	nm-glib-vpn-devel = %{version}-%{release}
 Requires:	%{libnm_glib_vpn} = %version-%release
 Conflicts:	%{_lib}nm_glib-devel < 0.7.996
 
