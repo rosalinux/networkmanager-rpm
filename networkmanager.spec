@@ -169,7 +169,6 @@ autoreconf -f
 %make
 
 %install
-rm -rf %{buildroot}
 %makeinstall_std
 
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
@@ -293,7 +292,6 @@ fi
 %{_libdir}/libnm-glib.so
 %{_datadir}/gir-1.0/NMClient-1.0.gir
 %{_datadir}/gir-1.0/NetworkManager-1.0.gir
-
 
 %files -n %{libnm_glib_vpn_devel}
 %{_includedir}/libnm-glib/nm-vpn*.h
