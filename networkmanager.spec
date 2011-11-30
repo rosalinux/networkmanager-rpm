@@ -85,8 +85,7 @@ from a DHCP server, and change nameservers whenever it sees fit.
 Summary:	Shared library for nm_util
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
-Obsoletes:	%{_lib}nm_util1 < 0.7.996
-Provides:	%{_lib}nm_util1 = %{EVRD}
+%rename		%{_lib}nm_util1
 
 %description -n %{libnm_util}
 Shared library for nm-util.
