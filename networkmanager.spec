@@ -1,8 +1,8 @@
 %define _requires_exceptions devel\(libnss3.*\)\\|devel\(libnspr4.*\)\\|devel\(libsmime3.*\)
 
-%define	major_glib	2
+%define	major_glib	4
 %define major_glib_vpn	1
-%define major_util	1
+%define major_util	2
 %define libnm_glib		%mklibname nm-glib %{major_glib}
 %define libnm_glib_devel	%mklibname -d nm-glib
 %define libnm_glib_vpn		%mklibname nm-glib-vpn %{major_glib_vpn}
@@ -17,7 +17,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.8.6.0
+Version:	0.9.2.0
 %if %{snapshot}
 Release:	%mkrel 0.%{snapshot}.1
 %else
@@ -32,17 +32,17 @@ Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{ve
 Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.tar.xz
 %endif
 Source1:	README.urpmi
+# XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-mdv.patch
+Patch1:		networkmanager-0.9.2.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
-Patch50:	networkmanager-0.8.2-systemd-start-after-resolvconf.patch
-Patch51:	NetworkManager-0.8.6.0-glib-2.31.0.diff
+Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
@@ -149,10 +149,9 @@ Development files for nm-glib-vpn.
 %patch1 -p1 -b .networkmanager-mdv
 %patch2 -p1 -b .explain-dns1-dns2
 %patch50 -p1 -b .after-resolvconf
-%patch51 -p1 -b .glib-2.31.0
 
 %build
-autoreconf -fi
+autoreconf -f
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
 		--with-crypto=nss \
@@ -266,11 +265,11 @@ fi
 %dir %{_datadir}/%{rname}
 %{_datadir}/%{rname}/gdb-cmd
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
-%{_datadir}/polkit-1/actions/org.freedesktop.network-manager-settings.system.policy
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 %{_datadir}/gtk-doc/html/*
 /lib/udev/rules.d/*.rules
 %if %{_with_systemd}
+/lib/systemd/system/NetworkManager-wait-online.service
 /lib/systemd/system/NetworkManager.service
 /lib/systemd/system/networkmanager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
@@ -278,6 +277,7 @@ fi
 
 %files -n %{libnm_util}
 %{_libdir}/libnm-util.so.%{major_util}*
+%{_libdir}/girepository-1.0/NetworkManager-1.0.typelib
 
 %files -n %{libnm_util_devel}
 %dir %{_includedir}/%{rname}
@@ -288,6 +288,7 @@ fi
 
 %files -n %{libnm_glib}
 %{_libdir}/libnm-glib.so.%{major_glib}*
+%{_libdir}/girepository-1.0/NMClient-1.0.typelib
 
 %files -n %{libnm_glib_vpn}
 %{_libdir}/libnm-glib-vpn.so.%{major_glib_vpn}*
@@ -298,6 +299,9 @@ fi
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm-glib.pc
 %{_libdir}/libnm-glib.so
+%{_datadir}/gir-1.0/NMClient-1.0.gir
+%{_datadir}/gir-1.0/NetworkManager-1.0.gir
+
 
 %files -n %{libnm_glib_vpn_devel}
 %{_includedir}/libnm-glib/nm-vpn*.h
