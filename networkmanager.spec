@@ -68,7 +68,7 @@ Requires:	dnsmasq-base
 Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
 Requires:	iproute2
 Requires:	iptables
-Provides:	NetworkManager = %{version}-%{release}
+Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
@@ -86,7 +86,7 @@ Summary:	Shared library for nm_util
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
 Obsoletes:	%{_lib}nm_util1 < 0.7.996
-Provides:	%{_lib}nm_util1 = %{version}-%{release}
+Provides:	%{_lib}nm_util1 = %{EVRD}
 
 %description -n %{libnm_util}
 Shared library for nm-util.
@@ -95,10 +95,10 @@ Shared library for nm-util.
 Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
-Provides:	nm-util-devel = %{version}-%{release}
-Provides:	%{name}-devel = %{version}-%{release}
-Provides:	NetworkManager-devel = %{version}-%{release}
-Requires:	%{libnm_util} = %version-%release
+Provides:	nm-util-devel = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
+Provides:	NetworkManager-devel = %{EVRD}
+Requires:	%{libnm_util} = %{EVRD}
 Obsoletes:	%{_lib}nm_util-devel < 0.7.996
 
 %description -n %{libnm_util_devel}
@@ -116,10 +116,10 @@ NetworkManager functionality from applications that use glib.
 %package -n	%{libnm_glib_devel}
 Summary:	Development files for nm_glib
 Group:		Development/C
-Provides:	nm-glib-devel = %{version}-%{release}
-Provides:       NetworkManager-glib-devel = %{version}-%{release}
+Provides:	nm-glib-devel = %{EVRD}
+Provides:       NetworkManager-glib-devel = %{EVRD}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
-Requires:	%{libnm_glib} = %version-%release
+Requires:	%{libnm_glib} = %{EVRD}
 Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
 
 %description -n %{libnm_glib_devel}
@@ -137,8 +137,8 @@ NetworkManager VPN functionality from applications that use glib.
 %package -n	%{libnm_glib_vpn_devel}
 Summary:	Development files for nm-glib-vpn
 Group:		Development/C
-Provides:	nm-glib-vpn-devel = %{version}-%{release}
-Requires:	%{libnm_glib_vpn} = %version-%release
+Provides:	nm-glib-vpn-devel = %{EVRD}
+Requires:	%{libnm_glib_vpn} = %{EVRD}
 Conflicts:	%{_lib}nm_glib-devel < 0.7.996
 
 %description -n %{libnm_glib_vpn_devel}
