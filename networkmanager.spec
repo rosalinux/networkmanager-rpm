@@ -187,13 +187,6 @@ install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 # Add readme displayed by urpmi
 cp %{SOURCE1} .
 
-# provide networkmanager daemon via systemd as well
-# also provide it under lowercase name, symlinking NetworkManager to it
-pushd %{buildroot}/lib/systemd/system
-mv %{rname}.service %{name}.service
-ln -s %{name}.service %{rname}.service
-popd
-
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
 pushd %{buildroot}%{_localstatedir}/lib/%{rname} && {
@@ -271,7 +264,6 @@ fi
 %if %{_with_systemd}
 /lib/systemd/system/NetworkManager-wait-online.service
 /lib/systemd/system/NetworkManager.service
-/lib/systemd/system/networkmanager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 %endif
 
