@@ -96,8 +96,6 @@ Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
 Provides:	nm-util-devel = %{EVRD}
-Provides:	%{name}-devel = %{EVRD}
-Provides:	NetworkManager-devel = %{EVRD}
 Requires:	%{libnm_util} = %{EVRD}
 Obsoletes:	%{_lib}nm_util-devel < 0.7.996
 
@@ -117,7 +115,6 @@ NetworkManager functionality from applications that use glib.
 Summary:	Development files for nm_glib
 Group:		Development/C
 Provides:	nm-glib-devel = %{EVRD}
-Provides:       NetworkManager-glib-devel = %{EVRD}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
 Requires:	%{libnm_glib} = %{EVRD}
 Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
