@@ -16,7 +16,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.2.0
-Release:	%{?snapshot:0.%{snapshot}.}1
+Release:	%{?snapshot:0.%{snapshot}.}2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -36,15 +36,15 @@ Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch51:	NetworkManager-0.9.2.0-default-stop.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
-BuildRequires:	libnl-devel wpa_supplicant libiw-devel dbus-glib-devel
+BuildRequires:	pkgconfig(libnl-1) wpa_supplicant libiw-devel pkgconfig(dbus-glib-1)
 BuildRequires:	nss-devel intltool
-BuildRequires:	gtk-doc ext2fs-devel
-BuildRequires:	ppp-devel polkit-1-devel 
-BuildRequires:	libuuid-devel
-BuildRequires:	libgudev-devel
+BuildRequires:	gtk-doc pkgconfig(ext2fs)
+BuildRequires:	ppp-devel pkgconfig(polkit-gobject-1)
+BuildRequires:	pkgconfig(uuid)
+BuildRequires:	pkgconfig(gudev-1.0)
 #BuildRequires:	dhcp-client
 BuildRequires:	iptables
-BuildRequires:	gobject-introspection-devel >= 0.10.3
+BuildRequires:	pkgconfig(gobject-introspection-1.0)
 # (bor) for systemd support, pkg-config; move to systemd?
 BuildRequires:	systemd-units
 Requires(post):	systemd-units rpm-helper
