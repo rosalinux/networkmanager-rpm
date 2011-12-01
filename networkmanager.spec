@@ -53,6 +53,7 @@ BuildRequires:	libuuid-devel
 BuildRequires:	libgudev-devel
 #BuildRequires:	dhcp-client
 BuildRequires:	iptables
+BuildRequires:	gobject-introspection-devel >= 0.10.3
 %if %{_with_systemd}
 # (bor) for systemd support, pkg-config; move to systemd?
 BuildRequires:	systemd-units
