@@ -37,7 +37,7 @@ Patch51:	NetworkManager-0.9.2.0-default-stop.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1) wpa_supplicant libiw-devel pkgconfig(dbus-glib-1)
-BuildRequires:	nss-devel intltool
+BuildRequires:	pkgconfig(nss) intltool
 BuildRequires:	gtk-doc pkgconfig(ext2fs)
 BuildRequires:	ppp-devel pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
