@@ -148,9 +148,9 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .default-stop~
+autoreconf -f
 
 %build
-autoreconf -f
 %configure2_5x	--disable-static \
 		--with-distro=mandriva \
 		--with-crypto=nss \
