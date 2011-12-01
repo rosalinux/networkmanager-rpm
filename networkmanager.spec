@@ -60,7 +60,7 @@ BuildRequires:	systemd-units
 Requires(post):	systemd-units, rpm-helper
 Requires(preun):	systemd-units, rpm-helper
 Requires(postun):systemd-units
-Requires:	wpa_supplicant wireless-tools dhcp-client
+Requires:	wpa_supplicant >= 0.7.3-2 wireless-tools dhcp-client
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
 Requires:	dhcp-client
