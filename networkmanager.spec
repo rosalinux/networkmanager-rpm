@@ -10,7 +10,7 @@
 %define libnm_util		%mklibname nm-util %{major_util}
 %define libnm_util_devel	%mklibname -d nm-util
 
-%define snapshot 0
+#define snapshot 0
 
 %define _with_systemd 1
 
@@ -18,19 +18,11 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.2.0
-%if %{snapshot}
-Release:	%mkrel 0.%{snapshot}.1
-%else
-Release:        %mkrel 1
-%endif
+Release:	%{?snapshot:0.%{snapshot}.}1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-%if %snapshot
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.%{snapshot}.tar.xz
-%else
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}.tar.xz
-%endif
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
 Source1:	README.urpmi
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
