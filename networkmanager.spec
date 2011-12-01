@@ -12,8 +12,6 @@
 
 #define snapshot 0
 
-%define _with_systemd 1
-
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
@@ -47,12 +45,10 @@ BuildRequires:	libgudev-devel
 #BuildRequires:	dhcp-client
 BuildRequires:	iptables
 BuildRequires:	gobject-introspection-devel >= 0.10.3
-%if %{_with_systemd}
 # (bor) for systemd support, pkg-config; move to systemd?
 BuildRequires:	systemd-units
-%endif
-Requires(post):	systemd-units, rpm-helper
-Requires(preun):	systemd-units, rpm-helper
+Requires(post):	systemd-units rpm-helper
+Requires(preun):systemd-units rpm-helper
 Requires(postun):systemd-units
 Requires:	wpa_supplicant >= 0.7.3-2 wireless-tools dhcp-client
 Requires:	mobile-broadband-provider-info
@@ -150,11 +146,7 @@ autoreconf -f
 		--with-docs=yes \
 		--with-system-ca-path=/etc/pki/tls/certs \
 		--with-resolvconf=yes \
-%if !%{_with_systemd}
-		--without-systemdsystemunitdir \
-%else
 		--with-systemdsystemunitdir=%{_unitdir} \
-%endif
 		--with-tests=yes
 
 %make
@@ -251,11 +243,9 @@ fi
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 %{_datadir}/gtk-doc/html/*
 /lib/udev/rules.d/*.rules
-%if %{_with_systemd}
 /lib/systemd/system/NetworkManager-wait-online.service
 /lib/systemd/system/NetworkManager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
-%endif
 
 %files -n %{libnm_util}
 %{_libdir}/libnm-util.so.%{major_util}*
