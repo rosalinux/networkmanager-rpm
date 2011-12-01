@@ -146,7 +146,7 @@ autoreconf -f
 		--with-docs=yes \
 		--with-system-ca-path=/etc/pki/tls/certs \
 		--with-resolvconf=yes \
-		--with-systemdsystemunitdir=%{_unitdir} \
+		--with-systemdsystemunitdir=%{_systemunitdir} \
 		--with-tests=yes
 
 %make
@@ -243,8 +243,8 @@ fi
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 %{_datadir}/gtk-doc/html/*
 /lib/udev/rules.d/*.rules
-/lib/systemd/system/NetworkManager-wait-online.service
-/lib/systemd/system/NetworkManager.service
+%{_systemunitdir}/NetworkManager-wait-online.service
+%{_systemunitdir}/NetworkManager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 
 %files -n %{libnm_util}
