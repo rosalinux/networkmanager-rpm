@@ -46,6 +46,7 @@ BuildRequires:	iptables
 BuildRequires:	pkgconfig(gobject-introspection-1.0)
 # (bor) for systemd support, pkg-config; move to systemd?
 BuildRequires:	systemd-units
+BuildRequires:	pkgconfig(libsystemd-login)
 Requires(post):	systemd-units rpm-helper
 Requires(preun):systemd-units rpm-helper
 Requires(postun):systemd-units
