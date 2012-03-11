@@ -156,7 +156,6 @@ autoreconf -f
 		--with-dhclient=/sbin/dhclient \
 		--with-iptables=/sbin/iptables \
 		--with-resolvconf=/sbin/resolvconf
-
 %make
 
 %install
