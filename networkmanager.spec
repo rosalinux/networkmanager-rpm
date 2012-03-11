@@ -149,7 +149,11 @@ autoreconf -f
 		--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
 		--with-resolvconf=yes \
 		--with-systemdsystemunitdir=%{_systemunitdir} \
-		--with-tests=yes
+		--with-tests=yes \
+		--with-dhcpcd=/sbin/dhcpcd \
+		--with-dhclient=/sbin/dhclient \
+		--with-iptables=/sbin/iptables \
+		--with-resolvconf=/sbin/resolvconf
 
 %make
 
