@@ -1,5 +1,3 @@
-%define _requires_exceptions devel\(libnss3.*\)\\|devel\(libnspr4.*\)\\|devel\(libsmime3.*\)
-
 %define	major_glib	4
 %define major_glib_vpn	1
 %define major_util	2
