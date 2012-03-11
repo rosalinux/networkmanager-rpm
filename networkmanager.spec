@@ -133,7 +133,7 @@ Development files for nm-glib-vpn.
 
 %prep
 %setup -q -n %{rname}-%{version}
-%patch1 -p1 -b .networkmanager-mdv~
+%patch1 -p1 -b .mdv~
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .default-stop~
