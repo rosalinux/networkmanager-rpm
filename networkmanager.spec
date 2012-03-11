@@ -33,6 +33,7 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch52:	networkmanager-fix-includes.patch
 Patch53:	NetworkManager-0.9.3.995-fix-wifi-typo.patch
+Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1) wpa_supplicant libiw-devel pkgconfig(dbus-glib-1)
@@ -137,6 +138,7 @@ Development files for nm-glib-vpn.
 %patch50 -p1 -b .after-resolvconf~
 %patch52 -p1 -b .includes~
 %patch53 -p1 -b .typo~
+%patch54 -p1 -b .link~
 autoreconf -f
 
 %build
