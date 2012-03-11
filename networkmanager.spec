@@ -34,6 +34,7 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch51:	NetworkManager-0.9.2.0-default-stop.patch
+Patch52:	networkmanager-fix-includes.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1) wpa_supplicant libiw-devel pkgconfig(dbus-glib-1)
@@ -136,6 +137,7 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .default-stop~
+%patch52 -p1 -b .includes~
 autoreconf -f
 
 %build
