@@ -26,13 +26,14 @@ Source1:	README.urpmi
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.2.0-mdv.patch
+Patch1:		networkmanager-0.9.3.995-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch51:	NetworkManager-0.9.2.0-default-stop.patch
 Patch52:	networkmanager-fix-includes.patch
+Patch53:	NetworkManager-0.9.3.995-fix-wifi-typo.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1) wpa_supplicant libiw-devel pkgconfig(dbus-glib-1)
@@ -136,6 +137,7 @@ Development files for nm-glib-vpn.
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .default-stop~
 %patch52 -p1 -b .includes~
+%patch53 -p1 -b .typo~
 autoreconf -f
 
 %build
