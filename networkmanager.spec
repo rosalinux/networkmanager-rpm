@@ -15,12 +15,12 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.2.0
-Release:	%{?snapshot:0.%{snapshot}.}3
+Version:	0.9.3.995
+Release:	%{?snapshot:0.%{snapshot}.}1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.8/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
 Source1:	README.urpmi
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
