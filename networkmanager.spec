@@ -31,7 +31,6 @@ Patch1:		networkmanager-0.9.3.995-mdv.patch
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
-Patch51:	NetworkManager-0.9.2.0-default-stop.patch
 Patch52:	networkmanager-fix-includes.patch
 Patch53:	NetworkManager-0.9.3.995-fix-wifi-typo.patch
 # upstream patches
@@ -135,7 +134,6 @@ Development files for nm-glib-vpn.
 %patch1 -p1 -b .mdv~
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
-%patch51 -p1 -b .default-stop~
 %patch52 -p1 -b .includes~
 %patch53 -p1 -b .typo~
 autoreconf -f
