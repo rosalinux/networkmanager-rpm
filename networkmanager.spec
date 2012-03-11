@@ -146,6 +146,7 @@ autoreconf -f
 		--with-docs=yes \
 		--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
 		--with-resolvconf=yes \
+		--with-session-tracking=systemd \
 		--with-systemdsystemunitdir=%{_systemunitdir} \
 		--with-tests=yes \
 		--with-dhcpcd=/sbin/dhcpcd \
