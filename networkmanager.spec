@@ -146,7 +146,7 @@ autoreconf -f
 		--with-crypto=nss \
 		--enable-more-warnings=no \
 		--with-docs=yes \
-		--with-system-ca-path=/etc/pki/tls/certs \
+		--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
 		--with-resolvconf=yes \
 		--with-systemdsystemunitdir=%{_systemunitdir} \
 		--with-tests=yes
