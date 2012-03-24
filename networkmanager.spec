@@ -13,7 +13,7 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.3.995
+Version:	0.9.4.0
 Release:	%{?snapshot:0.%{snapshot}.}1
 Group:		System/Base
 License:	GPLv2+
@@ -26,20 +26,24 @@ Source1:	README.urpmi
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.3.995-mdv.patch
+Patch1:		networkmanager-0.9.4.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
-Patch52:	networkmanager-fix-includes.patch
-Patch53:	NetworkManager-0.9.3.995-fix-wifi-typo.patch
+# fixed Patch52:	networkmanager-fix-includes.patch
 Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
+Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
-BuildRequires:	pkgconfig(libnl-1) wpa_supplicant libiw-devel pkgconfig(dbus-glib-1)
+BuildRequires:	pkgconfig(libnl-1)
+BuildRequires:	wpa_supplicant
+BuildRequires:	libiw-devel
+BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(nss) intltool
 BuildRequires:	gtk-doc pkgconfig(ext2fs)
-BuildRequires:	ppp-devel pkgconfig(polkit-gobject-1)
+BuildRequires:	ppp-devel
+BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(gudev-1.0)
 #BuildRequires:	dhcp-client
@@ -48,10 +52,13 @@ BuildRequires:	pkgconfig(gobject-introspection-1.0)
 # (bor) for systemd support, pkg-config; move to systemd?
 BuildRequires:	systemd-units
 BuildRequires:	pkgconfig(libsystemd-login)
+BuildRequires:	pkgconfig(libsoup-2.4)
 Requires(post):	systemd-units rpm-helper
 Requires(preun):systemd-units rpm-helper
 Requires(postun):systemd-units
-Requires:	wpa_supplicant >= 0.7.3-2 wireless-tools dhcp-client
+Requires:	wpa_supplicant >= 0.7.3-2
+Requires:	wireless-tools
+Requires:	dhcp-client
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
 Requires:	dhcp-client
@@ -136,13 +143,14 @@ Development files for nm-glib-vpn.
 %patch1 -p1 -b .mdv~
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
-%patch52 -p1 -b .includes~
-%patch53 -p1 -b .typo~
 %patch54 -p1 -b .link~
+%patch55 -p1 -b .str~
+
 autoreconf -f
 
 %build
 %configure2_5x	--disable-static \
+		--disable-rpath \
 		--with-distro=mandriva \
 		--with-crypto=nss \
 		--enable-more-warnings=no \
@@ -155,7 +163,12 @@ autoreconf -f
 		--with-dhcpcd=/sbin/dhcpcd \
 		--with-dhclient=/sbin/dhclient \
 		--with-iptables=/sbin/iptables \
-		--with-resolvconf=/sbin/resolvconf
+		--with-resolvconf=/sbin/resolvconf \
+		--enable-polkit \
+		--enable-ppp \
+		--enable-concheck \
+		--with-wext=yes
+
 %make
 
 %install
