@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}1
+Release:	%{?snapshot:0.%{snapshot}.}2
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -35,6 +35,7 @@ Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
 Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
 Patch56:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
+Patch57:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
@@ -147,7 +148,7 @@ Development files for nm-glib-vpn.
 %patch54 -p1 -b .link~
 %patch55 -p1 -b .str~
 %patch56 -p1 -b .rhbz802536~
-
+%patch57 -p1 -b .rhbz#806664~
 autoreconf -f
 
 %build
