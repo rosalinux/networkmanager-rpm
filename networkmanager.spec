@@ -34,6 +34,7 @@ Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
 Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
+Patch56:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
@@ -145,6 +146,7 @@ Development files for nm-glib-vpn.
 %patch50 -p1 -b .after-resolvconf~
 %patch54 -p1 -b .link~
 %patch55 -p1 -b .str~
+%patch56 -p1 -b .rhbz802536~
 
 autoreconf -f
 
