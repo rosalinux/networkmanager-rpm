@@ -46,7 +46,7 @@ BuildRequires:	pkgconfig(libnl-1)
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	pkgconfig(nss) intltool
+BuildRequires:	pkgconfig(gnutls) intltool
 BuildRequires:	gtk-doc pkgconfig(ext2fs)
 BuildRequires:	ppp-devel
 BuildRequires:	pkgconfig(polkit-gobject-1)
@@ -161,7 +161,7 @@ autoreconf -f
 %configure2_5x	--disable-static \
 		--disable-rpath \
 		--with-distro=mandriva \
-		--with-crypto=nss \
+		--with-crypto=gnutls \
 		--enable-more-warnings=no \
 		--with-docs=yes \
 		--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
