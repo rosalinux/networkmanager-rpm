@@ -176,7 +176,8 @@ autoreconf -f
 		--enable-polkit \
 		--enable-ppp \
 		--enable-concheck \
-		--with-wext=yes
+		--with-wext=yes \
+		--enable-polkit
 
 %make
 
