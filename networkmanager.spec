@@ -38,6 +38,8 @@ Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
 Patch56:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
 Patch57:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
 Patch58:	NetworkManager-0.9.4.0-nscd-poke.patch
+Patch59:	nm-polkit-permissive.patch
+
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
@@ -148,10 +150,11 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
 %patch54 -p1 -b .link~
-%patch55 -p1 -b .str~
-%patch56 -p1 -b .rhbz802536~
-%patch57 -p1 -b .rhbz#806664~
+#patch55 -p1 -b .str~
+#patch56 -p1 -b .rhbz802536~
+#patch57 -p1 -b .rhbz#806664~
 %patch58 -p1 -b .nscd_poke~
+%patch59 -p1 -b .permissive~
 autoreconf -f
 
 %build
