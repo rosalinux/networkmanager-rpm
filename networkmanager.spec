@@ -20,6 +20,7 @@ License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
 Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/0.9/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
 Source1:	README.urpmi
+Source3:	nm-poke-nscd
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
 # DO NOT CHANGE IT MANUALLY.
@@ -36,6 +37,7 @@ Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
 Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
 Patch56:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
 Patch57:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
+Patch58:	NetworkManager-0.9.4.0-nscd-poke.patch
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
@@ -149,6 +151,7 @@ Development files for nm-glib-vpn.
 %patch55 -p1 -b .str~
 %patch56 -p1 -b .rhbz802536~
 %patch57 -p1 -b .rhbz#806664~
+%patch58 -p1 -b .nscd_poke~
 autoreconf -f
 
 %build
@@ -176,6 +179,8 @@ autoreconf -f
 
 %install
 %makeinstall_std
+
+install -m755 %{SOURCE3} -D %{buildroot}%{_libexecdir}/nm-poke-nscd
 
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
@@ -250,6 +255,7 @@ fi
 %{_libdir}/nm-dispatcher.action
 %{_libexecdir}/nm-dhcp-client.action
 %{_libexecdir}/nm-avahi-autoipd.action
+%{_libexecdir}/nm-poke-nscd
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man8/*.8*
