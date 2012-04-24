@@ -47,7 +47,7 @@ BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(gnutls) intltool
-BuildRequires:	gtk-doc pkgconfig(ext2fs)
+BuildRequires:	gtk-doc gtk-doc-mkpdf pkgconfig(ext2fs)
 BuildRequires:	ppp-devel
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
