@@ -38,6 +38,7 @@ Patch56:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.pat
 Patch57:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
 Patch59:	nm-polkit-permissive.patch
 Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
+Patch61:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
 
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
@@ -155,6 +156,7 @@ Development files for nm-glib-vpn.
 #patch58 -p1 -b .nscd_poke~
 %patch59 -p1 -b .permissive~
 %patch60 -p1 -b .nscd_mdv~
+%patch61 -p1 -b .nocheck~
 autoreconf -f
 
 %build
