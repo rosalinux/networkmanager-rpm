@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}4
+Release:	%{?snapshot:0.%{snapshot}.}5
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -46,7 +46,7 @@ BuildRequires:	pkgconfig(libnl-1)
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	pkgconfig(gnutls) intltool
+BuildRequires:	pkgconfig(nss) intltool
 BuildRequires:	gtk-doc gtk-doc-mkpdf pkgconfig(ext2fs)
 BuildRequires:	ppp-devel
 BuildRequires:	pkgconfig(polkit-gobject-1)
@@ -163,7 +163,7 @@ autoreconf -f
 %configure2_5x	--disable-static \
 		--disable-rpath \
 		--with-distro=mandriva \
-		--with-crypto=gnutls \
+		--with-crypto=nss \
 		--enable-more-warnings=no \
 		--with-docs=yes \
 		--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
