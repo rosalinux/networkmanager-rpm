@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}5
+Release:	%{?snapshot:0.%{snapshot}.}6
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -31,6 +31,7 @@ Patch1:		networkmanager-0.9.4.0-mdv.patch
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
+Patch51:	networkmanager-0.9.4.0-add-systemd-alias.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
 Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
@@ -40,6 +41,8 @@ Patch59:	nm-polkit-permissive.patch
 Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
 Patch61:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
 
+
+
 # upstream patches
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
@@ -47,7 +50,7 @@ BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(nss) intltool
-BuildRequires:	gtk-doc gtk-doc-mkpdf pkgconfig(ext2fs)
+BuildRequires:	gtk-doc pkgconfig(ext2fs)
 BuildRequires:	ppp-devel
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
@@ -149,6 +152,7 @@ Development files for nm-glib-vpn.
 %patch1 -p1 -b .mdv~
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
+%patch51 -p1 -b .systemd-alias~
 %patch54 -p1 -b .link~
 #patch55 -p1 -b .str~
 #patch56 -p1 -b .rhbz802536~
@@ -201,6 +205,9 @@ install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 # Add readme displayed by urpmi
 cp %{SOURCE1} .
 
+# link service file to match alias
+ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
+
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
 pushd %{buildroot}%{_localstatedir}/lib/%{rname} && {
@@ -215,26 +222,13 @@ find %{buildroot} -name \*.la|xargs rm -f
 
 
 %post
-%_post_service %{name}
-# Zé: install; upgrade
-if [ "$1" -ge 1 ]; then 
-    /bin/systemctl enable NetworkManager.service
-fi
+%_post_service %{rname} %{rname}.service 
 
 %preun
-%_preun_service %{name}
-# Zé: upgrade, not removal
-if [ "$1" -eq 1 ] ; then
-    /bin/systemctl try-restart NetworkManager.service
-fi
+%_preun_service %{rname} %{rname}.service
 
 %postun
-# Zé: removal
-if [ "$1" -eq 0 ]; then
-    /bin/systemctl --no-reload NetworkManager.service
-    /bin/systemctl stop NetworkManager.service
-fi
-
+%_postun_unit %{rname}.service 
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
@@ -277,6 +271,7 @@ fi
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
 %{_systemunitdir}/NetworkManager.service
+%{_systemunitdir}/networkmanager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 
 %files -n %{libnm_util}
