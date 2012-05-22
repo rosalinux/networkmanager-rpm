@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}6
+Release:	%{?snapshot:0.%{snapshot}.}7
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -190,6 +190,8 @@ autoreconf -f
 %install
 %makeinstall_std
 
+mv %{buildroot}%{_initrddir}/networkmanager %{buildroot}%{_initrddir}/%{rname}
+
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-mdv,keyfile
@@ -235,7 +237,7 @@ popd
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
-%{_initrddir}/%{name}
+%{_initrddir}/%{rname}
 #%{_initrddir}/%{rname}dispatcher
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
