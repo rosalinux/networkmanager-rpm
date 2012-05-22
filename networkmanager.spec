@@ -218,9 +218,6 @@ popd
 
 %find_lang %{rname}
 
-find %{buildroot} -name \*.la|xargs rm -f
-
-
 %post
 %_post_service %{rname} %{rname}.service 
 
