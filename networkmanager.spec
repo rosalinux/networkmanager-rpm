@@ -76,6 +76,7 @@ Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
 Requires:	iproute2
 Requires:	iptables
 Provides:	NetworkManager = %{EVRD}
+Suggests:	nscd
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
