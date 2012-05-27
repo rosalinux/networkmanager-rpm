@@ -67,10 +67,9 @@ Requires(preun):systemd-units rpm-helper
 Requires(postun):systemd-units
 Requires:	wpa_supplicant >= 0.7.3-2
 Requires:	wireless-tools
-Requires:	dhcp-client
+Requires:	dhcp-client-daemon
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
-Requires:	dhcp-client
 Requires:	dnsmasq-base
 Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
 Requires:	iproute2
