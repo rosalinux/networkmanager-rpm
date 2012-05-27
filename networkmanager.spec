@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}7
+Release:	%{?snapshot:0.%{snapshot}.}8
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -40,7 +40,7 @@ Patch57:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_setting
 Patch59:	nm-polkit-permissive.patch
 Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
 Patch61:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
-
+Patch62:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
 
 
 # upstream patches
@@ -155,13 +155,14 @@ Development files for nm-glib-vpn.
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .systemd-alias~
 %patch54 -p1 -b .link~
-#patch55 -p1 -b .str~
-#patch56 -p1 -b .rhbz802536~
-#patch57 -p1 -b .rhbz#806664~
+%patch55 -p1 -b .str~
+%patch56 -p1 -b .rhbz802536~
+%patch57 -p1 -b .rhbz#806664~
 #patch58 -p1 -b .nscd_poke~
 %patch59 -p1 -b .permissive~
 %patch60 -p1 -b .nscd_mdv~
 %patch61 -p1 -b .nocheck~
+%patch62 -p1 -b .ppp_req~
 autoreconf -f
 
 %build
