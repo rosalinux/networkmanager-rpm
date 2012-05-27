@@ -191,8 +191,6 @@ autoreconf -f
 %install
 %makeinstall_std
 
-mv %{buildroot}%{_initrddir}/networkmanager %{buildroot}%{_initrddir}/%{rname}
-
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-mdv,keyfile
@@ -238,7 +236,7 @@ popd
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
-%{_initrddir}/%{rname}
+%{_initrddir}/%{name}
 #%{_initrddir}/%{rname}dispatcher
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
