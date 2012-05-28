@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}8
+Release:	%{?snapshot:0.%{snapshot}.}9
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -184,7 +184,6 @@ autoreconf -f
 		--enable-ppp \
 		--enable-concheck \
 		--with-wext=yes \
-		--enable-polkit
 
 %make
 
