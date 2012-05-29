@@ -62,9 +62,7 @@ BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	systemd-units
 BuildRequires:	pkgconfig(libsystemd-login)
 BuildRequires:	pkgconfig(libsoup-2.4)
-Requires(post):	systemd-units rpm-helper
-Requires(preun):systemd-units rpm-helper
-Requires(postun):systemd-units
+Requires(post,preun,postun):rpm-helper
 Requires:	wpa_supplicant >= 0.7.3-2
 Requires:	wireless-tools
 Requires:	dhcp-client-daemon
