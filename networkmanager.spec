@@ -33,18 +33,18 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.4.0-add-systemd-alias.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
-Patch54:	NetworkManager-0.9.3.995-add-missing-linkage.patch
-Patch55:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
-Patch56:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
-Patch57:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
-Patch59:	nm-polkit-permissive.patch
 Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
-Patch61:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
-Patch62:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 
-
 # upstream patches
+Patch100:	NetworkManager-0.9.3.995-add-missing-linkage.patch
+Patch101:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
+Patch102:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
+Patch103:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
+Patch104:	nm-polkit-permissive.patch
+Patch105:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
+Patch106:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
+
 # (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
 BuildRequires:	wpa_supplicant
@@ -154,16 +154,18 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .systemd-alias~
-%patch54 -p1 -b .link~
-%patch55 -p1 -b .str~
-%patch56 -p1 -b .rhbz802536~
-%patch57 -p1 -b .rhbz#806664~
 #patch58 -p1 -b .nscd_poke~
-%patch59 -p1 -b .permissive~
 %patch60 -p1 -b .nscd_mdv~
-%patch61 -p1 -b .nocheck~
-%patch62 -p1 -b .ppp_req~
 %patch63 -p1 -b .dhcpcd~
+
+%patch100 -p1 -b .link~
+%patch101 -p1 -b .str~
+%patch102 -p1 -b .rhbz802536~
+%patch103 -p1 -b .rhbz#806664~
+%patch104 -p1 -b .permissive~
+%patch105 -p1 -b .nocheck~
+%patch106 -p1 -b .ppp_req~
+
 autoreconf -f
 
 %build
