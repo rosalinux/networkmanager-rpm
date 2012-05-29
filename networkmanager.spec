@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}9
+Release:	%{?snapshot:0.%{snapshot}.}10
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -44,6 +44,7 @@ Patch103:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settin
 Patch104:	nm-polkit-permissive.patch
 Patch105:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
 Patch106:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
+Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
 
 BuildRequires:	pkgconfig(libnl-1)
 BuildRequires:	wpa_supplicant
@@ -161,6 +162,7 @@ Development files for nm-glib-vpn.
 %patch104 -p1 -b .permissive~
 %patch105 -p1 -b .nocheck~
 %patch106 -p1 -b .ppp_req~
+%patch107 -p1 -b .nmcli_con~
 
 autoreconf -f
 
