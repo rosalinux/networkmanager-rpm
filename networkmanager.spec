@@ -41,6 +41,7 @@ Patch59:	nm-polkit-permissive.patch
 Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
 Patch61:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
 Patch62:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
+Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 
 
 # upstream patches
@@ -162,6 +163,7 @@ Development files for nm-glib-vpn.
 %patch60 -p1 -b .nscd_mdv~
 %patch61 -p1 -b .nocheck~
 %patch62 -p1 -b .ppp_req~
+%patch63 -p1 -b .dhcpcd~
 autoreconf -f
 
 %build
