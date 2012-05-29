@@ -45,7 +45,6 @@ Patch104:	nm-polkit-permissive.patch
 Patch105:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
 Patch106:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
 
-# (fhimpe) Make it use correct location for dhclient lease files
 BuildRequires:	pkgconfig(libnl-1)
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
@@ -154,7 +153,6 @@ Development files for nm-glib-vpn.
 %patch2 -p1 -b .explain-dns1-dns2~
 %patch50 -p1 -b .after-resolvconf~
 %patch51 -p1 -b .systemd-alias~
-#patch58 -p1 -b .nscd_poke~
 %patch60 -p1 -b .nscd_mdv~
 %patch63 -p1 -b .dhcpcd~
 
@@ -240,11 +238,9 @@ popd
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %{_initrddir}/%{name}
-#%{_initrddir}/%{rname}dispatcher
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %{_sbindir}/%{rname}
-#%{_sbindir}/%{rname}Dispatcher
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
