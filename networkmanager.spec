@@ -14,7 +14,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}10
+Release:	%{?snapshot:0.%{snapshot}.}11
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -221,10 +221,10 @@ popd
 %find_lang %{rname}
 
 %post
-%_post_service %{rname} %{rname}.service 
+%_post_service %{name} %{rname}.service
 
 %preun
-%_preun_service %{rname} %{rname}.service
+%_preun_service %{name} %{rname}.service
 
 %postun
 %_postun_unit %{rname}.service 
