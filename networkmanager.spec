@@ -13,8 +13,8 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.4.0
-Release:	%{?snapshot:0.%{snapshot}.}11
+Version:	0.9.5.95
+Release:	%{?snapshot:0.%{snapshot}.}1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -37,13 +37,7 @@ Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 
 # upstream patches
-Patch100:	NetworkManager-0.9.3.995-add-missing-linkage.patch
-Patch101:	networkmanager-0.9.4.0-format_not_a_string_literal.patch
-Patch102:	networkmanager-0.9.4.0-ensure-bindings-created-NMClient-object-work.patch
-Patch103:	networkmanager-0.9.4.0-initialize-NMRemoteSettings-in-nm_remote_settings_new.patch
 Patch104:	nm-polkit-permissive.patch
-Patch105:	networkmanager-0.9.4.0-cl-fix-nm-nocheck-con-up.patch
-Patch106:	0001-ppp-don-t-use-struct-ifpppstatsreq-that-was-removed-.patch
 Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
 
 BuildRequires:	pkgconfig(libnl-1)
@@ -155,13 +149,7 @@ Development files for nm-glib-vpn.
 %patch60 -p1 -b .nscd_mdv~
 %patch63 -p1 -b .dhcpcd~
 
-%patch100 -p1 -b .link~
-%patch101 -p1 -b .str~
-%patch102 -p1 -b .rhbz802536~
-%patch103 -p1 -b .rhbz#806664~
 %patch104 -p1 -b .permissive~
-%patch105 -p1 -b .nocheck~
-%patch106 -p1 -b .ppp_req~
 %patch107 -p1 -b .nmcli_con~
 
 autoreconf -f
