@@ -13,8 +13,8 @@
 %define	rname	NetworkManager
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.5.96
-Release:	%{?snapshot:0.%{snapshot}.}1
+Version:	0.9.6.0
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
