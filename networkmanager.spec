@@ -1,19 +1,20 @@
-%define	major_glib	4
-%define major_glib_vpn	1
-%define major_util	2
-%define libnm_glib		%mklibname nm-glib %{major_glib}
-%define libnm_glib_devel	%mklibname -d nm-glib
-%define libnm_glib_vpn		%mklibname nm-glib-vpn %{major_glib_vpn}
-%define libnm_glib_vpn_devel	%mklibname -d nm-glib-vpn
-%define libnm_util		%mklibname nm-util %{major_util}
-%define libnm_util_devel	%mklibname -d nm-util
+%define major_glib 4
+%define major_glib_vpn 1
+%define major_util 2
+%define libnm_glib %mklibname nm-glib %{major_glib}
+%define libnm_glib_devel %mklibname -d nm-glib
+%define libnm_glib_vpn %mklibname nm-glib-vpn %{major_glib_vpn}
+%define libnm_glib_vpn_devel %mklibname -d nm-glib-vpn
+%define libnm_util %mklibname nm-util %{major_util}
+%define libnm_util_devel %mklibname -d nm-util
 
 #define snapshot 0
 
-%define	rname	NetworkManager
+%define rname NetworkManager
+
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.6.0
+Version:	0.9.6.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -44,8 +45,10 @@ BuildRequires:	pkgconfig(libnl-1)
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	pkgconfig(nss) intltool
-BuildRequires:	gtk-doc pkgconfig(ext2fs)
+BuildRequires:	pkgconfig(nss)
+BuildRequires:	intltool
+BuildRequires:	gtk-doc
+BuildRequires:	pkgconfig(ext2fs)
 BuildRequires:	ppp-devel
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
@@ -57,7 +60,7 @@ BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	systemd-units
 BuildRequires:	pkgconfig(libsystemd-login)
 BuildRequires:	pkgconfig(libsoup-2.4)
-Requires(post,preun,postun):rpm-helper
+Requires(post,preun,postun):	rpm-helper
 Requires:	wpa_supplicant >= 0.7.3-2
 Requires:	wireless-tools
 Requires:	dhcp-client-daemon
@@ -81,7 +84,7 @@ configuration and setup as painless and automatic as possible.  If using DHCP,
 NetworkManager is _intended_ to replace default routes, obtain IP addresses
 from a DHCP server, and change nameservers whenever it sees fit.
 
-%package -n	%{libnm_util}
+%package -n %{libnm_util}
 Summary:	Shared library for nm_util
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
@@ -90,7 +93,7 @@ Obsoletes:	%{mklibname networkmanager-util 0}
 %description -n %{libnm_util}
 Shared library for nm-util.
 
-%package -n	%{libnm_util_devel}
+%package -n %{libnm_util_devel}
 Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
@@ -101,7 +104,7 @@ Obsoletes:	%{_lib}nm_util-devel < 0.7.996
 %description -n %{libnm_util_devel}
 Development files for nm-util.
 
-%package -n	%{libnm_glib}
+%package -n %{libnm_glib}
 Summary:	Shared library for nm_glib
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-glib 0}
@@ -110,7 +113,7 @@ Obsoletes:	%{mklibname networkmanager-glib 0}
 This package contains the libraries that make it easier to use some
 NetworkManager functionality from applications that use glib.
 
-%package -n	%{libnm_glib_devel}
+%package -n %{libnm_glib_devel}
 Summary:	Development files for nm_glib
 Group:		Development/C
 Provides:	nm-glib-devel = %{EVRD}
@@ -121,7 +124,7 @@ Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
 %description -n %{libnm_glib_devel}
 Development files for nm-glib.
 
-%package -n	%{libnm_glib_vpn}
+%package -n %{libnm_glib_vpn}
 Summary:	Shared library for nm-glib-vpn
 Group:		System/Libraries
 Conflicts:	%{_lib}nm-glib1 < 0.7.996
@@ -130,7 +133,7 @@ Conflicts:	%{_lib}nm-glib1 < 0.7.996
 This package contains the libraries that make it easier to use some
 NetworkManager VPN functionality from applications that use glib.
 
-%package -n	%{libnm_glib_vpn_devel}
+%package -n %{libnm_glib_vpn_devel}
 Summary:	Development files for nm-glib-vpn
 Group:		Development/C
 Provides:	nm-glib-vpn-devel = %{EVRD}
