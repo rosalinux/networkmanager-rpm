@@ -1,0 +1,10 @@
+--- NetworkManager-0.9.2.0/data/NetworkManager.service.in.after-resolvconf	2011-11-09 18:22:29.000000000 +0100
++++ NetworkManager-0.9.2.0/data/NetworkManager.service.in	2011-11-30 17:45:58.690683181 +0100
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Network Manager
+-After=syslog.target
++After=syslog.target resolvconf.service
+ Wants=network.target
+ Before=network.target
+ 
