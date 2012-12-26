@@ -1,3 +1,5 @@
+%define url_ver %(echo %{version}|cut -d. -f1,2)
+
 %define major_glib 4
 %define major_glib_vpn 1
 %define major_util 2
@@ -19,7 +21,7 @@ Release:	1
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/%{url_ver}/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
 Source1:	README.urpmi
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
@@ -41,37 +43,38 @@ Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 Patch104:	nm-polkit-permissive.patch
 Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
 
-BuildRequires:	pkgconfig(libnl-1)
+#BuildRequires:	dhcp-client
+BuildRequires:	gtk-doc
+BuildRequires:	intltool
+BuildRequires:	iptables
+BuildRequires:	systemd-units
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
-BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	pkgconfig(nss)
-BuildRequires:	intltool
-BuildRequires:	gtk-doc
-BuildRequires:	pkgconfig(ext2fs)
 BuildRequires:	ppp-devel
+BuildRequires:	pkgconfig(dbus-glib-1)
+BuildRequires:	pkgconfig(ext2fs)
+BuildRequires:	pkgconfig(gobject-introspection-1.0)
+BuildRequires:	pkgconfig(gudev-1.0)
+BuildRequires:	pkgconfig(libnl-1)
+BuildRequires:	pkgconfig(libsoup-2.4)
+# (bor) for systemd support, pkg-config; move to systemd?
+BuildRequires:	pkgconfig(libsystemd-login)
+BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
-BuildRequires:	pkgconfig(gudev-1.0)
-#BuildRequires:	dhcp-client
-BuildRequires:	iptables
-BuildRequires:	pkgconfig(gobject-introspection-1.0)
-# (bor) for systemd support, pkg-config; move to systemd?
-BuildRequires:	systemd-units
-BuildRequires:	pkgconfig(libsystemd-login)
-BuildRequires:	pkgconfig(libsoup-2.4)
-Requires(post,preun,postun):	rpm-helper
-Requires:	wpa_supplicant >= 0.7.3-2
-Requires:	wireless-tools
+
 Requires:	dhcp-client-daemon
+Requires:	dnsmasq-base
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
-Requires:	dnsmasq-base
 Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
 Requires:	iproute2
 Requires:	iptables
-Provides:	NetworkManager = %{EVRD}
+Requires(post,preun,postun):	rpm-helper
+Requires:	wireless-tools
+Requires:	wpa_supplicant >= 0.7.3-2
 Suggests:	nscd
+Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
@@ -145,38 +148,30 @@ Development files for nm-glib-vpn.
 
 %prep
 %setup -q -n %{rname}-%{version}
-%patch1 -p1 -b .mdv~
-%patch2 -p1 -b .explain-dns1-dns2~
-%patch50 -p1 -b .after-resolvconf~
-%patch51 -p1 -b .systemd-alias~
-%patch60 -p1 -b .nscd_mdv~
-%patch63 -p1 -b .dhcpcd~
-
-%patch104 -p1 -b .permissive~
-%patch107 -p1 -b .nmcli_con~
-
+%apply_patches
 autoreconf -f
 
 %build
-%configure2_5x	--disable-static \
-		--disable-rpath \
-		--with-distro=mandriva \
-		--with-crypto=nss \
-		--enable-more-warnings=no \
-		--with-docs=yes \
-		--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-		--with-resolvconf=yes \
-		--with-session-tracking=systemd \
-		--with-systemdsystemunitdir=%{_systemunitdir} \
-		--with-tests=yes \
-		--with-dhcpcd=/sbin/dhcpcd \
-		--with-dhclient=/sbin/dhclient \
-		--with-iptables=/sbin/iptables \
-		--with-resolvconf=/sbin/resolvconf \
-		--enable-polkit \
-		--enable-ppp \
-		--enable-concheck \
-		--with-wext=yes \
+%configure2_5x \
+	--disable-static \
+	--disable-rpath \
+	--with-distro=mandriva \
+	--with-crypto=nss \
+	--enable-more-warnings=no \
+	--with-docs=yes \
+	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
+	--with-resolvconf=yes \
+	--with-session-tracking=systemd \
+	--with-systemdsystemunitdir=%{_systemunitdir} \
+	--with-tests=yes \
+	--with-dhcpcd=/sbin/dhcpcd \
+	--with-dhclient=/sbin/dhclient \
+	--with-iptables=/sbin/iptables \
+	--with-resolvconf=/sbin/resolvconf \
+	--enable-polkit \
+	--enable-ppp \
+	--enable-concheck \
+	--with-wext=yes \
 
 %make
 
