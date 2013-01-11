@@ -17,7 +17,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.6.4
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 URL:		http://www.gnome.org/projects/NetworkManager/
@@ -149,7 +149,8 @@ Development files for nm-glib-vpn.
 %prep
 %setup -q -n %{rname}-%{version}
 %apply_patches
-autoreconf -f
+autoreconf -fi
+intltoolize -f
 
 %build
 %configure2_5x \
