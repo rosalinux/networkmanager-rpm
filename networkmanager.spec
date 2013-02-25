@@ -61,6 +61,8 @@ BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(libnl-3.0)
+# (tpg) modemmanager support
+BuildRequires:	pkgconfig(mm-glib)
 
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
