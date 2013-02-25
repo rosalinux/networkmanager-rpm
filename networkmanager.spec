@@ -163,6 +163,7 @@ intltoolize -f
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
 	--with-resolvconf=yes \
 	--with-session-tracking=systemd \
+	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_systemunitdir} \
 	--with-tests=yes \
 	--with-dhcpcd=/sbin/dhcpcd \
@@ -172,7 +173,7 @@ intltoolize -f
 	--enable-polkit \
 	--enable-ppp \
 	--enable-concheck \
-	--with-wext=yes \
+	--with-wext=yes
 
 %make
 
