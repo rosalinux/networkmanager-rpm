@@ -153,6 +153,7 @@ autoreconf -fi
 intltoolize -f
 
 %build
+%define	_disable_ld_no_undefined 1
 %configure2_5x \
 	--disable-static \
 	--disable-rpath \
