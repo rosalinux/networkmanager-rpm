@@ -29,7 +29,7 @@ Source1:	README.urpmi
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.4.0-mdv.patch
+Patch1:		networkmanager-0.9.8.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
