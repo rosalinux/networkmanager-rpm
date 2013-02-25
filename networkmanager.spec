@@ -34,13 +34,11 @@ Patch1:		networkmanager-0.9.8.0-mdv.patch
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
-Patch51:	networkmanager-0.9.4.0-add-systemd-alias.patch
+Patch51:	networkmanager-0.9.8.0-add-systemd-alias.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
-Patch60:	networkmanager-0.9.4.0-mdv-nscd-systemd.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 
 # upstream patches
-Patch104:	nm-polkit-permissive.patch
 Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
 
 #BuildRequires:	dhcp-client
@@ -87,16 +85,16 @@ configuration and setup as painless and automatic as possible.  If using DHCP,
 NetworkManager is _intended_ to replace default routes, obtain IP addresses
 from a DHCP server, and change nameservers whenever it sees fit.
 
-%package -n %{libnm_util}
+%package -n	%{libnm_util}
 Summary:	Shared library for nm_util
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
 %rename		%{_lib}nm_util1
 
-%description -n %{libnm_util}
+%description -n	%{libnm_util}
 Shared library for nm-util.
 
-%package -n %{libnm_util_devel}
+%package -n	%{libnm_util_devel}
 Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
@@ -104,10 +102,10 @@ Provides:	nm-util-devel = %{EVRD}
 Requires:	%{libnm_util} = %{EVRD}
 Obsoletes:	%{_lib}nm_util-devel < 0.7.996
 
-%description -n %{libnm_util_devel}
+%description -n	%{libnm_util_devel}
 Development files for nm-util.
 
-%package -n %{libnm_glib}
+%package -n	%{libnm_glib}
 Summary:	Shared library for nm_glib
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-glib 0}
@@ -116,7 +114,7 @@ Obsoletes:	%{mklibname networkmanager-glib 0}
 This package contains the libraries that make it easier to use some
 NetworkManager functionality from applications that use glib.
 
-%package -n %{libnm_glib_devel}
+%package -n	%{libnm_glib_devel}
 Summary:	Development files for nm_glib
 Group:		Development/C
 Provides:	nm-glib-devel = %{EVRD}
@@ -124,10 +122,10 @@ Obsoletes:	%{mklibname networkmanager-glib 0 -d}
 Requires:	%{libnm_glib} = %{EVRD}
 Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
 
-%description -n %{libnm_glib_devel}
+%description -n	%{libnm_glib_devel}
 Development files for nm-glib.
 
-%package -n %{libnm_glib_vpn}
+%package -n	%{libnm_glib_vpn}
 Summary:	Shared library for nm-glib-vpn
 Group:		System/Libraries
 Conflicts:	%{_lib}nm-glib1 < 0.7.996
@@ -136,14 +134,14 @@ Conflicts:	%{_lib}nm-glib1 < 0.7.996
 This package contains the libraries that make it easier to use some
 NetworkManager VPN functionality from applications that use glib.
 
-%package -n %{libnm_glib_vpn_devel}
+%package -n	%{libnm_glib_vpn_devel}
 Summary:	Development files for nm-glib-vpn
 Group:		Development/C
 Provides:	nm-glib-vpn-devel = %{EVRD}
 Requires:	%{libnm_glib_vpn} = %{EVRD}
 Conflicts:	%{_lib}nm_glib-devel < 0.7.996
 
-%description -n %{libnm_glib_vpn_devel}
+%description -n	%{libnm_glib_vpn_devel}
 Development files for nm-glib-vpn.
 
 %prep
@@ -174,7 +172,8 @@ intltoolize -f
 	--enable-polkit \
 	--enable-ppp \
 	--enable-concheck \
-	--with-wext=yes
+	--with-wext=yes \
+	--enable-modify-system
 
 %make
 
@@ -226,7 +225,6 @@ popd
 %{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
-%{_initrddir}/%{name}
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %{_sbindir}/%{rname}
@@ -248,9 +246,7 @@ popd
 %dir %{_localstatedir}/run/%{rname}
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
-%{_libexecdir}/nm-crash-logger
-%dir %{_datadir}/%{rname}
-%{_datadir}/%{rname}/gdb-cmd
+%{_datadir}/bash-completion/completions/nmcli
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 %{_datadir}/gtk-doc/html/*
