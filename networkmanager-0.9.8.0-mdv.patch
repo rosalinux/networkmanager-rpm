@@ -5893,7 +5893,7 @@
 +	shvarFile *parsed;
 +	char *type, *nmc = NULL, *bootproto;
 +	NMSetting *s_ip4, *s_port;
-+	gboolean nm_controlled = FALSE;
++	gboolean nm_controlled = TRUE;
 +	char *device = NULL;
 +	MdvIfcfgType ifcfg_type;
 +	gboolean ip6_used = FALSE;
@@ -5978,8 +5978,8 @@
 +			lower = g_ascii_strdown (nmc, -1);
 +			g_free (nmc);
 +
-+			if (!strcmp (lower, "yes") || !strcmp (lower, "y") || !strcmp (lower, "true"))
-+				nm_controlled = TRUE;
++           if (!strcmp (lower, "no") || !strcmp (lower, "n") || !strcmp (lower, "false"))
++               nm_controlled = FALSE;
 +			g_free (lower);
 +		}
 +
