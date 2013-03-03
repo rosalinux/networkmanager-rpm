@@ -22,7 +22,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.8.0
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -201,9 +201,10 @@ intltoolize -f
 %install
 %makeinstall_std
 
+# ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
-plugins=ifcfg-mdv,keyfile
+plugins=ifcfg-rh,keyfile
 EOF
 
 # create a VPN directory
