@@ -22,7 +22,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.8.0
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -40,6 +40,7 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.0-add-systemd-alias.patch
+Patch10:	nm-polkit-permissive.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 
