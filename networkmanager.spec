@@ -205,7 +205,7 @@ intltoolize -f
 # ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
-plugins=ifcfg-rh,keyfile
+plugins=ifcfg-mdv,keyfile
 EOF
 
 # create a VPN directory
