@@ -21,8 +21,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.8.0
-Release:	5
+Version:	0.9.8.2
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -273,6 +273,7 @@ popd
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
+%{_systemunitdir}/NetworkManager-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_systemunitdir}/networkmanager.service
 %{_mandir}/man1/*.1*
