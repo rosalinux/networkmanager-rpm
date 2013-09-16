@@ -21,7 +21,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.8.2
+Version:	0.9.8.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -39,10 +39,13 @@ Patch1:		networkmanager-0.9.8.0-mdv.patch
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
-Patch51:	networkmanager-0.9.8.0-add-systemd-alias.patch
+Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch10:	nm-polkit-permissive.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
+Patch64:	NetworkManager-0.9.3.995-discover-mac-address.patch
+# taken from Mageia
+Patch65:	NetworkManager-0.9.3.990-mga-wireless_essid.patch
 
 # upstream patches
 Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
