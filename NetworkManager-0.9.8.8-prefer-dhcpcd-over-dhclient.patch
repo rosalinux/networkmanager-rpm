@@ -1,0 +1,57 @@
+--- NetworkManager-0.9.8.8/src/dhcp-manager/nm-dhcp-manager.c.0066~	2013-10-10 17:23:40.000000000 +0200
++++ NetworkManager-0.9.8.8/src/dhcp-manager/nm-dhcp-manager.c	2013-10-27 21:14:52.129407839 +0100
+@@ -250,16 +250,16 @@ get_client_type (const char *client, GEr
+ 	/* If a client was disabled at build-time, its *_PATH define will be
+ 	 * an empty string.
+ 	 */
+-	if (DHCLIENT_PATH && strlen (DHCLIENT_PATH))
+-		dhclient_path = nm_dhcp_dhclient_get_path (DHCLIENT_PATH);
+ 	if (DHCPCD_PATH && strlen (DHCPCD_PATH))
+ 		dhcpcd_path = nm_dhcp_dhcpcd_get_path (DHCPCD_PATH);
++	if (DHCLIENT_PATH && strlen (DHCLIENT_PATH))
++		dhclient_path = nm_dhcp_dhclient_get_path (DHCLIENT_PATH);
+ 
+ 	if (!client) {
+-		if (dhclient_path)
+-			return NM_TYPE_DHCP_DHCLIENT;
+-		else if (dhcpcd_path)
++		if (dhcpcd_path)
+ 			return NM_TYPE_DHCP_DHCPCD;
++		else if (dhclient_path)
++			return NM_TYPE_DHCP_DHCLIENT;
+ 		else {
+ 			g_set_error_literal (error,
+ 			                     NM_DHCP_MANAGER_ERROR, NM_DHCP_MANAGER_ERROR_BAD_CLIENT,
+@@ -268,24 +268,24 @@ get_client_type (const char *client, GEr
+ 		}
+ 	}
+ 
+-	if (!strcmp (client, "dhclient")) {
+-		if (!dhclient_path) {
++	if (!strcmp (client, "dhcpcd")) {
++		if (!dhcpcd_path) {
+ 			g_set_error_literal (error,
+ 			                     NM_DHCP_MANAGER_ERROR, NM_DHCP_MANAGER_ERROR_BAD_CLIENT,
+-			                     _("'dhclient' could be found."));
++			                     _("'dhcpcd' could be found."));
+ 			return 0;
+ 		}
+-		return NM_TYPE_DHCP_DHCLIENT;
++		return NM_TYPE_DHCP_DHCPCD;
+ 	}
+ 
+-	if (!strcmp (client, "dhcpcd")) {
+-		if (!dhcpcd_path) {
++	if (!strcmp (client, "dhclient")) {
++		if (!dhclient_path) {
+ 			g_set_error_literal (error,
+ 			                     NM_DHCP_MANAGER_ERROR, NM_DHCP_MANAGER_ERROR_BAD_CLIENT,
+-			                     _("'dhcpcd' could be found."));
++			                     _("'dhclient' could be found."));
+ 			return 0;
+ 		}
+-		return NM_TYPE_DHCP_DHCPCD;
++		return NM_TYPE_DHCP_DHCLIENT;
+ 	}
+ 
+ 	g_set_error (error,

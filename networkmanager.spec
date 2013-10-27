@@ -22,7 +22,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.8.8
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -46,6 +46,8 @@ Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 Patch64:	NetworkManager-0.9.3.995-discover-mac-address.patch
 # taken from Mageia
 Patch65:	NetworkManager-0.9.3.990-mga-wireless_essid.patch
+Patch66:	NetworkManager-0.9.8.8-prefer-dhcpcd-over-dhclient.patch
+Patch67:	NetworkManager-0.9.8.8-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
 
 # upstream patches
 Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
