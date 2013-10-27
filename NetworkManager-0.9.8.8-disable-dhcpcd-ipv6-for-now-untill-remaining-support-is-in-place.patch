@@ -1,0 +1,11 @@
+--- NetworkManager-0.9.8.8/src/dhcp-manager/nm-dhcp-dhcpcd.c~	2013-10-27 20:16:38.411451968 +0100
++++ NetworkManager-0.9.8.8/src/dhcp-manager/nm-dhcp-dhcpcd.c	2013-10-27 20:16:44.241531999 +0100
+@@ -139,6 +139,8 @@ ip4_start (NMDHCPClient *client,
+ 
+ 	g_ptr_array_add (argv, (gpointer) "-G");	/* Let NM handle routing */
+ 
++	g_ptr_array_add (argv, (gpointer) "-4");	/* Only handle the new IPv4 support for now, otherwise we'll have to implement it in the settings plugins as well.. :p */
++
+ 	g_ptr_array_add (argv, (gpointer) "-c");	/* Set script file */
+ 	g_ptr_array_add (argv, (gpointer) ACTION_SCRIPT_PATH );
+ 
