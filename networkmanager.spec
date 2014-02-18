@@ -1,8 +1,10 @@
 %define	url_ver %(echo %{version}|cut -d. -f1,2)
 
-#define	snapshot 0
 %define	rname	NetworkManager
 %define	api	1.0
+
+%define gitdate	.git20140117
+%define git_sha	.94c2993
 
 %define	majglib		4
 %define	libnm_glib	%mklibname nm-glib %{majglib}
@@ -18,53 +20,56 @@
 %define	girname		%mklibname	%{name}-gir %{api}
 %define	devnm_util	%mklibname -d nm-util
 
+%define	ppp_version	%(rpm -q --queryformat "%{VERSION}" ppp )
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.8.8
-Release:	5
+Version:	0.9.9.0
+Release:	%{?gitdate:0%{gitdate}.}1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/%{url_ver}/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
+Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/%{url_ver}/%{rname}-%{version}%{?gitdate}%{?git_sha}.tar.xz
 Source1:	README.urpmi
+Source2:	00-server.conf
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.8.0-mdv.patch
+Patch1:		networkmanager-0.9.9.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
+Patch3:		0002-libnm-glib-zero-secrets-to-prevent-crash-getting-sec.patch
+
 # Mandriva specific patches
-Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
+Patch50:	networkmanager-0.9.9.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch10:	nm-polkit-permissive.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
-Patch64:	NetworkManager-0.9.3.995-discover-mac-address.patch
+Patch64:	NetworkManager-0.9.9.0-discover-mac-address.patch
 # taken from Mageia
 Patch65:	NetworkManager-0.9.3.990-mga-wireless_essid.patch
-Patch66:	NetworkManager-0.9.8.8-prefer-dhcpcd-over-dhclient.patch
-Patch67:	NetworkManager-0.9.8.8-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
-
-# upstream patches
-Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
+Patch66:	NetworkManager-0.9.9.0-prefer-dhcpcd-over-dhclient.patch
+#Patch67:	NetworkManager-0.9.8.8-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
 
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	systemd-units
+BuildRequires:	vala-tools
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
-BuildRequires:	ppp-devel
+BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(ext2fs)
 BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	pkgconfig(gudev-1.0)
 BuildRequires:	pkgconfig(libnl-3.0)
 BuildRequires:	pkgconfig(libsoup-2.4)
+BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd-login)
 BuildRequires:	pkgconfig(glibmm-2.4)
@@ -78,7 +83,7 @@ Requires:	iproute2
 Requires:	iptables
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
-Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
+Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
 Requires:	wpa_supplicant >= 0.7.3-2
@@ -178,12 +183,12 @@ Development files for nm-glib-vpn.
 %apply_patches
 autoreconf -fi
 intltoolize -f
+# Add readme displayed by urpmi
+cp %{SOURCE1} .
 
 %build
 %define	_disable_ld_no_undefined 1
 %configure2_5x \
-	--disable-static \
-	--disable-rpath \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
 	--with-docs=yes \
@@ -201,7 +206,16 @@ intltoolize -f
 	--enable-ppp \
 	--enable-concheck \
 	--with-wext=yes \
-	--enable-modify-system
+	--enable-modify-system \
+	--with-modem-manager-1=yes \
+	--with-vala=yes \
+	--with-udev-dir=/lib/udev \
+	--with-system-libndp=yes \
+	--with-nmtui \
+	--with-teamdctl \
+	--enable-introspection=yes \
+	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
+	--with-dist-version=%{version}-%{release}
 
 %make
 
@@ -214,18 +228,27 @@ cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 plugins=ifcfg-mdv,keyfile
 EOF
 
+install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/00-server.conf
+
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 
+
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 
-# Add readme displayed by urpmi
-cp %{SOURCE1} .
+# create a dnsmasq.d directory
+install -d $%{buildroot}%{_sysconfdir}/NetworkManager/dnsmasq.d
+
+install -d $%{buildroot}%{_datadir}/gnome-vpn-properties
+
+install -d $%{buildroot}%{_localstatedir}/lib/NetworkManager
+
 
 # link service file to match alias
 ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
+ln -s ../NetworkManager-wait-online.service %{buildroot}/%{_systemunitdir}/network-online.target.wants
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
@@ -239,9 +262,21 @@ popd
 
 %post
 %_post_service %{name} %{rname}.service
+%_post_service %{name} %{rname}-wait-omline.service
+%_post_service %{name} %{rname}-dispatcher.service
 
 %preun
+if [ $1 -eq 0 ]; then
+    # Package removal, not upgrade
+    /bin/systemctl --no-reload disable NetworkManager.service >/dev/null 2>&1 || :
+
+    # Don't kill networking entirely just on package remove
+    #/bin/systemctl stop NetworkManager.service >/dev/null 2>&1 || :
+fi
 %_preun_service %{name} %{rname}.service
+%_preun_service %{name} %{rname}-wait-omline.service
+%_preun_service %{name} %{rname}-dispatcher.service
+
 
 %postun
 %_postun_unit %{rname}.service 

@@ -1,6 +1,23 @@
---- NetworkManager-0.9.8.0/configure.ac.0001~	2013-02-20 22:02:49.000000000 +0100
-+++ NetworkManager-0.9.8.0/configure.ac	2013-02-25 10:01:11.492762738 +0100
-@@ -93,23 +93,26 @@ AC_SUBST(nmrundir, "$localstatedir/run/$
+--- NetworkManager-0.9.9.0/README.mdv.0001~	2014-02-18 14:52:23.597157458 +0100
++++ NetworkManager-0.9.9.0/README.mdv	2014-02-18 14:52:23.597157458 +0100
+@@ -0,0 +1,14 @@
++The ifcfg-mdv is a BETA plugin, which adds support for Mandriva-specific
++variables in /etc/sysconfig/network-scripts/ifcfg-* files to network
++manager.
++
++This is not a production-ready version, nor it is officially supported as of
++now. However, it works fine for me, so - at least in theory - it should work
++for some of you out there as well.
++
++To get the most up-to-date patch against mainstream NetworkManager code,
++just run:
++# git diff master mdv
++
++The 'patches' directory contains mostly up-to-date patches to be used with
++Mandriva's networkmanager package.
+--- NetworkManager-0.9.9.0/configure.ac.0001~	2014-01-08 12:33:19.000000000 +0100
++++ NetworkManager-0.9.9.0/configure.ac	2014-02-18 14:52:21.480398955 +0100
+@@ -90,23 +90,26 @@ AC_SUBST(nmrundir, "$localstatedir/run/$
  
  # Alternative configuration plugins
  AC_ARG_ENABLE(ifcfg-rh, AS_HELP_STRING([--enable-ifcfg-rh], [enable ifcfg-rh configuration plugin (Fedora/RHEL)]))
@@ -28,7 +45,7 @@
  AM_CONDITIONAL(CONFIG_PLUGIN_IFCFG_SUSE, test "$enable_ifcfg_suse" = "yes")
  AM_CONDITIONAL(CONFIG_PLUGIN_IFUPDOWN, test "$enable_ifupdown" = "yes")
  AM_CONDITIONAL(CONFIG_PLUGIN_IFNET, test "$enable_ifnet" = "yes")
-@@ -649,6 +652,7 @@ src/settings/plugins/ifnet/tests/Makefil
+@@ -749,6 +752,7 @@ src/settings/plugins/ifnet/tests/Makefil
  src/settings/plugins/ifcfg-rh/Makefile
  src/settings/plugins/ifcfg-rh/tests/Makefile
  src/settings/plugins/ifcfg-rh/tests/network-scripts/Makefile
@@ -36,8 +53,8 @@
  src/settings/plugins/ifcfg-suse/Makefile
  src/settings/plugins/keyfile/Makefile
  src/settings/plugins/keyfile/tests/Makefile
---- NetworkManager-0.9.8.0/initscript/Mandriva/networkmanager.in.0001~	2013-02-11 21:35:57.000000000 +0100
-+++ NetworkManager-0.9.8.0/initscript/Mandriva/networkmanager.in	2013-02-25 09:35:17.271005896 +0100
+--- NetworkManager-0.9.9.0/initscript/Mandriva/networkmanager.in.0001~	2012-11-06 09:04:58.000000000 +0100
++++ NetworkManager-0.9.9.0/initscript/Mandriva/networkmanager.in	2014-02-18 14:52:21.483732433 +0100
 @@ -11,8 +11,10 @@
  #
  ### BEGIN INIT INFO
@@ -61,78 +78,21 @@
  
  	echo -n $"Starting NetworkManager daemon: "
  	daemon --check $servicename $processname --pid-file=$pidfile
---- NetworkManager-0.9.8.0/man/NetworkManager.conf.5.in.0001~	2013-02-20 21:56:15.000000000 +0100
-+++ NetworkManager-0.9.8.0/man/NetworkManager.conf.5.in	2013-02-25 09:35:17.271005896 +0100
-@@ -67,6 +67,13 @@ to read and write configuration from the
- It currently supports reading wired, WiFi, and 802.1x connections, but does not yet support reading
- or writing mobile broadband, PPPoE, or VPN connections. To allow reading and writing of these
- add \fIkeyfile\fP plugin to your configuration as well.
-+.TP 
-+.I ifcfg\-mdv
-+plugin is used on the Mandriva distribution
-+to read and write configuration from the standard files under /etc/sysconfig/network-scripts. Additionally wireless security information is taken from /etc/wpa_supplicant.conf.
-+It currently supports reading wired, WiFi, and possibly 802.1x connections, but does not yet support reading
-+or writing mobile broadband, PPPoE, or VPN connections. To allow reading and writing of these
-+add \fIkeyfile\fP plugin to your configuration as well.
- .TP
- .I ifupdown
- plugin is used on the Debian and Ubuntu distributions, and reads connections from
---- NetworkManager-0.9.8.0/README.mdv.0001~	2013-02-25 09:35:17.270005885 +0100
-+++ NetworkManager-0.9.8.0/README.mdv	2013-02-25 09:35:17.270005885 +0100
-@@ -0,0 +1,14 @@
-+The ifcfg-mdv is a BETA plugin, which adds support for Mandriva-specific
-+variables in /etc/sysconfig/network-scripts/ifcfg-* files to network
-+manager.
+--- NetworkManager-0.9.9.0/src/settings/plugins/Makefile.am.0001~	2014-02-18 14:52:23.620491803 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/Makefile.am	2014-02-18 14:53:13.405985757 +0100
+@@ -6,6 +6,10 @@ if CONFIG_PLUGIN_IFCFG_RH
+ SUBDIRS+=ifcfg-rh
+ endif
+ 
++if CONFIG_PLUGIN_IFCFG_MDV
++SUBDIRS+=ifcfg-mdv
++endif
 +
-+This is not a production-ready version, nor it is officially supported as of
-+now. However, it works fine for me, so - at least in theory - it should work
-+for some of you out there as well.
-+
-+To get the most up-to-date patch against mainstream NetworkManager code,
-+just run:
-+# git diff master mdv
-+
-+The 'patches' directory contains mostly up-to-date patches to be used with
-+Mandriva's networkmanager package.
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/common.h.0001~	2013-02-25 09:35:17.272005908 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/common.h	2013-02-25 09:35:17.272005908 +0100
-@@ -0,0 +1,34 @@
-+/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
-+/* NetworkManager system settings service
-+ *
-+ * This program is free software; you can redistribute it and/or modify
-+ * it under the terms of the GNU General Public License as published by
-+ * the Free Software Foundation; either version 2 of the License, or
-+ * (at your option) any later version.
-+ *
-+ * This program is distributed in the hope that it will be useful,
-+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
-+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-+ * GNU General Public License for more details.
-+ *
-+ * You should have received a copy of the GNU General Public License along
-+ * with this program; if not, write to the Free Software Foundation, Inc.,
-+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-+ *
-+ * (C) Copyright 2009 - 2012 Mandriva SA.
-+ */
-+
-+#ifndef __MDV_COMMON_H__
-+#define __MDV_COMMON_H__
-+
-+#include "../ifcfg-rh/common.h"
-+
-+#define IFCFG_WIRELESS_D_DIR IFCFG_DIR"/wireless.d"
-+
-+#undef IFCFG_PLUGIN_NAME 
-+#define IFCFG_PLUGIN_NAME "ifcfg-mdv"
-+#undef IFCFG_PLUGIN_INFO
-+#define IFCFG_PLUGIN_INFO "(c) 2009 - 2010 Eugeni Dodonov <eugeni@mandriva.com>, 2011 - 2012 Per Øyvind Karlsen <pkarlsen@mandriva.com>."
-+
-+#endif  /* __MDV_COMMON_H__ */
-+
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/Makefile.am.0001~	2013-02-25 09:35:17.272005908 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/Makefile.am	2013-02-25 11:18:04.917925447 +0100
+ if CONFIG_PLUGIN_IFCFG_SUSE
+ SUBDIRS+=ifcfg-suse
+ endif
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/Makefile.am.0001~	2014-02-18 14:52:23.597157458 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/Makefile.am	2014-02-18 14:52:23.597157458 +0100
 @@ -0,0 +1,62 @@
 +SUBDIRS=.
 +
@@ -196,8 +156,45 @@
 +	libifcfg-mdv-io.la \
 +	$(GLIB_LIBS)
 +
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c.0001~	2013-02-25 09:35:17.272005908 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c	2013-02-25 09:35:17.272005908 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/common.h.0001~	2014-02-18 14:52:23.597157458 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/common.h	2014-02-18 14:52:23.597157458 +0100
+@@ -0,0 +1,34 @@
++/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
++/* NetworkManager system settings service
++ *
++ * This program is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU General Public License as published by
++ * the Free Software Foundation; either version 2 of the License, or
++ * (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License along
++ * with this program; if not, write to the Free Software Foundation, Inc.,
++ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
++ *
++ * (C) Copyright 2009 - 2012 Mandriva SA.
++ */
++
++#ifndef __MDV_COMMON_H__
++#define __MDV_COMMON_H__
++
++#include "../ifcfg-rh/common.h"
++
++#define IFCFG_WIRELESS_D_DIR IFCFG_DIR"/wireless.d"
++
++#undef IFCFG_PLUGIN_NAME 
++#define IFCFG_PLUGIN_NAME "ifcfg-mdv"
++#undef IFCFG_PLUGIN_INFO
++#define IFCFG_PLUGIN_INFO "(c) 2009 - 2010 Eugeni Dodonov <eugeni@mandriva.com>, 2011 - 2012 Per Øyvind Karlsen <pkarlsen@mandriva.com>."
++
++#endif  /* __MDV_COMMON_H__ */
++
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c.0001~	2014-02-18 14:52:23.597157458 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c	2014-02-18 14:52:23.597157458 +0100
 @@ -0,0 +1,394 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -593,8 +590,8 @@
 +		              G_TYPE_NONE, 0);
 +}
 +
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.c.0001~	2013-02-25 09:35:17.273005920 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.c	2013-02-25 09:35:17.273005920 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.c.0001~	2014-02-18 14:52:23.600490935 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.c	2014-02-18 14:52:23.600490935 +0100
 @@ -0,0 +1,536 @@
 +#include <errno.h>
 +#include <string.h>
@@ -1132,8 +1129,8 @@
 +
 +	return result;
 +}
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.h.0001~	2013-02-25 09:35:17.273005920 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.h	2013-02-25 09:35:17.273005920 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.h.0001~	2014-02-18 14:52:23.600490935 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.h	2014-02-18 14:52:23.600490935 +0100
 @@ -0,0 +1,27 @@
 +#ifndef PARSE_WPA_SUPPLICANT_CONF_H
 +#define PARSE_WPA_SUPPLICANT_CONF_H
@@ -1162,8 +1159,8 @@
 +gboolean ifcfg_mdv_wpa_network_save(WPANetwork *, gchar *, GError **);
 +
 +#endif /* PARSE_WPA_SUPPLICANT_CONF_H */
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/plugin.c.0001~	2013-02-25 09:35:17.274005931 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/plugin.c	2013-02-25 11:22:33.157019910 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.c.0001~	2014-02-18 14:52:23.603824413 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.c	2014-02-18 14:52:23.603824413 +0100
 @@ -0,0 +1,818 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -1983,8 +1980,8 @@
 +
 +	return G_OBJECT (singleton);
 +}
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/plugin.h.0001~	2013-02-25 09:35:17.274005931 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/plugin.h	2013-02-25 09:35:17.274005931 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.h.0001~	2014-02-18 14:52:23.603824413 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.h	2014-02-18 14:52:23.603824413 +0100
 @@ -0,0 +1,50 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -2036,8 +2033,8 @@
 +
 +#endif	/* _PLUGIN_H_ */
 +
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/reader.c.0001~	2013-02-25 09:35:17.277005966 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/reader.c	2013-02-25 11:23:24.789613928 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/reader.c.0001~	2014-02-18 14:52:23.610491369 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/reader.c	2014-02-18 14:52:23.610491369 +0100
 @@ -0,0 +1,4051 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -6090,8 +6087,8 @@
 +	return _("System");
 +}
 +
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/reader.h.0001~	2013-02-25 09:35:17.277005966 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/reader.h	2013-02-25 09:35:17.277005966 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/reader.h.0001~	2014-02-18 14:52:23.613824847 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/reader.h	2014-02-18 14:52:23.613824847 +0100
 @@ -0,0 +1,43 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -6136,8 +6133,8 @@
 +GByteArray *ifcfg_mdv_parse_ssid(char *, GError **);
 +
 +#endif  /* __READER_H__ */
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/utils-mdv.c.0001~	2013-02-25 09:35:17.277005966 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/utils-mdv.c	2013-02-25 09:35:17.277005966 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/utils-mdv.c.0001~	2014-02-18 14:52:23.613824847 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/utils-mdv.c	2014-02-18 14:52:23.613824847 +0100
 @@ -0,0 +1,180 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -6319,8 +6316,8 @@
 +			break;
 +	}
 +}
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/utils-mdv.h.0001~	2013-02-25 09:35:17.278005978 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/utils-mdv.h	2013-02-25 09:35:17.277005966 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/utils-mdv.h.0001~	2014-02-18 14:52:23.613824847 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/utils-mdv.h	2014-02-18 14:52:23.613824847 +0100
 @@ -0,0 +1,66 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
@@ -6388,8 +6385,8 @@
 +
 +#endif  /* _UTILS_MDV_H_ */
 +
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/writer.c.0001~	2013-02-25 09:35:17.279005989 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/writer.c	2013-02-25 11:15:04.590834049 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/writer.c.0001~	2014-02-18 14:52:23.617158325 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/writer.c	2014-02-18 14:52:23.617158325 +0100
 @@ -0,0 +1,2015 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service - keyfile plugin
@@ -8406,8 +8403,8 @@
 +	return write_connection (connection, ifcfg_dir, filename, keyfile, NULL, error);
 +}
 +
---- NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/writer.h.0001~	2013-02-25 09:35:17.279005989 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/ifcfg-mdv/writer.h	2013-02-25 09:35:17.279005989 +0100
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/writer.h.0001~	2014-02-18 14:52:23.617158325 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/writer.h	2014-02-18 14:52:23.617158325 +0100
 @@ -0,0 +1,39 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service - keyfile plugin
@@ -8448,15 +8445,3 @@
 +                                   GError **error);
 +
 +#endif /* _WRITER_H_ */
---- NetworkManager-0.9.8.0/src/settings/plugins/Makefile.am.0001~	2013-02-25 09:35:17.271005896 +0100
-+++ NetworkManager-0.9.8.0/src/settings/plugins/Makefile.am	2013-02-25 10:01:33.354987138 +0100
-@@ -1,5 +1,9 @@
- SUBDIRS=keyfile example
- 
-+if CONFIG_PLUGIN_IFCFG_MDV
-+SUBDIRS+=ifcfg-mdv
-+endif
-+
- if CONFIG_PLUGIN_IFCFG_RH
- SUBDIRS+=ifcfg-rh
- endif

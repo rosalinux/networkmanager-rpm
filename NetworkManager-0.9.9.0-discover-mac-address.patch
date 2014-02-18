@@ -1,6 +1,6 @@
---- NetworkManager-0.9.3.995/src/settings/plugins/ifcfg-rh/reader.c~	2012-03-02 00:45:18.000000000 +0100
-+++ NetworkManager-0.9.3.995/src/settings/plugins/ifcfg-rh/reader.c	2012-03-06 23:52:24.759497076 +0100
-@@ -171,6 +171,46 @@
+--- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-rh/reader.c.0064~	2014-01-08 12:33:19.000000000 +0100
++++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-rh/reader.c	2014-02-18 19:28:13.023133188 +0100
+@@ -252,6 +252,46 @@ make_connection_setting (const char *fil
  }
  
  static gboolean
@@ -47,7 +47,7 @@
  read_mac_address (shvarFile *ifcfg, const char *key, int type,
                    GByteArray **array, GError **error)
  {
-@@ -2887,6 +2927,10 @@
+@@ -3420,6 +3460,10 @@ make_wireless_setting (shvarFile *ifcfg,
  	s_wireless = NM_SETTING_WIRELESS (nm_setting_wireless_new ());
  
  	if (read_mac_address (ifcfg, "HWADDR", ARPHRD_ETHER, &array, error)) {
@@ -57,8 +57,8 @@
 +		}
  		if (array) {
  			g_object_set (s_wireless, NM_SETTING_WIRELESS_MAC_ADDRESS, array, NULL);
- 
-@@ -3217,6 +3261,10 @@
+ 			g_byte_array_free (array, TRUE);
+@@ -3710,6 +3754,11 @@ make_wired_setting (shvarFile *ifcfg,
  	}
  
  	if (read_mac_address (ifcfg, "HWADDR", ARPHRD_ETHER, &mac, error)) {
@@ -66,6 +66,7 @@
 +		if (!mac) {
 +			discover_mac_address(ifcfg, &mac, error);
 +		}
++
  		if (mac) {
  			g_object_set (s_wired, NM_SETTING_WIRED_MAC_ADDRESS, mac, NULL);
- 
+ 			g_byte_array_free (mac, TRUE);
