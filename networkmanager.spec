@@ -71,6 +71,7 @@ BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
+BuildRequires:	pkgconfig(mm-glib)
 
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
@@ -201,7 +202,8 @@ intltoolize -f
 	--enable-ppp \
 	--enable-concheck \
 	--with-wext=yes \
-	--enable-modify-system
+	--enable-modify-system \
+    --with-modem-manager-1=yes
 
 %make
 
