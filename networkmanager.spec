@@ -22,7 +22,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.8.8
-Release:	1
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -203,7 +203,6 @@ intltoolize -f
 	--enable-concheck \
 	--with-wext=yes \
 	--enable-modify-system \
-	--enable-bluez4 \
 	--with-modem-manager-1=yes
 
 %make
