@@ -56,6 +56,7 @@ Patch66:	NetworkManager-0.9.9.0-prefer-dhcpcd-over-dhclient.patch
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	iptables
+BuildRequires:	readline-devel
 BuildRequires:	systemd-units
 BuildRequires:	vala-tools
 BuildRequires:	wpa_supplicant
