@@ -1285,7 +1285,7 @@
 +		PLUGIN_PRINT (IFCFG_PLUGIN_NAME, "parsing %s ... ", path);
 +	}
 +
-+	connection = nm_ifcfg_connection_new (path, source, &local, &ignore_error);
++	connection = nm_ifcfg_connection_new (source, path, &local, &ignore_error);
 +	if (!connection) {
 +		if (!ignore_error) {
 +			PLUGIN_PRINT (IFCFG_PLUGIN_NAME, "    error: %s",
@@ -1419,7 +1419,7 @@
 +
 +	PLUGIN_PRINT (IFCFG_PLUGIN_NAME, "updating %s", path);
 +
-+	new = (NMIfcfgConnection *) nm_ifcfg_connection_new (path, NULL, &error, &ignore_error);
++	new = (NMIfcfgConnection *) nm_ifcfg_connection_new (NULL, path, &error, &ignore_error);
 +	if (!new) {
 +		/* errors reading connection; remove it */
 +		if (!ignore_error) {
@@ -1698,7 +1698,7 @@
 +		return hostname;
 +	}
 +
-+	network = svNewFile (SC_NETWORK_FILE);
++	network = svOpenFile (SC_NETWORK_FILE,NULL);
 +	if (!network) {
 +		PLUGIN_WARN (IFCFG_PLUGIN_NAME, "Could not get hostname: failed to read " SC_NETWORK_FILE);
 +		return NULL;
@@ -1735,7 +1735,7 @@
 +	priv->hostname = g_strdup (hostname);
 +
 +	/* Remove "HOSTNAME" from SC_NETWORK_FILE, if present */
-+	network = svNewFile (SC_NETWORK_FILE);
++	network = svOpenFile (SC_NETWORK_FILE,NULL);
 +	if (network) {
 +		svSetValue (network, "HOSTNAME", NULL, FALSE);
 +		svWriteFile (network, 0644, NULL);
@@ -2749,7 +2749,7 @@
 +		gboolean read_success;
 +
 +		/* If no gateway in the ifcfg, try /etc/sysconfig/network instead */
-+		network_ifcfg = svNewFile (network_file);
++		network_ifcfg = svOpenFile (network_file,NULL);
 +		if (network_ifcfg) {
 +			read_success = read_ip4_address (network_ifcfg, "GATEWAY", &tmp, error);
 +			svCloseFile (network_ifcfg);
@@ -3326,7 +3326,7 @@
 +#endif
 +
 +	/* Then check if GATEWAYDEV; it's global and overrides DEFROUTE */
-+	 network_ifcfg = svNewFile (network_file);
++	 network_ifcfg = svOpenFile (network_file, NULL);
 +	 if (network_ifcfg) {
 +		char *gatewaydev;
 +
@@ -3617,7 +3617,7 @@
 +	 * they are global and override IPV6_DEFROUTE
 +	 * When both are set, the device specified in IPV6_DEFAULTGW takes preference.
 +	 */
-+	network_ifcfg = svNewFile (network_file);
++	network_ifcfg = svOpenFile (network_file, NULL);
 +	if (network_ifcfg) {
 +		char *ipv6_defaultgw, *ipv6_defaultdev;
 +		char *default_dev = NULL;
@@ -3652,7 +3652,7 @@
 +	str_value = svGetValue (ifcfg, "IPV6INIT", FALSE);
 +	ipv6init = svTrueValue (ifcfg, "IPV6INIT", FALSE);
 +	if (!str_value) {
-+		network_ifcfg = svNewFile (network_file);
++		network_ifcfg = svOpenFile (network_file,NULL);
 +		if (network_ifcfg) {
 +			ipv6init = svTrueValue (network_ifcfg, "IPV6INIT", FALSE);
 +			svCloseFile (network_ifcfg);
@@ -5922,7 +5922,7 @@
 +		return NULL;
 +	}
 +
-+	parsed = svNewFile (filename);
++	parsed = svOpenFile (filename,NULL);
 +	if (!parsed) {
 +		g_set_error (out_error, IFCFG_PLUGIN_ERROR, 0,
 +		             "Couldn't parse file '%s'", filename);
@@ -6343,7 +6343,7 @@
 + */
 +
 +#ifndef _UTILS_MDV_H_
-+#define _UTILS_H_MDV_
++#define _UTILS_MDV_H_
 +
 +#include <glib.h>
 +#include "shvar.h"
@@ -8250,7 +8250,7 @@
 +
 +	if (filename) {
 +		/* For existing connections, 'filename' should be full path to ifcfg file */
-+		ifcfg = svNewFile (filename);
++		ifcfg = svOpenFile (filename,NULL);
 +		ifcfg_name = g_strdup (filename);
 +	} else {
 +		char *escaped;
