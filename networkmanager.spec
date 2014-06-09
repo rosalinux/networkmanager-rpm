@@ -292,6 +292,7 @@ fi
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
+%dir %{_sysconfdir}/%{rname}/conf.d
 %config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/system-connections
