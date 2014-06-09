@@ -1163,7 +1163,7 @@
 +#endif /* PARSE_WPA_SUPPLICANT_CONF_H */
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.c.0001~	2014-02-18 14:52:23.603824413 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.c	2014-02-18 14:52:23.603824413 +0100
-@@ -0,0 +1,818 @@
+@@ -0,0 +1,820 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
 + *
@@ -1668,7 +1668,7 @@
 +
 +static NMSettingsConnection *
 +add_connection (NMSystemConfigInterface *config,
-+                NMConnection *connection,
++                NMConnection *connection, gboolean save_to_disk,
 +                GError **error)
 +{
 +	SCPluginIfcfg *self = SC_PLUGIN_IFCFG (config);
@@ -1676,10 +1676,12 @@
 +	char *path = NULL;
 +
 +	/* Write it out first, then add the connection to our internal list */
-+	if (writer_new_connection (connection, IFCFG_DIR, &path, error)) {
-+		added = _internal_new_connection (self, path, connection, error);
-+		g_free (path);
++	if (save_to_disk) {
++		if (!writer_new_connection (connection, IFCFG_DIR, &path, error)) 
++			return NULL;
 +	}
++	added = _internal_new_connection (self, path, connection, error);
++	g_free (path);
 +	return (NMSettingsConnection *) added;
 +}
 +

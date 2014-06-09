@@ -45,7 +45,7 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.9.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
-# fixed Patch52:	networkmanager-fix-includes.patch
+Patch52:	NetworkManager-0.9.95-set_error.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 Patch64:	NetworkManager-0.9.9.0-discover-mac-address.patch
 # taken from Mageia
