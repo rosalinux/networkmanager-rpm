@@ -1163,7 +1163,7 @@
 +#endif /* PARSE_WPA_SUPPLICANT_CONF_H */
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.c.0001~	2014-02-18 14:52:23.603824413 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/plugin.c	2014-02-18 14:52:23.603824413 +0100
-@@ -0,0 +1,820 @@
+@@ -0,0 +1,826 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
 + *
@@ -1215,6 +1215,12 @@
 +#include "writer.h"
 +#include "utils.h"
 +#include "utils-mdv.h"
++
++#define PLUGIN_PRINT(pname, fmt, args...) \
++       { g_message ("   " pname ": " fmt, ##args); }
++
++#define PLUGIN_WARN(pname, fmt, args...) \
++       { g_warning ("   " pname ": " fmt, ##args); }
 +
 +static void connection_new_or_changed (SCPluginIfcfg *plugin,
 +                                       const char *path,
