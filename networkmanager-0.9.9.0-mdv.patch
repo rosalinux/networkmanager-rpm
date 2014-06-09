@@ -196,7 +196,7 @@
 +
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c.0001~	2014-02-18 14:52:23.597157458 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c	2014-02-18 14:52:23.597157458 +0100
-@@ -0,0 +1,395 @@
+@@ -0,0 +1,394 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
 + *
@@ -459,7 +459,6 @@
 +			"Only roaming connection can be deleted");
 +		callback(connection, error, user_data);
 +		g_error_free(error);
-+		return FALSE;
 +	}
 +
 +	s_wireless = (NMSettingWireless *)nm_connection_get_setting(NM_CONNECTION(connection), NM_TYPE_SETTING_WIRELESS);
