@@ -20,7 +20,7 @@
 %define	girname		%mklibname	%{name}-gir %{api}
 %define	devnm_util	%mklibname -d nm-util
 
-%define	ppp_version	%(rpm -q --queryformat "%{VERSION}" ppp )
+%define	ppp_version	2.4.5
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
