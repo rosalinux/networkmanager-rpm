@@ -93,7 +93,7 @@
  endif
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/Makefile.am.0001~	2014-02-18 14:52:23.597157458 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/Makefile.am	2014-02-18 14:52:23.597157458 +0100
-@@ -0,0 +1,62 @@
+@@ -0,0 +1,63 @@
 +SUBDIRS=.
 +
 +pkglib_LTLIBRARIES = libnm-settings-plugin-ifcfg-mdv.la
@@ -120,6 +120,7 @@
 +	-I$(top_srcdir)/src/settings/plugins/ifcfg-rh \
 +	-I$(top_srcdir)/src/wifi \
 +	-I$(top_srcdir)/src/settings \
++	-I$(top_srcdir)/src \
 +	-I$(top_srcdir)/include \
 +	-I$(top_srcdir)/libnm-glib \
 +	-I$(top_srcdir)/libnm-util
@@ -132,8 +133,7 @@
 +	-DSBINDIR=\"$(sbindir)\"
 +
 +libifcfg_mdv_io_la_LIBADD = \
-+	$(top_builddir)/src/wifi/libwifi-utils.la \
-+	$(top_builddir)/src/posix-signals/libnm-posix-signals.la \
++	$(top_builddir)/src/libNetworkManager.la \
 +	$(top_builddir)/libnm-util/libnm-util.la \
 +	$(GLIB_LIBS) \
 +	$(NSS_LIBS)
@@ -147,6 +147,7 @@
 +libnm_settings_plugin_ifcfg_mdv_la_CPPFLAGS = \
 +	$(GLIB_CFLAGS) \
 +	$(DBUS_CFLAGS) \
++	$(POLKIT_CFLAGS) \
 +	-DSYSCONFDIR=\"$(sysconfdir)\"
 +
 +libnm_settings_plugin_ifcfg_mdv_la_LDFLAGS = -module -avoid-version
@@ -195,7 +196,7 @@
 +
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c.0001~	2014-02-18 14:52:23.597157458 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/nm-ifcfg-connection.c	2014-02-18 14:52:23.597157458 +0100
-@@ -0,0 +1,394 @@
+@@ -0,0 +1,395 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service
 + *
@@ -298,8 +299,8 @@
 +}
 +
 +NMIfcfgConnection *
-+nm_ifcfg_connection_new (const char *full_path,
-+                         NMConnection *source,
++nm_ifcfg_connection_new (NMConnection *source,
++                         const char* full_path,
 +                         GError **error,
 +                         gboolean *ignore_error)
 +{
@@ -311,6 +312,7 @@
 +	char *routefile = NULL;
 +	char *route6file = NULL;
 +	NMInotifyHelper *ih;
++	gboolean update_unsaved = TRUE;
 +
 +	g_return_val_if_fail (full_path != NULL, NULL);
 +
@@ -327,16 +329,17 @@
 +		                            ignore_error);
 +		if (!tmp)
 +			return NULL;
++		update_unsaved = FALSE;
 +	}
 +
 +	object = (GObject *) g_object_new (NM_TYPE_IFCFG_CONNECTION,
-+	                                   NM_IFCFG_CONNECTION_UNMANAGED, unmanaged,
++	                                   NM_IFCFG_CONNECTION_UNMANAGED_SPEC, unmanaged,
 +	                                   NULL);
 +	if (!object)
 +		goto out;
 +
 +	/* Update our settings with what was read from the file */
-+	if (!nm_settings_connection_replace_settings (NM_SETTINGS_CONNECTION (object), tmp, error)) {
++	if (!nm_settings_connection_replace_settings (NM_SETTINGS_CONNECTION (object), tmp, update_unsaved, error)) {
 +		g_object_unref (object);
 +		object = NULL;
 +		goto out;
@@ -575,7 +578,7 @@
 +	/* Properties */
 +	g_object_class_install_property
 +		(object_class, PROP_UNMANAGED,
-+		 g_param_spec_string (NM_IFCFG_CONNECTION_UNMANAGED,
++		 g_param_spec_string (NM_IFCFG_CONNECTION_UNMANAGED_SPEC,
 +						  "Unmanaged",
 +						  "Unmanaged",
 +						  NULL,
@@ -1308,7 +1311,7 @@
 +		/* Wait for the connection to become unmanaged once it knows the
 +		 * hardware IDs of its device, if/when the device gets plugged in.
 +		 */
-+		g_signal_connect (G_OBJECT (connection), "notify::" NM_IFCFG_CONNECTION_UNMANAGED,
++		g_signal_connect (G_OBJECT (connection), "notify::" NM_IFCFG_CONNECTION_UNMANAGED_SPEC,
 +		                  G_CALLBACK (connection_unmanaged_changed), self);
 +	}
 +
@@ -1449,7 +1452,7 @@
 +			 * interface gets managed and connection is re-added. */
 +			nm_connection_set_path (NM_CONNECTION (existing), NULL);
 +
-+			g_object_set (existing, NM_IFCFG_CONNECTION_UNMANAGED, new_unmanaged, NULL);
++			g_object_set (existing, NM_IFCFG_CONNECTION_UNMANAGED_SPEC, new_unmanaged, NULL);
 +			g_signal_emit_by_name (self, NM_SYSTEM_CONFIG_INTERFACE_UNMANAGED_SPECS_CHANGED);
 +		}
 +	} else {
@@ -1469,7 +1472,7 @@
 +		                                           commit_cb, NULL);
 +
 +		/* Update unmanaged status */
-+		g_object_set (existing, NM_IFCFG_CONNECTION_UNMANAGED, new_unmanaged, NULL);
++		g_object_set (existing, NM_IFCFG_CONNECTION_UNMANAGED_SPEC, new_unmanaged, NULL);
 +		g_signal_emit_by_name (self, NM_SYSTEM_CONFIG_INTERFACE_UNMANAGED_SPECS_CHANGED);
 +	}
 +	g_object_unref (new);
@@ -1736,7 +1739,7 @@
 +	network = svNewFile (SC_NETWORK_FILE);
 +	if (network) {
 +		svSetValue (network, "HOSTNAME", NULL, FALSE);
-+		svWriteFile (network, 0644);
++		svWriteFile (network, 0644, NULL);
 +		svCloseFile (network);
 +	}
 +
@@ -1969,7 +1972,7 @@
 +}
 +
 +G_MODULE_EXPORT GObject *
-+nm_system_config_factory (const char *config_file)
++nm_system_config_factory (void)
 +{
 +	static SCPluginIfcfg *singleton = NULL;
 +
@@ -7945,7 +7948,7 @@
 +			g_free (gw_key);
 +			g_free (metric_key);
 +		}
-+		if (svWriteFile (routefile, 0644)) {
++		if (svWriteFile (routefile, 0644, NULL)) {
 +			g_set_error (error, IFCFG_PLUGIN_ERROR, 0,
 +			             "Could not update route file '%s'", routefile->fileName);
 +			svCloseFile (routefile);
@@ -8349,7 +8352,7 @@
 +
 +	write_connection_setting (s_con, ifcfg);
 +
-+	if (svWriteFile (ifcfg, 0600)) {
++	if (svWriteFile (ifcfg, 0600, NULL)) {
 +		g_set_error (error, IFCFG_PLUGIN_ERROR, 0,
 +		             "Can't write connection '%s'", ifcfg->fileName);
 +		goto out;

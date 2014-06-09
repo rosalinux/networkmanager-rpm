@@ -3,8 +3,8 @@
 %define	rname	NetworkManager
 %define	api	1.0
 
-%define gitdate	.git20140117
-%define git_sha	.94c2993
+%define gitdate	%{nil}
+%define git_sha %{nil}
 
 %define	majglib		4
 %define	libnm_glib	%mklibname nm-glib %{majglib}
@@ -24,7 +24,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.9.0
+Version:	0.9.9.95
 Release:	%{?gitdate:0%{gitdate}.}1
 Group:		System/Base
 License:	GPLv2+
@@ -41,12 +41,10 @@ Source2:	00-server.conf
 Patch1:		networkmanager-0.9.9.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
-Patch3:		0002-libnm-glib-zero-secrets-to-prevent-crash-getting-sec.patch
 
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.9.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
-Patch10:	nm-polkit-permissive.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
 Patch64:	NetworkManager-0.9.9.0-discover-mac-address.patch
@@ -76,6 +74,8 @@ BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
+BuildRequires:	pkgconfig(libndp)
+BuildRequires:	pkgconfig(libnewt)
 
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
@@ -248,7 +248,6 @@ install -d $%{buildroot}%{_localstatedir}/lib/NetworkManager
 
 # link service file to match alias
 ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
-ln -s ../NetworkManager-wait-online.service %{buildroot}/%{_systemunitdir}/network-online.target.wants
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
@@ -262,7 +261,7 @@ popd
 
 %post
 %_post_service %{name} %{rname}.service
-%_post_service %{name} %{rname}-wait-omline.service
+%_post_service %{name} %{rname}-wait-online.service
 %_post_service %{name} %{rname}-dispatcher.service
 
 %preun
@@ -274,7 +273,7 @@ if [ $1 -eq 0 ]; then
     #/bin/systemctl stop NetworkManager.service >/dev/null 2>&1 || :
 fi
 %_preun_service %{name} %{rname}.service
-%_preun_service %{name} %{rname}-wait-omline.service
+%_preun_service %{name} %{rname}-wait-online.service
 %_preun_service %{name} %{rname}-dispatcher.service
 
 
@@ -286,20 +285,23 @@ fi
 %doc README.urpmi
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
-%{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
+%config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
 %{_bindir}/nmcli
-%{_bindir}/nm-tool
+%{_bindir}/nmtui
+%{_bindir}/nmtui-connect
+%{_bindir}/nmtui-edit
+%{_bindir}/nmtui-hostname
 %{_bindir}/nm-online
 %{_sbindir}/%{rname}
-%{_libexecdir}/nm-dispatcher.action
-%{_libexecdir}/nm-dhcp-client.action
+%{_libexecdir}/nm-dhcp-helper
+%{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-avahi-autoipd.action
 %dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
@@ -316,9 +318,12 @@ fi
 %{_systemunitdir}/NetworkManager-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_systemunitdir}/networkmanager.service
+%{_systemunitdir}/network-online.target.wants/NetworkManager-wait-online.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man8/*.8*
+%{_datadir}/vala/vapi/libnm*
+%{_datadir}/doc/NetworkManager/examples/server.conf
 
 %files -n %{libnm_util}
 %{_libdir}/libnm-util.so.%{majutil}*
