@@ -326,7 +326,6 @@ fi
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man8/*.8*
-%{_datadir}/vala/vapi/libnm*
 %{_datadir}/doc/NetworkManager/examples/server.conf
 
 %files -n %{libnm_util}
