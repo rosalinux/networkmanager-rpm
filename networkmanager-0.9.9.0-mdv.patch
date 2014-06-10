@@ -641,7 +641,7 @@
 +		str[l] = '\0';
 +	} else {
 +		l = strlen(value);
-+		str = utils_hexstr2bin(value, l);
++		str = nm_utils_hexstr2bin(value, l);
 +		if (str == NULL)
 +			return NULL;
 +	}
@@ -926,7 +926,7 @@
 +		}
 +
 +	if (need_hex)
-+		str = utils_bin2hexstr(val, strlen(val), -1);
++		str = nm_utils_bin2hexstr(val, strlen(val), -1);
 +	else
 +		str = g_strdup_printf("\"%s\"", val);
 +
@@ -6397,7 +6397,7 @@
 +
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/writer.c.0001~	2014-02-18 14:52:23.617158325 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/writer.c	2014-02-18 14:52:23.617158325 +0100
-@@ -0,0 +1,2015 @@
+@@ -0,0 +1,2016 @@
 +/* -*- Mode: C; tab-width: 4; indent-tabs-mode: t; c-basic-offset: 4 -*- */
 +/* NetworkManager system settings service - keyfile plugin
 + *
@@ -6428,6 +6428,7 @@
 +#include <sys/stat.h>
 +#include <unistd.h>
 +#include <stdio.h>
++#include <ctype.h>
 +
 +#include <nm-setting-connection.h>
 +#include <nm-setting-wired.h>
@@ -6510,7 +6511,7 @@
 +		g_string_printf(str, "s:%s", value);
 +	} else if (len == 10 || len == 26) {
 +		gchar *p;
-+		s = utils_hexstr2bin (value, len);
++		s = nm_utils_hexstr2bin (value, len);
 +		for (p = s; *p; p++) {
 +			if (!isascii (*p)) {
 +				g_free(s);
