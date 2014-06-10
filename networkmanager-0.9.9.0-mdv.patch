@@ -594,11 +594,13 @@
 +
 --- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.c.0001~	2014-02-18 14:52:23.600490935 +0100
 +++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-mdv/parse_wpa_supplicant_conf.c	2014-02-18 14:52:23.600490935 +0100
-@@ -0,0 +1,536 @@
+@@ -0,0 +1,538 @@
 +#include <errno.h>
 +#include <string.h>
 +#include <glib.h>
 +#include <glib/gstdio.h>
++
++#include <nm-utils.h>
 +
 +#include "utils.h"
 +#include "common.h"
