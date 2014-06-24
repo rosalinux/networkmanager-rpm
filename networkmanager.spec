@@ -22,7 +22,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.8.10
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -228,6 +228,8 @@ cp %{SOURCE1} .
 
 # link service file to match alias
 ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
+#rhbz#974811
+ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
@@ -281,6 +283,7 @@ popd
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
 %{_systemunitdir}/NetworkManager-dispatcher.service
+%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_systemunitdir}/networkmanager.service
 %{_mandir}/man1/*.1*
