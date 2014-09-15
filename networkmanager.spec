@@ -25,7 +25,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	0.9.9.95
-Release:	%{?gitdate:0%{gitdate}.}5
+Release:	%{?gitdate:0%{gitdate}.}6
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -228,7 +228,7 @@ cp %{SOURCE1} .
 # ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
-plugins=ifcfg-mdv,keyfile
+plugins=ifcfg-rh,keyfile
 EOF
 
 install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/00-server.conf
@@ -263,9 +263,9 @@ popd
 %find_lang %{rname}
 
 %post
-%_post_service %{name} %{rname}.service
-%_post_service %{name} %{rname}-wait-online.service
-%_post_service %{name} %{rname}-dispatcher.service
+%systemd_post %{rname}.service
+%systemd_post %{rname}-wait-online.service
+%systemd_post %{rname}-dispatcher.service
 
 %preun
 if [ $1 -eq 0 ]; then
@@ -275,13 +275,13 @@ if [ $1 -eq 0 ]; then
     # Don't kill networking entirely just on package remove
     #/bin/systemctl stop NetworkManager.service >/dev/null 2>&1 || :
 fi
-%_preun_service %{name} %{rname}.service
-%_preun_service %{name} %{rname}-wait-online.service
-%_preun_service %{name} %{rname}-dispatcher.service
+%systemd_preun %{rname}.service
+%systemd_preun %{rname}-wait-online.service
+%systemd_preun %{rname}-dispatcher.service
 
 
 %postun
-%_postun_unit %{rname}.service 
+%systemd_postun
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
