@@ -5,5 +5,6 @@ removed_sources:
   NetworkManager-0.9.8.6.tar.xz: 13f98f6a1aec8e714cf495fb844725d261ae00af
   NetworkManager-0.9.8.8.tar.xz: c134f5fa9fa1736d0af636430bc0c16cc3ab0dd1
   NetworkManager-0.9.8.tar.xz: ba453a19fbbf0e3f773bead2111fb93761c4ba83
-sources:
   NetworkManager-0.9.9.95.tar.xz: 4d0359a647e23bfb7d35d655e3de79fa6dcd0853
+sources:
+  NetworkManager-0.9.10.0.tar.xz: f670d871d0115d8b4c0bc035245cb309510c7377
