@@ -20,11 +20,15 @@
 %define	girname		%mklibname	%{name}-gir %{api}
 %define	devnm_util	%mklibname -d nm-util
 
+%define	majlibnm	0
+%define	libnm		%mklibname nm %{majlibnm}
+%define	nm_girname	%mklibname nm-gir %{api}
+%define	devnm		%mklibname -d nm
 %define	ppp_version	2.4.6
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.10.0
+Version:	1.0.0
 Release:	%{?gitdate:0%{gitdate}.}1
 Group:		System/Base
 License:	GPLv2+
@@ -38,19 +42,21 @@ Source2:	00-server.conf
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.9.0-mdv.patch
+#Patch1:		networkmanager-1.0.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 
 # Mandriva specific patches
 Patch50:	networkmanager-0.9.9.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
-Patch52:	NetworkManager-0.9.95-set_error.patch
+# seems to have been fixed upstream...?
+#Patch52:	NetworkManager-0.9.95-set_error.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
-Patch64:	NetworkManager-0.9.9.0-discover-mac-address.patch
+#Patch64:	NetworkManager-1.0.0-discover-mac-address.patch
 # taken from Mageia
-Patch65:	NetworkManager-0.9.3.990-mga-wireless_essid.patch
-Patch66:	NetworkManager-0.9.9.0-prefer-dhcpcd-over-dhclient.patch
+#Patch65:	NetworkManager-1.0.0-mga-wireless_essid.patch
+# disable for now...
+#Patch66:	NetworkManager-0.9.9.0-prefer-dhcpcd-over-dhclient.patch
 #Patch67:	NetworkManager-0.9.8.8-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
 
 BuildRequires:	gtk-doc
@@ -103,6 +109,29 @@ usage on servers.   The point of NetworkManager is to make networking
 configuration and setup as painless and automatic as possible.  If using DHCP,
 NetworkManager is _intended_ to replace default routes, obtain IP addresses
 from a DHCP server, and change nameservers whenever it sees fit.
+
+%package -n	%{libnm}
+Summary:	Shared library for nm_util
+Group:		System/Libraries
+
+%description -n	%{libnm}
+Shared library for nm.
+
+%package -n %{nm_girname}
+Summary:	GObject Introspection interface description for %{name}
+Group:		System/Libraries
+
+%description -n %{nm_girname}
+GObject Introspection interface description for NM.
+
+%package -n	%{devnm}
+Summary:	Development files for NM
+Group:		Development/C
+Provides:	nm-devel = %{EVRD}
+Requires:	%{nm_girname} = %{EVRD}
+
+%description -n	%{devnm}
+Development files for NM.
 
 %package -n	%{libnm_util}
 Summary:	Shared library for nm_util
@@ -235,7 +264,8 @@ install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/
 
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
-install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
+
+install -m755 clients/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 
 
 # create keyfile plugin system-settings directory
@@ -304,9 +334,10 @@ fi
 %{_bindir}/nmtui-hostname
 %{_bindir}/nm-online
 %{_sbindir}/%{rname}
+%{_libexecdir}/nm-avahi-autoipd.action
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
-%{_libexecdir}/nm-avahi-autoipd.action
+%{_libexecdir}/nm-iface-helper
 %dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
@@ -328,6 +359,20 @@ fi
 %{_mandir}/man8/*.8*
 %{_datadir}/doc/NetworkManager/examples/server.conf
 
+%files -n %{libnm}
+%{_libdir}/libnm.so.%{majlibnm}*
+
+%files -n %{nm_girname}
+%{_libdir}/girepository-1.0/NM-%{api}.typelib
+
+%files -n %{devnm}
+%dir %{_includedir}/libnm
+%{_includedir}/libnm/*.h
+%doc %{_datadir}/gtk-doc/html/libnm
+%{_datadir}/gir-1.0/NM-1.0.gir
+%{_libdir}/pkgconfig/libnm.pc
+%{_libdir}/libnm.so
+
 %files -n %{libnm_util}
 %{_libdir}/libnm-util.so.%{majutil}*
 
@@ -337,7 +382,8 @@ fi
 %files -n %{devnm_util}
 %dir %{_includedir}/%{rname}
 %{_includedir}/%{rname}/*.h
-%doc %{_datadir}/gtk-doc/html/*
+%doc %{_datadir}/gtk-doc/html/%{rname}
+%doc %{_datadir}/gtk-doc/html/libnm-util
 %{_datadir}/gir-1.0/NetworkManager-1.0.gir
 %{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/pkgconfig/libnm-util.pc
@@ -355,6 +401,7 @@ fi
 %files -n %{devnm_glib}
 %dir %{_includedir}/libnm-glib
 %exclude %{_includedir}/libnm-glib/nm-vpn*.h
+%doc %{_datadir}/gtk-doc/html/libnm-glib
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm-glib.pc
 %{_libdir}/libnm-glib.so

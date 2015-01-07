@@ -1,9 +1,9 @@
---- NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-rh/reader.c.0064~	2014-01-08 12:33:19.000000000 +0100
-+++ NetworkManager-0.9.9.0/src/settings/plugins/ifcfg-rh/reader.c	2014-02-18 19:28:13.023133188 +0100
+--- NetworkManager-1.0.0/src/settings/plugins/ifcfg-rh/reader.c.0064~	2014-12-19 18:14:14.000000000 +0100
++++ NetworkManager-1.0.0/src/settings/plugins/ifcfg-rh/reader.c	2015-01-07 10:31:47.522801078 +0100
 @@ -252,6 +252,46 @@ make_connection_setting (const char *fil
  }
  
- static gboolean
+ /* Returns TRUE on missing address or valid address */
 +discover_mac_address(shvarFile *ifcfg, GByteArray **array, GError **error)
 +{
 +	int fd, ret;
@@ -44,29 +44,29 @@
 +}
 +
 +static gboolean
- read_mac_address (shvarFile *ifcfg, const char *key, int type,
-                   GByteArray **array, GError **error)
- {
-@@ -3420,6 +3460,10 @@ make_wireless_setting (shvarFile *ifcfg,
- 	s_wireless = NM_SETTING_WIRELESS (nm_setting_wireless_new ());
- 
- 	if (read_mac_address (ifcfg, "HWADDR", ARPHRD_ETHER, &array, error)) {
+ static gboolean
+ read_ip4_address (shvarFile *ifcfg,
+                   const char *tag,
+@@ -3420,6 +3460,10 @@ wireless_connection_from_ifcfg (const ch
+ 	NMSetting *con_setting = NULL;
+ 	NMSetting *wireless_setting = NULL;
+ 	NMSetting8021x *s_8021x = NULL;
 +		/* if we don't have a HWADDR saved in ifcfg file, try to discover it manually */
 +		if (!array) {
 +			discover_mac_address(ifcfg, &array, error);
 +		}
- 		if (array) {
- 			g_object_set (s_wireless, NM_SETTING_WIRELESS_MAC_ADDRESS, array, NULL);
- 			g_byte_array_free (array, TRUE);
-@@ -3710,6 +3754,11 @@ make_wired_setting (shvarFile *ifcfg,
+ 	GBytes *ssid;
+ 	NMSetting *security_setting = NULL;
+ 	char *printable_ssid = NULL;
+@@ -3710,6 +3754,11 @@ parse_infiniband_p_key (shvarFile *ifcfg
+ 		               device, ifname);
+ 		goto done;
  	}
- 
- 	if (read_mac_address (ifcfg, "HWADDR", ARPHRD_ETHER, &mac, error)) {
 +		/* if we don't have a HWADDR saved in ifcfg file, try to discover it manually */
 +		if (!mac) {
 +			discover_mac_address(ifcfg, &mac, error);
 +		}
 +
- 		if (mac) {
- 			g_object_set (s_wired, NM_SETTING_WIRED_MAC_ADDRESS, mac, NULL);
- 			g_byte_array_free (mac, TRUE);
+ 
+ 	*out_p_key = id;
+ 	*out_parent = g_strdup (physdev);
