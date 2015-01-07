@@ -85,6 +85,7 @@ BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(libndp)
 BuildRequires:	pkgconfig(libnewt)
+BuildRequires:	pkgconfig(mm-glib)
 
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
@@ -281,6 +282,8 @@ install -d $%{buildroot}%{_localstatedir}/lib/NetworkManager
 
 # link service file to match alias
 ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
+#rhbz#974811
+ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
@@ -351,6 +354,7 @@ fi
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
 %{_systemunitdir}/NetworkManager-dispatcher.service
+%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_systemunitdir}/networkmanager.service
 %{_systemunitdir}/network-online.target.wants/NetworkManager-wait-online.service
