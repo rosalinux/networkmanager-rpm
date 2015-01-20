@@ -1,35 +1,32 @@
 %define	url_ver %(echo %{version}|cut -d. -f1,2)
 
-%define	rname	NetworkManager
-%define	api	1.0
+%define	rname NetworkManager
+%define	api 1.0
 
-%define gitdate	%{nil}
-%define git_sha %{nil}
+%define majglib 4
+%define libnm_glib %mklibname nm-glib %{majglib}
+%define girclient %mklibname	nmclient-gir %{api}
+%define devnm_glib %mklibname -d nm-glib
 
-%define	majglib		4
-%define	libnm_glib	%mklibname nm-glib %{majglib}
-%define	girclient	%mklibname	nmclient-gir %{api}
-%define	devnm_glib	%mklibname -d nm-glib
+%define majvpn 1
+%define libnm_glib_vpn %mklibname nm-glib-vpn %{majvpn}
+%define devnm_glib_vpn %mklibname -d nm-glib-vpn
 
-%define	majvpn		1
-%define	libnm_glib_vpn	%mklibname nm-glib-vpn %{majvpn}
-%define	devnm_glib_vpn	%mklibname -d nm-glib-vpn
-	
-%define	majutil		2
-%define	libnm_util	%mklibname nm-util %{majutil}
-%define	girname		%mklibname	%{name}-gir %{api}
-%define	devnm_util	%mklibname -d nm-util
+%define majutil 2
+%define libnm_util %mklibname nm-util %{majutil}
+%define girname %mklibname	%{name}-gir %{api}
+%define devnm_util %mklibname -d nm-util
 
-%define	ppp_version	2.4.6
+%define ppp_version 2.4.6
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.10.0
-Release:	%{?gitdate:0%{gitdate}.}1
+Version:	1.0.0
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/%{url_ver}/%{rname}-%{version}%{?gitdate}%{?git_sha}.tar.xz
+Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	README.urpmi
 Source2:	00-server.conf
 # XXX: repository MIA?? patch manually regenerated...
@@ -43,7 +40,6 @@ Patch1:		networkmanager-0.9.9.0-mdv.patch
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 
 # Mandriva specific patches
-Patch50:	networkmanager-0.9.9.0-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	NetworkManager-0.9.95-set_error.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
@@ -196,7 +192,7 @@ cp %{SOURCE1} .
 	--enable-more-warnings=no \
 	--with-docs=yes \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=yes \
+	--with-resolvconf=no \
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_systemunitdir} \
@@ -204,7 +200,6 @@ cp %{SOURCE1} .
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
-	--with-resolvconf=/sbin/resolvconf \
 	--enable-polkit \
 	--enable-ppp \
 	--enable-concheck \
