@@ -33,7 +33,6 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	README.urpmi
 Source2:	00-server.conf
-Source3:	20-connectivity-fedora.conf
 
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
@@ -49,8 +48,8 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 # seems to have been fixed upstream...?
 #Patch52:	NetworkManager-0.9.95-set_error.patch
-Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
-Patch64:	NetworkManager-1.0.0-discover-mac-address.patch
+#Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
+#Patch64:	NetworkManager-1.0.0-discover-mac-address.patch
 # taken from Mageia
 #Patch65:	NetworkManager-1.0.0-mga-wireless_essid.patch
 # disable for now...
@@ -102,7 +101,6 @@ Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
 
 # Not upstream, from fedora
-Patch10:	0000-explain-dns1-dns2.patch
 Patch11:	0001-rh1116999-resolv-conf-symlink.patch
 # http://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/?id=a687d1f9e0f75b987f40335934b54aa748f6724b
 # https://bugzilla.redhat.com/show_bug.cgi?id=1162636
@@ -286,7 +284,6 @@ EOF
 chmod  755 %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager
 
 install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/00-server.conf
-install -m644 -p %{SOURCE3} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/20-connectivity.conf.conf
 
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
