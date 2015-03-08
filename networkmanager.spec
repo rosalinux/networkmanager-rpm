@@ -224,7 +224,7 @@ cp %{SOURCE1} .
 
 %build
 %define	_disable_ld_no_undefined 1
-%configure2_5x \
+%configure \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
 	--with-docs=yes \
@@ -316,27 +316,6 @@ popd
 }
 
 %find_lang %{rname}
-
-%post
-%systemd_post %{rname}.service
-%systemd_post %{rname}-wait-online.service
-%systemd_post %{rname}-dispatcher.service
-
-%preun
-if [ $1 -eq 0 ]; then
-    # Package removal, not upgrade
-    /bin/systemctl --no-reload disable NetworkManager.service >/dev/null 2>&1 || :
-
-    # Don't kill networking entirely just on package remove
-    #/bin/systemctl stop NetworkManager.service >/dev/null 2>&1 || :
-fi
-%systemd_preun %{rname}.service
-%systemd_preun %{rname}-wait-online.service
-%systemd_preun %{rname}-dispatcher.service
-
-
-%postun
-%systemd_postun
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
