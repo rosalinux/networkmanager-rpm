@@ -1,0 +1,11 @@
+diff -Naur NetworkManager-0.9.10.2/data/NetworkManager.service.in NetworkManager-0.9.10.2.tpg/data/NetworkManager.service.in
+--- NetworkManager-0.9.10.2/data/NetworkManager.service.in	2015-03-02 14:50:17.000000000 +0000
++++ NetworkManager-0.9.10.2.tpg/data/NetworkManager.service.in	2015-03-29 10:17:39.615898504 +0000
+@@ -2,6 +2,7 @@
+ Description=Network Manager
+ Wants=network.target
+ Before=network.target @DISTRO_NETWORK_SERVICE@
++After=resolvconf.service
+ 
+ [Service]
+ Type=dbus

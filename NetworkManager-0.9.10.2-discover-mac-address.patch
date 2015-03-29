@@ -1,0 +1,72 @@
+diff -Naur NetworkManager-0.9.10.2/src/settings/plugins/ifcfg-rh/reader.c NetworkManager-0.9.10.2.tpg/src/settings/plugins/ifcfg-rh/reader.c
+--- NetworkManager-0.9.10.2/src/settings/plugins/ifcfg-rh/reader.c	2015-03-02 22:57:00.000000000 +0000
++++ NetworkManager-0.9.10.2.tpg/src/settings/plugins/ifcfg-rh/reader.c	2015-03-29 10:23:58.727183476 +0000
+@@ -248,6 +248,46 @@
+ }
+ 
+ static gboolean
++discover_mac_address(shvarFile *ifcfg, GByteArray **array, GError **error)
++{
++       int fd, ret;
++       struct ifreq ifr;
++       char *device;
++
++       device = svGetValue (ifcfg, "DEVICE", FALSE);
++
++       g_return_val_if_fail (device != NULL, FALSE);
++       g_return_val_if_fail (array != NULL, FALSE);
++       g_return_val_if_fail (*array == NULL, FALSE);
++       g_return_val_if_fail (error != NULL, FALSE);
++       g_return_val_if_fail (*error == NULL, FALSE);
++
++       fd = socket(AF_INET, SOCK_DGRAM, 0);
++       if (fd < 0) {
++               g_set_error(error, IFCFG_PLUGIN_ERROR, errno,
++                               "Unable to discover MAC address: socket error");
++               g_free (device);
++               return FALSE;
++       }
++
++       ifr.ifr_addr.sa_family = AF_INET;
++       strncpy(ifr.ifr_name, device, IFNAMSIZ-1);
++
++       ret = ioctl(fd, SIOCGIFHWADDR, &ifr);
++       g_free (device);
++       if (ret < 0) {
++               g_set_error(error, IFCFG_PLUGIN_ERROR, errno,
++                               "Unable to discover MAC address: ioctl error");
++               return FALSE;
++       }
++       close(fd);
++
++       *array = g_byte_array_sized_new (ETH_ALEN);
++       g_byte_array_append (*array, (guint8 *) ifr.ifr_hwaddr.sa_data, ETH_ALEN);
++       return TRUE;
++}
++
++static gboolean
+ read_mac_address (shvarFile *ifcfg, const char *key, int type,
+                   GByteArray **array, GError **error)
+ {
+@@ -3533,6 +3573,10 @@
+ 	s_wireless = NM_SETTING_WIRELESS (nm_setting_wireless_new ());
+ 
+ 	if (read_mac_address (ifcfg, "HWADDR", ARPHRD_ETHER, &array, error)) {
++               /* if we don't have a HWADDR saved in ifcfg file, try to discover it manually */
++               if (!array) {
++                       discover_mac_address(ifcfg, &array, error);
++               }
+ 		if (array) {
+ 			g_object_set (s_wireless, NM_SETTING_WIRELESS_MAC_ADDRESS, array, NULL);
+ 			g_byte_array_free (array, TRUE);
+@@ -3853,6 +3897,10 @@
+ 	}
+ 
+ 	if (read_mac_address (ifcfg, "HWADDR", ARPHRD_ETHER, &mac, error)) {
++               /* if we don't have a HWADDR saved in ifcfg file, try to discover it manually */
++               if (!mac) {
++                       discover_mac_address(ifcfg, &mac, error);
++               }
+ 		if (mac) {
+ 			g_object_set (s_wired, NM_SETTING_WIRED_MAC_ADDRESS, mac, NULL);
+ 			g_byte_array_free (mac, TRUE);

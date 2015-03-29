@@ -21,8 +21,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.8.8
-Release:	1.1
+Version:	0.9.10.2
+Release:	0.1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -34,23 +34,25 @@ Source1:	README.urpmi
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.8.0-mdv.patch
+Patch1:		networkmanager-0.9.10.2-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # Mandriva specific patches
-Patch50:	networkmanager-0.9.2.0-systemd-start-after-resolvconf.patch
+Patch50:	networkmanager-0.9.10.2-systemd-start-after-resolvconf.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch10:	nm-polkit-permissive.patch
 # fixed Patch52:	networkmanager-fix-includes.patch
 Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
-Patch64:	NetworkManager-0.9.3.995-discover-mac-address.patch
+Patch64:	NetworkManager-0.9.10.2-discover-mac-address.patch
 # taken from Mageia
-Patch65:	NetworkManager-0.9.3.990-mga-wireless_essid.patch
-Patch66:	NetworkManager-0.9.8.8-prefer-dhcpcd-over-dhclient.patch
-Patch67:	NetworkManager-0.9.8.8-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
+Patch65:	NetworkManager-0.9.10.2-mga-wireless_essid.patch
+# (tpg) do we really need this ?
+#Patch66:	NetworkManager-0.9.8.8-prefer-dhcpcd-over-dhclient.patch
+Patch67:	NetworkManager-0.9.10.2-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
 
 # upstream patches
-Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
+# (tpg) fixed ?
+#Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
 
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
@@ -177,6 +179,7 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
+
 autoreconf -fi
 intltoolize -f
 
