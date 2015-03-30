@@ -57,6 +57,7 @@ Patch67:	NetworkManager-0.9.10.2-disable-dhcpcd-ipv6-for-now-untill-remaining-su
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	iptables
+BuildRequires:	readline-devel
 BuildRequires:	systemd-units
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
