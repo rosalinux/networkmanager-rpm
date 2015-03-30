@@ -74,6 +74,7 @@ BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
+BuildRequires:	pkgconfig(libndp)
 BuildRequires:	pkgconfig(mm-glib)
 
 Requires:	dhcp-client-daemon
