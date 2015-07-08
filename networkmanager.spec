@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.0.0
-Release:	3
+Version:	1.0.2
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -46,15 +46,6 @@ Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 
 # Mandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
-# seems to have been fixed upstream...?
-#Patch52:	NetworkManager-0.9.95-set_error.patch
-#Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
-#Patch64:	NetworkManager-1.0.0-discover-mac-address.patch
-# taken from Mageia
-#Patch65:	NetworkManager-1.0.0-mga-wireless_essid.patch
-# disable for now...
-#Patch66:	NetworkManager-0.9.9.0-prefer-dhcpcd-over-dhclient.patch
-#Patch67:	NetworkManager-0.9.8.8-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
 
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
@@ -99,12 +90,8 @@ Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
-
 # Not upstream, from fedora
 Patch11:	0001-rh1116999-resolv-conf-symlink.patch
-# http://cgit.freedesktop.org/NetworkManager/NetworkManager/commit/?id=a687d1f9e0f75b987f40335934b54aa748f6724b
-# https://bugzilla.redhat.com/show_bug.cgi?id=1162636
-Patch12:	NetworkManager-1.0.0-bridge_resume.patch
 
 %description
 NetworkManager attempts to keep an active network connection available at all
