@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.0.6
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -74,7 +74,7 @@ BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(libndp)
 BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
-
+BuildRequires:	pkgconfig(bluez)
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
 Requires:	iproute2
@@ -235,8 +235,12 @@ cp %{SOURCE1} .
 	--with-udev-dir=/lib/udev \
 	--with-system-libndp=yes \
 	--with-nmtui \
-	--with-teamdctl \
+	--enable-teamdctl \
 	--enable-introspection=yes \
+	--enable-bluez5-dun \
+	--enable-lto \
+	--enable-wifi \
+	--enable-wimax \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
