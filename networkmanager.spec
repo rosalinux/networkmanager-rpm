@@ -75,6 +75,7 @@ BuildRequires:	pkgconfig(libndp)
 BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
+BuildRequires:	pkgconfig(libteamdctl)
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
 Requires:	iproute2
