@@ -240,7 +240,6 @@ cp %{SOURCE1} .
 	--enable-bluez5-dun \
 	--enable-lto \
 	--enable-wifi \
-	--enable-wimax \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
