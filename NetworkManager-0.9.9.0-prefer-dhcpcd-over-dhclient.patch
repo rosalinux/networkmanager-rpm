@@ -1,0 +1,54 @@
+--- NetworkManager-0.9.9.0/src/dhcp-manager/nm-dhcp-manager.c.0066~	2014-02-18 19:31:54.092848396 +0100
++++ NetworkManager-0.9.9.0/src/dhcp-manager/nm-dhcp-manager.c	2014-02-18 19:35:31.752423419 +0100
+@@ -296,17 +296,17 @@ get_client_type (const char *client, GEr
+ 	 * an empty string.
+ 	 */
+ 	/* coverity[array_null] */
+-	if (DHCLIENT_PATH && strlen (DHCLIENT_PATH))
+-		dhclient_path = nm_dhcp_dhclient_get_path (DHCLIENT_PATH);
+-	/* coverity[array_null] */
+ 	if (DHCPCD_PATH && strlen (DHCPCD_PATH))
+ 		dhcpcd_path = nm_dhcp_dhcpcd_get_path (DHCPCD_PATH);
++	/* coverity[array_null] */
++	if (DHCLIENT_PATH && strlen (DHCLIENT_PATH))
++		dhclient_path = nm_dhcp_dhclient_get_path (DHCLIENT_PATH);
+ 
+ 	if (!client) {
+-		if (dhclient_path)
+-			return NM_TYPE_DHCP_DHCLIENT;
+-		else if (dhcpcd_path)
++		if (dhcpcd_path)
+ 			return NM_TYPE_DHCP_DHCPCD;
++		else if (dhclient_path)
++			return NM_TYPE_DHCP_DHCLIENT;
+ 		else {
+ 			g_set_error_literal (error,
+ 			                     NM_DHCP_MANAGER_ERROR, NM_DHCP_MANAGER_ERROR_BAD_CLIENT,
+@@ -315,21 +315,21 @@ get_client_type (const char *client, GEr
+ 		}
+ 	}
+ 
+-	if (!strcmp (client, "dhclient")) {
+-		if (!dhclient_path) {
++	if (!strcmp (client, "dhcpcd")) {
++		if (!dhcpcd_path) {
+ 			g_set_error_literal (error,
+ 			                     NM_DHCP_MANAGER_ERROR, NM_DHCP_MANAGER_ERROR_BAD_CLIENT,
+-			                     _("'dhclient' could be found."));
++			                     _("'dhcpcd' could be found."));
+ 			return G_TYPE_INVALID;
+ 		}
+ 		return NM_TYPE_DHCP_DHCLIENT;
+ 	}
+ 
+-	if (!strcmp (client, "dhcpcd")) {
+-		if (!dhcpcd_path) {
++	if (!strcmp (client, "dhclient")) {
++		if (!dhclient_path) {
+ 			g_set_error_literal (error,
+ 			                     NM_DHCP_MANAGER_ERROR, NM_DHCP_MANAGER_ERROR_BAD_CLIENT,
+-			                     _("'dhcpcd' could be found."));
++			                     _("'dhclient' could be found."));
+ 			return G_TYPE_INVALID;
+ 		}
+ 		return NM_TYPE_DHCP_DHCPCD;

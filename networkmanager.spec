@@ -1,89 +1,88 @@
 %define	url_ver %(echo %{version}|cut -d. -f1,2)
 
-#define	snapshot 0
-%define	rname	NetworkManager
-%define	api	1.0
+%define	rname NetworkManager
+%define	api 1.0
 
-%define	majglib		4
-%define	libnm_glib	%mklibname nm-glib %{majglib}
-%define	girclient	%mklibname	nmclient-gir %{api}
-%define	devnm_glib	%mklibname -d nm-glib
+%define majglib 4
+%define libnm_glib %mklibname nm-glib %{majglib}
+%define girclient %mklibname	nmclient-gir %{api}
+%define devnm_glib %mklibname -d nm-glib
 
-%define	majvpn		1
-%define	libnm_glib_vpn	%mklibname nm-glib-vpn %{majvpn}
-%define	devnm_glib_vpn	%mklibname -d nm-glib-vpn
-	
-%define	majutil		2
-%define	libnm_util	%mklibname nm-util %{majutil}
-%define	girname		%mklibname	%{name}-gir %{api}
-%define	devnm_util	%mklibname -d nm-util
+%define majvpn 1
+%define libnm_glib_vpn %mklibname nm-glib-vpn %{majvpn}
+%define devnm_glib_vpn %mklibname -d nm-glib-vpn
 
+%define majutil 2
+%define libnm_util %mklibname nm-util %{majutil}
+%define girname %mklibname	%{name}-gir %{api}
+%define devnm_util %mklibname -d nm-util
+
+%define	majlibnm	0
+%define	libnm		%mklibname nm %{majlibnm}
+%define	nm_girname	%mklibname nm-gir %{api}
+%define	devnm		%mklibname -d nm
+%define	ppp_version	2.4.6
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	0.9.10.2
-Release:	0.1
+Version:	1.0.6
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
-Source0:	http://ftp.gnome.org/pub/GNOME/sources/NetworkManager/%{url_ver}/%{rname}-%{version}%{?snapshot:.%{snapshot}}.tar.xz
+Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	README.urpmi
+Source2:	00-server.conf
+
 # XXX: repository MIA?? patch manually regenerated...
 # This patch is build from GIT at git://git.mandriva.com/projects/networkmanager.git
 # DO NOT CHANGE IT MANUALLY.
 # To generate patch use
 #	git diff master..mdv
 # Current mdv tip: 2e93ff7
-Patch1:		networkmanager-0.9.10.2-mdv.patch
+#Patch1:		networkmanager-1.0.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
-# Mandriva specific patches
-Patch50:	networkmanager-0.9.10.2-systemd-start-after-resolvconf.patch
-Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
-Patch10:	nm-polkit-permissive.patch
-# fixed Patch52:	networkmanager-fix-includes.patch
-Patch63:	NetworkManager-0.9.4.0-dhcpcd-verbose-output.patch
-Patch64:	NetworkManager-0.9.10.2-discover-mac-address.patch
-# taken from Mageia
-Patch65:	NetworkManager-0.9.10.2-mga-wireless_essid.patch
-# (tpg) do we really need this ?
-#Patch66:	NetworkManager-0.9.8.8-prefer-dhcpcd-over-dhclient.patch
-Patch67:	NetworkManager-0.9.10.2-disable-dhcpcd-ipv6-for-now-untill-remaining-support-is-in-place.patch
 
-# upstream patches
-# (tpg) fixed ?
-#Patch107:	networkmanager-0.9.4.0-nm-remote-settings.patch
+# Mandriva specific patches
+Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 
 BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
 BuildRequires:	systemd-units
+BuildRequires:	vala-tools
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
-BuildRequires:	ppp-devel
+BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(ext2fs)
 BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	pkgconfig(gudev-1.0)
 BuildRequires:	pkgconfig(libnl-3.0)
 BuildRequires:	pkgconfig(libsoup-2.4)
+BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd-login)
+# Temporary while systemd package is missing req
+BuildRequires:	libsystemd-devel
 BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(libndp)
+BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
-
+BuildRequires:	pkgconfig(bluez)
+BuildRequires:	pkgconfig(libteamdctl)
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
 Requires:	iproute2
 Requires:	iptables
 Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
-Requires:	ppp = %(rpm -q --queryformat "%{VERSION}" ppp )
+Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
 Requires:	wpa_supplicant >= 0.7.3-2
@@ -92,6 +91,8 @@ Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
+# Not upstream, from fedora
+Patch11:	0001-rh1116999-resolv-conf-symlink.patch
 
 %description
 NetworkManager attempts to keep an active network connection available at all
@@ -100,6 +101,29 @@ usage on servers.   The point of NetworkManager is to make networking
 configuration and setup as painless and automatic as possible.  If using DHCP,
 NetworkManager is _intended_ to replace default routes, obtain IP addresses
 from a DHCP server, and change nameservers whenever it sees fit.
+
+%package -n	%{libnm}
+Summary:	Shared library for nm_util
+Group:		System/Libraries
+
+%description -n	%{libnm}
+Shared library for nm.
+
+%package -n %{nm_girname}
+Summary:	GObject Introspection interface description for %{name}
+Group:		System/Libraries
+
+%description -n %{nm_girname}
+GObject Introspection interface description for NM.
+
+%package -n	%{devnm}
+Summary:	Development files for NM
+Group:		Development/C
+Provides:	nm-devel = %{EVRD}
+Requires:	%{nm_girname} = %{EVRD}
+
+%description -n	%{devnm}
+Development files for NM.
 
 %package -n	%{libnm_util}
 Summary:	Shared library for nm_util
@@ -181,20 +205,19 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
-
 autoreconf -fi
 intltoolize -f
+# Add readme displayed by urpmi
+cp %{SOURCE1} .
 
 %build
 %define	_disable_ld_no_undefined 1
-%configure2_5x \
-	--disable-static \
-	--disable-rpath \
+%configure \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
 	--with-docs=yes \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=yes \
+	--with-resolvconf=no \
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_systemunitdir} \
@@ -202,14 +225,24 @@ intltoolize -f
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
-	--with-resolvconf=/sbin/resolvconf \
 	--enable-polkit \
+	--enable-polkit-agent \
 	--enable-ppp \
 	--enable-concheck \
 	--with-wext=yes \
 	--enable-modify-system \
-	--enable-bluez4 \
-	--with-modem-manager-1=yes
+	--with-modem-manager-1=yes \
+	--with-vala=yes \
+	--with-udev-dir=/lib/udev \
+	--with-system-libndp=yes \
+	--with-nmtui \
+	--enable-teamdctl \
+	--enable-introspection=yes \
+	--enable-bluez5-dun \
+	--enable-lto \
+	--enable-wifi \
+	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
+	--with-dist-version=%{version}-%{release}
 
 %make
 
@@ -222,18 +255,48 @@ cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 plugins=ifcfg-rh,keyfile
 EOF
 
+# Create netprofile module 
+install -d %{buildroot}%{_sysconfdir}/netprofile/modules/
+cat > %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager << EOF
+# netprofile module
+#
+# this module contains settings for saving/restore the NetworkManager configuration
+# in different network profiles
+
+NAME="networkmanager"
+DESCRIPTION="Networkmanager connection settings"
+
+# list of files to be saved by netprofile
+FILES="/etc/NetworkManager/"
+
+# list of services to be restarted by netprofile
+SERVICES="networkmanager"
+EOF
+chmod  755 %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager
+
+install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/00-server.conf
+
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
-install -m755 test/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
+
+install -m755 clients/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
+
 
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 
-# Add readme displayed by urpmi
-cp %{SOURCE1} .
+# create a dnsmasq.d directory
+install -d $%{buildroot}%{_sysconfdir}/NetworkManager/dnsmasq.d
+
+install -d $%{buildroot}%{_datadir}/gnome-vpn-properties
+
+install -d $%{buildroot}%{_localstatedir}/lib/NetworkManager
+
 
 # link service file to match alias
 ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
+#rhbz#974811
+ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
@@ -245,43 +308,36 @@ popd
 
 %find_lang %{rname}
 
-%post
-%systemd_post %{rname}.service
-%systemd_post %{rname}-wait-online.service
-%systemd_post %{rname}-dispatcher.service
-
-%preun
-%systemd_preun %{rname}.service
-%systemd_preun %{rname}-wait-online.service
-%systemd_preun %{rname}-dispatcher.service
-
-%postun
-%systemd_postun
-
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
 %doc README.urpmi
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
-%{_sysconfdir}/dbus-1/system.d/nm-dhcp-client.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
+%config(noreplace) %{_sysconfdir}/netprofile/modules/01_networkmanager
+%dir %{_sysconfdir}/%{rname}/conf.d
+%config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
 %{_bindir}/nmcli
-%{_bindir}/nm-tool
+%{_bindir}/nmtui
+%{_bindir}/nmtui-connect
+%{_bindir}/nmtui-edit
+%{_bindir}/nmtui-hostname
 %{_bindir}/nm-online
 %{_sbindir}/%{rname}
-%{_libexecdir}/nm-dispatcher.action
-%{_libexecdir}/nm-dhcp-client.action
 %{_libexecdir}/nm-avahi-autoipd.action
+%{_libexecdir}/nm-dhcp-helper
+%{_libexecdir}/nm-dispatcher
+%{_libexecdir}/nm-iface-helper
 %dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
-%dir %{_localstatedir}/run/%{rname}
+%attr(0755,root,root) %dir %{_localstatedir}/run/%{rname}
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
 %{_datadir}/bash-completion/completions/nmcli
@@ -291,11 +347,28 @@ popd
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
 %{_systemunitdir}/NetworkManager-dispatcher.service
+%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_systemunitdir}/networkmanager.service
+%{_systemunitdir}/network-online.target.wants/NetworkManager-wait-online.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man8/*.8*
+%{_datadir}/doc/NetworkManager/examples/server.conf
+
+%files -n %{libnm}
+%{_libdir}/libnm.so.%{majlibnm}*
+
+%files -n %{nm_girname}
+%{_libdir}/girepository-1.0/NM-%{api}.typelib
+
+%files -n %{devnm}
+%dir %{_includedir}/libnm
+%{_includedir}/libnm/*.h
+%doc %{_datadir}/gtk-doc/html/libnm
+%{_datadir}/gir-1.0/NM-1.0.gir
+%{_libdir}/pkgconfig/libnm.pc
+%{_libdir}/libnm.so
 
 %files -n %{libnm_util}
 %{_libdir}/libnm-util.so.%{majutil}*
@@ -306,7 +379,8 @@ popd
 %files -n %{devnm_util}
 %dir %{_includedir}/%{rname}
 %{_includedir}/%{rname}/*.h
-%doc %{_datadir}/gtk-doc/html/*
+%doc %{_datadir}/gtk-doc/html/%{rname}
+%doc %{_datadir}/gtk-doc/html/libnm-util
 %{_datadir}/gir-1.0/NetworkManager-1.0.gir
 %{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/pkgconfig/libnm-util.pc
@@ -324,6 +398,7 @@ popd
 %files -n %{devnm_glib}
 %dir %{_includedir}/libnm-glib
 %exclude %{_includedir}/libnm-glib/nm-vpn*.h
+%doc %{_datadir}/gtk-doc/html/libnm-glib
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm-glib.pc
 %{_libdir}/libnm-glib.so

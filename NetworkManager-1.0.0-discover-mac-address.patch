@@ -1,0 +1,91 @@
+From 87473e2e8ecc70ce493d5525647778a46448745d Mon Sep 17 00:00:00 2001
+From: Olivier Blin <blino@mageia.org>
+Date: Wed, 28 Jan 2015 23:14:48 +0000
+Subject: [PATCH 1/2] ifcfg-rh: guess mac address if not present in ifcfg file
+ (adapted from ifcfg-mdv plugin)
+
+Taken from older patch (r131003 in package SVN), but adapted by
+Colin Guthrie <colin@mageia.org> for latest NM.
+
+This was actually broken in the rediff in r589386 by Thierry which
+would have resulted in memory leaks and no effect.
+---
+ src/settings/plugins/ifcfg-rh/reader.c | 48 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+
+diff --git a/src/settings/plugins/ifcfg-rh/reader.c b/src/settings/plugins/ifcfg-rh/reader.c
+index c43439c..b66d20a 100644
+--- a/src/settings/plugins/ifcfg-rh/reader.c
++++ b/src/settings/plugins/ifcfg-rh/reader.c
+@@ -251,6 +251,48 @@ make_connection_setting (const char *file,
+ 	return NM_SETTING (s_con);
+ }
+ 
++static char *
++discover_mac_address(shvarFile *ifcfg, GError **error)
++{
++	char *value = NULL;
++	int fd, ret;
++	struct ifreq ifr;
++	char *device;
++	GByteArray *array;
++
++	device = svGetValue (ifcfg, "DEVICE", FALSE);
++
++	g_return_val_if_fail (device != NULL, FALSE);
++	g_return_val_if_fail (error != NULL, FALSE);
++	g_return_val_if_fail (*error == NULL, FALSE);
++
++	fd = socket(AF_INET, SOCK_DGRAM, 0);
++	if (fd < 0) {
++		g_set_error(error, NM_SETTINGS_ERROR, NM_SETTINGS_ERROR_INVALID_CONNECTION,
++				"Unable to discover MAC address: socket error");
++		g_free (device);
++		return NULL;
++	}
++
++	ifr.ifr_addr.sa_family = AF_INET;
++	strncpy(ifr.ifr_name, device, IFNAMSIZ-1);
++
++	ret = ioctl(fd, SIOCGIFHWADDR, &ifr);
++	g_free (device);
++	if (ret < 0) {
++		g_set_error(error, NM_SETTINGS_ERROR, NM_SETTINGS_ERROR_INVALID_CONNECTION,
++				"Unable to discover MAC address: ioctl error");
++		return NULL;
++	}
++	close(fd);
++
++	array = g_byte_array_sized_new (ETH_ALEN);
++	g_byte_array_append (array, (guint8 *) ifr.ifr_hwaddr.sa_data, ETH_ALEN);
++	value = nm_utils_hwaddr_ntoa (array->data, array->len);
++	g_byte_array_free (array, TRUE);
++	return value;
++}
++
+ /* Returns TRUE on missing address or valid address */
+ static gboolean
+ read_ip4_address (shvarFile *ifcfg,
+@@ -3249,6 +3291,9 @@ make_wireless_setting (shvarFile *ifcfg,
+ 	s_wireless = NM_SETTING_WIRELESS (nm_setting_wireless_new ());
+ 
+ 	value = svGetValue (ifcfg, "HWADDR", FALSE);
++	/* if we don't have a HWADDR saved in ifcfg file, try to discover it manually */
++	if (!value)
++		value = discover_mac_address(ifcfg, error);
+ 	if (value) {
+ 		value = g_strstrip (value);
+ 		g_object_set (s_wireless, NM_SETTING_WIRELESS_MAC_ADDRESS, value, NULL);
+@@ -3527,6 +3572,9 @@ make_wired_setting (shvarFile *ifcfg,
+ 	}
+ 
+ 	value = svGetValue (ifcfg, "HWADDR", FALSE);
++	/* if we don't have a HWADDR saved in ifcfg file, try to discover it manually */
++	if (!value)
++		value = discover_mac_address(ifcfg, error);
+ 	if (value) {
+ 		value = g_strstrip (value);
+ 		g_object_set (s_wired, NM_SETTING_WIRED_MAC_ADDRESS, value, NULL);
+-- 
+2.2.2
+
