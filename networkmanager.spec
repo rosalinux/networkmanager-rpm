@@ -74,7 +74,6 @@ BuildRequires:	pkgconfig(libndp)
 BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
-BuildRequires:	pkgconfig(libteamdctl)
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
 Requires:	iproute2
@@ -236,7 +235,6 @@ cp %{SOURCE1} .
 	--with-udev-dir=/lib/udev \
 	--with-system-libndp=yes \
 	--with-nmtui \
-	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-wifi \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
