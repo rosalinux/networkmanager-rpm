@@ -21,7 +21,7 @@
 %define	libnm		%mklibname nm %{majlibnm}
 %define	nm_girname	%mklibname nm-gir %{api}
 %define	devnm		%mklibname -d nm
-%define	ppp_version	2.4.6
+%define	ppp_version	2.4.5
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
