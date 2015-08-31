@@ -74,6 +74,7 @@ BuildRequires:	pkgconfig(libndp)
 BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
+BuildRequires:	pkgconfig(libteamdctl)
 Requires:	dhcp-client-daemon
 Requires:	dnsmasq-base
 Requires:	iproute2
@@ -210,12 +211,12 @@ cp %{SOURCE1} .
 
 %build
 %define	_disable_ld_no_undefined 1
-%configure \
+%configure2_5x \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
 	--with-docs=yes \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=no \
+	--with-resolvconf=yes \
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_systemunitdir} \
@@ -223,6 +224,7 @@ cp %{SOURCE1} .
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
+    --with-resolvconf=/sbin/resolvconf \
 	--enable-polkit \
 	--enable-polkit-agent \
 	--enable-ppp \
@@ -234,9 +236,9 @@ cp %{SOURCE1} .
 	--with-udev-dir=/lib/udev \
 	--with-system-libndp=yes \
 	--with-nmtui \
+	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
-	--enable-lto \
 	--enable-wifi \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
