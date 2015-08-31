@@ -238,7 +238,6 @@ cp %{SOURCE1} .
 	--with-nmtui \
 	--enable-teamdctl \
 	--enable-introspection=yes \
-	--enable-bluez5-dun \
 	--enable-wifi \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
