@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.0.6
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -93,6 +93,8 @@ Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
 # Not upstream, from fedora
 Patch11:	0001-rh1116999-resolv-conf-symlink.patch
+# from arch
+Patch12:	0001-Add-Requires.private-glib-2.0.patch
 
 %description
 NetworkManager attempts to keep an active network connection available at all
