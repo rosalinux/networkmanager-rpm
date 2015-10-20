@@ -242,9 +242,6 @@ Development files for nm-glib-vpn.
 
 %make
 
-%check
-make check
-
 %install
 %makeinstall_std
 
