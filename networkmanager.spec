@@ -26,12 +26,11 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.0.6
-Release:	1
+Release:	1.1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
-Source1:	README.urpmi
 Source2:	00-server.conf
 
 # XXX: repository MIA?? patch manually regenerated...
@@ -43,6 +42,13 @@ Source2:	00-server.conf
 #Patch1:		networkmanager-1.0.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
+# Not upstream, from fedora
+Patch3:        0001-rh1116999-resolv-conf-symlink.patch
+# Mageia patches
+# (blino) took discover_mac_address() from ifcfg-mdv, modified to read device name
+Patch10:       NetworkManager-1.0.0-discover-mac-address.patch
+# (blino) took ifcfg_mdv_parse_ssid() from ifcfg-mdv to read WIRELESS_ESSID, but kept ESSID as fallback
+Patch11:	NetworkManager-1.0.0-mga-wireless_essid.patch
 
 # Mandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
@@ -89,8 +95,6 @@ Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
-# Not upstream, from fedora
-Patch11:	0001-rh1116999-resolv-conf-symlink.patch
 
 %description
 NetworkManager attempts to keep an active network connection available at all
@@ -203,10 +207,6 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
-autoreconf -fi
-intltoolize -f
-# Add readme displayed by urpmi
-cp %{SOURCE1} .
 
 %build
 %define	_disable_ld_no_undefined 1
@@ -231,7 +231,7 @@ cp %{SOURCE1} .
 	--with-wext=yes \
 	--enable-modify-system \
 	--with-modem-manager-1=yes \
-	--with-vala=yes \
+	--disable-vala \
 	--with-udev-dir=/lib/udev \
 	--with-system-libndp=yes \
 	--with-nmtui \
@@ -241,6 +241,9 @@ cp %{SOURCE1} .
 	--with-dist-version=%{version}-%{release}
 
 %make
+
+%check
+make check
 
 %install
 %makeinstall_std
@@ -306,7 +309,6 @@ popd
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
-%doc README.urpmi
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
