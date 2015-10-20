@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.0.6
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -309,6 +309,21 @@ popd
 }
 
 %find_lang %{rname}
+
+%post
+
+# bug 1395
+# need to handle upgrade from minimal ifcfg files
+# networkmanager < 0.9.10 treated a file with missing BOOTPROTO
+# as BOOTPROTO=dhcp, later version treat it as IPV4 disabled
+# so we add a BOOTPROTO to any ifcfg files without one
+for x in /etc/sysconfig/network-scripts/ifcfg-*;
+do
+   if [ $(basename $x) != "ifcfg-lo" ]; then
+       grep -q ^BOOTPROTO $x || echo BOOTPROTO=dhcp >> $x
+   fi
+done
+
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
