@@ -31,7 +31,6 @@ Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
-Source1:	README.urpmi
 Source2:	00-server.conf
 
 # XXX: repository MIA?? patch manually regenerated...
@@ -43,8 +42,12 @@ Source2:	00-server.conf
 #Patch1:		networkmanager-1.0.0-mdv.patch
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
+# Not upstream, from fedora
+Patch3:        0001-rh1116999-resolv-conf-symlink.patch
+# from arch
+Patch4:        0001-Add-Requires.private-glib-2.0.patch
 
-# Mandriva specific patches
+# OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 
 BuildRequires:	gtk-doc
@@ -52,7 +55,6 @@ BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
 BuildRequires:	systemd-units
-BuildRequires:	vala-tools
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
@@ -91,10 +93,6 @@ Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
-# Not upstream, from fedora
-Patch11:	0001-rh1116999-resolv-conf-symlink.patch
-# from arch
-Patch12:	0001-Add-Requires.private-glib-2.0.patch
 
 %description
 NetworkManager attempts to keep an active network connection available at all
@@ -209,8 +207,6 @@ Development files for nm-glib-vpn.
 %apply_patches
 autoreconf -fi
 intltoolize -f
-# Add readme displayed by urpmi
-cp %{SOURCE1} .
 
 %build
 %define	_disable_ld_no_undefined 1
@@ -234,7 +230,7 @@ cp %{SOURCE1} .
 	--with-wext=yes \
 	--enable-modify-system \
 	--with-modem-manager-1=yes \
-	--with-vala=yes \
+	--disable-vala \
 	--with-udev-dir=/lib/udev \
 	--with-system-libndp=yes \
 	--with-nmtui \
