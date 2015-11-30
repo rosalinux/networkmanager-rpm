@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.0.6
-Release:	5
+Version:	1.0.8
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -283,9 +283,6 @@ install -d $%{buildroot}%{_datadir}/gnome-vpn-properties
 
 install -d $%{buildroot}%{_localstatedir}/lib/NetworkManager
 
-
-# link service file to match alias
-ln -sf %{_systemunitdir}/%{rname}.service %{buildroot}%{_systemunitdir}/%{name}.service
 #rhbz#974811
 ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 
@@ -354,7 +351,6 @@ done
 %{_systemunitdir}/NetworkManager-dispatcher.service
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
-%{_systemunitdir}/networkmanager.service
 %{_systemunitdir}/network-online.target.wants/NetworkManager-wait-online.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
