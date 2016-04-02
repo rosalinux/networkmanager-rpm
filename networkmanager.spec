@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.0.10
+Version:	1.0.12
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -203,6 +203,8 @@ intltoolize -f
 
 %build
 %define	_disable_ld_no_undefined 1
+# --disable-qt below just disables a Qt 4.x based sample.
+# plasma-nm is much nicer anyway.
 %configure \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
@@ -232,6 +234,7 @@ intltoolize -f
 	--enable-bluez5-dun \
 	--enable-lto \
 	--enable-wifi \
+	--disable-qt \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
