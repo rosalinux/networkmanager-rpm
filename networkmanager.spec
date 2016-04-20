@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.0.12
+Version:	1.2.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -35,8 +35,6 @@ Source2:	00-server.conf
 
 # Fedora patches
 Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
-# Not upstream, from fedora
-Patch3:        0001-rh1116999-resolv-conf-symlink.patch
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
 
@@ -317,7 +315,6 @@ done
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
-%{_sysconfdir}/dbus-1/system.d/nm-avahi-autoipd.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %dir %{_sysconfdir}/%{rname}
@@ -335,7 +332,6 @@ done
 %{_bindir}/nmtui-hostname
 %{_bindir}/nm-online
 %{_sbindir}/%{rname}
-%{_libexecdir}/nm-avahi-autoipd.action
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
@@ -357,6 +353,7 @@ done
 %{_systemunitdir}/network-online.target.wants/NetworkManager-wait-online.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
+%{_mandir}/man7/*.7*
 %{_mandir}/man8/*.8*
 %{_datadir}/doc/NetworkManager/examples/server.conf
 
