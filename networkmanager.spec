@@ -58,6 +58,7 @@ BuildRequires:	pkgconfig(libsoup-2.4)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(systemd)
 BuildRequires:	pkgconfig(libsystemd-login)
+BuildRequires:	pkgconfig(libsystemd-journal)
 # Temporary while systemd package is missing req
 BuildRequires:	libsystemd-devel
 BuildRequires:	pkgconfig(glibmm-2.4)
