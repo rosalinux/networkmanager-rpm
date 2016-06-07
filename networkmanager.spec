@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.2.0
+Version:	1.2.2
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -45,7 +45,6 @@ BuildRequires:	gtk-doc
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
-BuildRequires:	systemd-units
 BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
@@ -56,11 +55,7 @@ BuildRequires:	pkgconfig(gudev-1.0)
 BuildRequires:	pkgconfig(libnl-3.0)
 BuildRequires:	pkgconfig(libsoup-2.4)
 BuildRequires:	pkgconfig(mm-glib)
-BuildRequires:	pkgconfig(systemd)
-BuildRequires:	pkgconfig(libsystemd-login)
-BuildRequires:	pkgconfig(libsystemd-journal)
-# Temporary while systemd package is missing req
-BuildRequires:	libsystemd-devel
+BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
