@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.2.2
+Version:	1.2.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -208,10 +208,14 @@ intltoolize -f
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_systemunitdir} \
-	--with-tests=yes \
+	--with-systemd-logind=yes \
+	--with-systemd-journal=yes \
+	--with-logging-backend-default=journal \
+	--with-libaudit=yes-disabled-by-default \
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
+	--with-config-dns-rc-manager-default=symlink \
 	--enable-polkit \
 	--enable-polkit-agent \
 	--enable-ppp \
@@ -223,6 +227,7 @@ intltoolize -f
 	--with-udev-dir=/lib/udev \
 	--with-system-libndp=yes \
 	--with-nmtui \
+	--enable-ifcfg-rh=yes \
 	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
