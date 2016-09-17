@@ -211,7 +211,7 @@ intltoolize -f
 	--with-systemd-logind=yes \
 	--with-systemd-journal=yes \
 	--with-logging-backend-default=journal \
-	--with-libaudit=yes-disabled-by-default \
+	--with-libaudit=no \
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
