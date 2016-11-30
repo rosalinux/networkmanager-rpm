@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.0.6
-Release:	1.2
+Release:	1.3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -49,7 +49,7 @@ Patch3:        0001-rh1116999-resolv-conf-symlink.patch
 Patch10:       NetworkManager-1.0.0-discover-mac-address.patch
 # (blino) took ifcfg_mdv_parse_ssid() from ifcfg-mdv to read WIRELESS_ESSID, but kept ESSID as fallback
 Patch11:	NetworkManager-1.0.0-mga-wireless_essid.patch
-
+Patch12:	0001-Add-Requires.private-glib-2.0.patch
 # Mandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 
