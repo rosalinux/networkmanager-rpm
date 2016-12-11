@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.2.4
+Version:	1.2.6
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -314,7 +314,7 @@ done
 
 
 %files -f %{rname}.lang
-%doc AUTHORS CONTRIBUTING ChangeLog NEWS README TODO
+%doc AUTHORS CONTRIBUTING NEWS README TODO
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
@@ -410,4 +410,3 @@ done
 %{_includedir}/libnm-glib/nm-vpn*.h
 %{_libdir}/pkgconfig/libnm-glib-vpn.pc
 %{_libdir}/libnm-glib-vpn.so
-
