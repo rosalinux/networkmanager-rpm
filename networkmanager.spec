@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.2.6
+Version:	1.4.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
