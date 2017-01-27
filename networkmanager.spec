@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.4.4
+Version:	1.6.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -192,8 +192,8 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
-autoreconf -fi
-intltoolize -f
+#autoreconf -fi
+#intltoolize -f
 
 %build
 %define	_disable_ld_no_undefined 1
