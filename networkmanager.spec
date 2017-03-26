@@ -33,8 +33,6 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source2:	00-server.conf
 
-# Fedora patches
-Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
 
@@ -190,13 +188,13 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
-#autoreconf -fi
-#intltoolize -f
 
 %build
 %define	_disable_ld_no_undefined 1
+
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
+
 %configure \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
