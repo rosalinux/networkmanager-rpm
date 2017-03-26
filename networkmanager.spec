@@ -201,6 +201,7 @@ Development files for nm-glib-vpn.
 	--with-crypto=nss \
 	--enable-more-warnings=no \
 	--with-docs=yes \
+	--enable-tests=no \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
 	--with-resolvconf=no \
 	--with-session-tracking=systemd \
@@ -231,9 +232,10 @@ Development files for nm-glib-vpn.
 	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
-	--disable-lto \
+	--enable-lto \
 	--enable-wifi \
 	--disable-qt \
+	--without-libnm-glib \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
