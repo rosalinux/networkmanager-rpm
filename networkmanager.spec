@@ -232,7 +232,7 @@ Development files for nm-glib-vpn.
 	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
-	--enable-lto \
+	--disable-lto \
 	--enable-wifi \
 	--disable-qt \
 	--without-libnm-glib \
