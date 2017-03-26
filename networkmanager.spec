@@ -193,6 +193,7 @@ Development files for nm-glib-vpn.
 
 %build
 %define	_disable_ld_no_undefined 1
+%define _disable_lto 1
 
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
