@@ -64,6 +64,7 @@ BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
+BuildRequires:	python3egg(pygobject)
 Requires:	iproute2
 Requires:	iptables
 Requires:	modemmanager
