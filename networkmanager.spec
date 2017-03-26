@@ -40,6 +40,7 @@ Patch4:        0001-Add-Requires.private-glib-2.0.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 
 BuildRequires:	gtk-doc
+BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
@@ -230,7 +231,7 @@ Development files for nm-glib-vpn.
 	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
-	--enable-lto \
+	--disable-lto \
 	--enable-wifi \
 	--disable-qt \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
