@@ -5,7 +5,7 @@
 
 %define majglib 4
 %define libnm_glib %mklibname nm-glib %{majglib}
-%define girclient %mklibname	nmclient-gir %{api}
+%define girclient %mklibname nmclient-gir %{api}
 %define devnm_glib %mklibname -d nm-glib
 
 %define majvpn 1
@@ -14,18 +14,18 @@
 
 %define majutil 2
 %define libnm_util %mklibname nm-util %{majutil}
-%define girname %mklibname	%{name}-gir %{api}
+%define girname %mklibname %{name}-gir %{api}
 %define devnm_util %mklibname -d nm-util
 
-%define	majlibnm	0
-%define	libnm		%mklibname nm %{majlibnm}
-%define	nm_girname	%mklibname nm-gir %{api}
-%define	devnm		%mklibname -d nm
-%define	ppp_version	2.4.7
+%define	majlibnm 0
+%define	libnm %mklibname nm %{majlibnm}
+%define	nm_girname %mklibname nm-gir %{api}
+%define	devnm %mklibname -d nm
+%define	ppp_version 2.4.7
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.6.0
+Version:	1.6.2
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -65,11 +65,9 @@ BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
-Requires:	dhcp-client-daemon
-Requires:	dnsmasq-base
+BuildRequires:	pkgconfig(jansson)
 Requires:	iproute2
 Requires:	iptables
-Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
 Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
@@ -212,6 +210,8 @@ Development files for nm-glib-vpn.
 	--with-systemd-journal=yes \
 	--with-logging-backend-default=journal \
 	--with-libaudit=no \
+	--with-config-dhcp-default=internal \
+	--with-dhcpcd-supports-ipv6=yes \
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
@@ -246,6 +246,7 @@ Development files for nm-glib-vpn.
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-rh,keyfile
+dhcp=internal
 EOF
 
 # Create netprofile module 
@@ -278,8 +279,13 @@ install -m755 clients/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 
+install -d %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
+install -d %{buildroot}%{_localstatedir}/lib/%{rname}/
+touch %{buildroot}%{_localstatedir}/lib/%{rname}/%{rname}-intern.conf
+
 # create a dnsmasq.d directory
-install -d $%{buildroot}%{_sysconfdir}/NetworkManager/dnsmasq.d
+install -d %{buildroot}%{_sysconfdir}/%{rname}/dnsmasq.d
+install -d %{buildroot}%{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 
 install -d $%{buildroot}%{_datadir}/gnome-vpn-properties
 
@@ -324,8 +330,14 @@ done
 %dir %{_sysconfdir}/%{rname}/conf.d
 %config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
+%dir %{_sysconfdir}/%{rname}/dnsmasq.d/
+%dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
+%dir %{_prefix}/lib/%{rname}/
+%dir %{_prefix}/lib/%{rname}/conf.d/
+%dir %{_localstatedir}/lib/%{rname}/
+%ghost %{_localstatedir}/lib/%{rname}/%{rname}-intern.conf
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
