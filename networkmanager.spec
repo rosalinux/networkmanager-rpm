@@ -355,7 +355,6 @@ done
 %{_libexecdir}/nm-iface-helper
 %{_libdir}/NetworkManager/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
-%attr(0755,root,root) %dir %{_localstatedir}/run/%{rname}
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
 %{_datadir}/bash-completion/completions/nmcli
