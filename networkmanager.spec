@@ -337,7 +337,11 @@ done
 %dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
+%if %{_lib} != "lib64"
 %dir %{_prefix}/lib/%{rname}
+%else
+%dir %{_libdir}/NetworkManager
+%endif
 %dir %{_prefix}/lib/%{rname}/conf.d/
 %{_bindir}/nmcli
 %{_bindir}/nmtui
@@ -349,14 +353,13 @@ done
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
-%dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %attr(0755,root,root) %dir %{_localstatedir}/run/%{rname}
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
 %{_datadir}/bash-completion/completions/nmcli
-%{_datadir}/dbus-1/interfaces/org.freedesktop.NetworkManager.*.xml
+%{_datadir}/dbus-1/interfaces/org.freedesktop.NetworkManager*.xml
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
@@ -381,7 +384,7 @@ done
 %files -n %{devnm}
 %dir %{_includedir}/libnm
 %{_includedir}/libnm/*.h
-%doc %{_datadir}/gtk-doc/html/libnm
+#doc %{_datadir}/gtk-doc/html/libnm
 %{_datadir}/gir-1.0/NM-1.0.gir
 %{_libdir}/pkgconfig/libnm.pc
 %{_libdir}/libnm.so
@@ -395,8 +398,8 @@ done
 %files -n %{devnm_util}
 %dir %{_includedir}/%{rname}
 %{_includedir}/%{rname}/*.h
-%doc %{_datadir}/gtk-doc/html/%{rname}
-%doc %{_datadir}/gtk-doc/html/libnm-util
+#doc %{_datadir}/gtk-doc/html/%{rname}
+#doc %{_datadir}/gtk-doc/html/libnm-util
 %{_datadir}/gir-1.0/NetworkManager-1.0.gir
 %{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/pkgconfig/libnm-util.pc
@@ -414,7 +417,7 @@ done
 %files -n %{devnm_glib}
 %dir %{_includedir}/libnm-glib
 %exclude %{_includedir}/libnm-glib/nm-vpn*.h
-%doc %{_datadir}/gtk-doc/html/libnm-glib
+#doc %{_datadir}/gtk-doc/html/libnm-glib
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm-glib.pc
 %{_libdir}/libnm-glib.so
