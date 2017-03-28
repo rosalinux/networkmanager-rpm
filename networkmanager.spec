@@ -236,7 +236,7 @@ Development files for nm-glib-vpn.
 	--disable-lto \
 	--enable-wifi \
 	--disable-qt \
-	--without-libnm-glib \
+	--with-libnm-glib \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
@@ -337,10 +337,8 @@ done
 %dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
-%dir %{_prefix}/lib/%{rname}/
+%dir %{_prefix}/lib/%{rname}
 %dir %{_prefix}/lib/%{rname}/conf.d/
-%dir %{_localstatedir}/lib/%{rname}/
-%ghost %{_localstatedir}/lib/%{rname}/%{rname}-intern.conf
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
@@ -358,6 +356,7 @@ done
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
 %{_datadir}/bash-completion/completions/nmcli
+%{_datadir}/dbus-1/interfaces/org.freedesktop.NetworkManager.*.xml
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
