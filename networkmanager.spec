@@ -5,7 +5,7 @@
 
 %define majglib 4
 %define libnm_glib %mklibname nm-glib %{majglib}
-%define girclient %mklibname	nmclient-gir %{api}
+%define girclient %mklibname nmclient-gir %{api}
 %define devnm_glib %mklibname -d nm-glib
 
 %define majvpn 1
@@ -14,18 +14,18 @@
 
 %define majutil 2
 %define libnm_util %mklibname nm-util %{majutil}
-%define girname %mklibname	%{name}-gir %{api}
+%define girname %mklibname %{name}-gir %{api}
 %define devnm_util %mklibname -d nm-util
 
-%define	majlibnm	0
-%define	libnm		%mklibname nm %{majlibnm}
-%define	nm_girname	%mklibname nm-gir %{api}
-%define	devnm		%mklibname -d nm
-%define	ppp_version	2.4.7
+%define	majlibnm 0
+%define	libnm %mklibname nm %{majlibnm}
+%define	nm_girname %mklibname nm-gir %{api}
+%define	devnm %mklibname -d nm
+%define	ppp_version 2.4.7
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.2.6
+Version:	1.6.2
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -33,8 +33,6 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source2:	00-server.conf
 
-# Fedora patches
-Patch2:		networkmanager-0.8.1.999-explain-dns1-dns2.patch
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
 
@@ -42,6 +40,7 @@ Patch4:        0001-Add-Requires.private-glib-2.0.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 
 BuildRequires:	gtk-doc
+BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
@@ -65,11 +64,10 @@ BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
-Requires:	dhcp-client-daemon
-Requires:	dnsmasq-base
+BuildRequires:	pkgconfig(jansson)
+BuildRequires:	python3egg(pygobject)
 Requires:	iproute2
 Requires:	iptables
-Requires:	mobile-broadband-provider-info
 Requires:	modemmanager
 Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
@@ -192,17 +190,19 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
-autoreconf -fi
-intltoolize -f
 
 %build
 %define	_disable_ld_no_undefined 1
+%define _disable_lto 1
+
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
+
 %configure \
 	--with-crypto=nss \
 	--enable-more-warnings=no \
 	--with-docs=yes \
+	--enable-tests=no \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
 	--with-resolvconf=no \
 	--with-session-tracking=systemd \
@@ -212,6 +212,8 @@ intltoolize -f
 	--with-systemd-journal=yes \
 	--with-logging-backend-default=journal \
 	--with-libaudit=no \
+	--with-config-dhcp-default=internal \
+	--with-dhcpcd-supports-ipv6=yes \
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
@@ -231,9 +233,10 @@ intltoolize -f
 	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
-	--enable-lto \
+	--disable-lto \
 	--enable-wifi \
 	--disable-qt \
+	--with-libnm-glib \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
@@ -246,6 +249,7 @@ intltoolize -f
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-rh,keyfile
+dhcp=internal
 EOF
 
 # Create netprofile module 
@@ -278,8 +282,13 @@ install -m755 clients/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 
+install -d %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
+install -d %{buildroot}%{_localstatedir}/lib/%{rname}/
+touch %{buildroot}%{_localstatedir}/lib/%{rname}/%{rname}-intern.conf
+
 # create a dnsmasq.d directory
-install -d $%{buildroot}%{_sysconfdir}/NetworkManager/dnsmasq.d
+install -d %{buildroot}%{_sysconfdir}/%{rname}/dnsmasq.d
+install -d %{buildroot}%{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 
 install -d $%{buildroot}%{_datadir}/gnome-vpn-properties
 
@@ -324,8 +333,16 @@ done
 %dir %{_sysconfdir}/%{rname}/conf.d
 %config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
+%dir %{_sysconfdir}/%{rname}/dnsmasq.d/
+%dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
+%if %{_lib} != "lib64"
+%dir %{_prefix}/lib/%{rname}
+%else
+%dir %{_libdir}/NetworkManager
+%endif
+%dir %{_prefix}/lib/%{rname}/conf.d/
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
@@ -336,13 +353,12 @@ done
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
-%dir %{_libdir}/NetworkManager
 %{_libdir}/NetworkManager/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
-%attr(0755,root,root) %dir %{_localstatedir}/run/%{rname}
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
 %{_datadir}/bash-completion/completions/nmcli
+%{_datadir}/dbus-1/interfaces/org.freedesktop.NetworkManager*.xml
 %{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
@@ -367,7 +383,7 @@ done
 %files -n %{devnm}
 %dir %{_includedir}/libnm
 %{_includedir}/libnm/*.h
-%doc %{_datadir}/gtk-doc/html/libnm
+#doc %{_datadir}/gtk-doc/html/libnm
 %{_datadir}/gir-1.0/NM-1.0.gir
 %{_libdir}/pkgconfig/libnm.pc
 %{_libdir}/libnm.so
@@ -381,8 +397,8 @@ done
 %files -n %{devnm_util}
 %dir %{_includedir}/%{rname}
 %{_includedir}/%{rname}/*.h
-%doc %{_datadir}/gtk-doc/html/%{rname}
-%doc %{_datadir}/gtk-doc/html/libnm-util
+#doc %{_datadir}/gtk-doc/html/%{rname}
+#doc %{_datadir}/gtk-doc/html/libnm-util
 %{_datadir}/gir-1.0/NetworkManager-1.0.gir
 %{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/pkgconfig/libnm-util.pc
@@ -400,7 +416,7 @@ done
 %files -n %{devnm_glib}
 %dir %{_includedir}/libnm-glib
 %exclude %{_includedir}/libnm-glib/nm-vpn*.h
-%doc %{_datadir}/gtk-doc/html/libnm-glib
+#doc %{_datadir}/gtk-doc/html/libnm-glib
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm-glib.pc
 %{_libdir}/libnm-glib.so
