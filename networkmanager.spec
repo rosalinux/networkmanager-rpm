@@ -33,6 +33,8 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source2:	00-server.conf
 
+Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
+
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
 
@@ -190,10 +192,10 @@ Development files for nm-glib-vpn.
 %prep
 %setup -qn %{rname}-%{version}
 %apply_patches
+[ -e autogen.sh ] && ./autogen.sh
 
 %build
 %define	_disable_ld_no_undefined 1
-%define _disable_lto 1
 
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
@@ -233,14 +235,16 @@ Development files for nm-glib-vpn.
 	--enable-teamdctl \
 	--enable-introspection=yes \
 	--enable-bluez5-dun \
-	--disable-lto \
+	--enable-lto \
 	--enable-wifi \
 	--disable-qt \
 	--with-libnm-glib \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
 
-%make
+# Setting LDFLAGS is necessary to make sure we link with LTO
+# if we're building with LTO
+%make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
 %install
 %makeinstall_std
