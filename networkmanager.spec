@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.6.2
+Version:	1.8.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -67,6 +67,7 @@ BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
+BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
 Requires:	iproute2
 Requires:	iptables
@@ -387,7 +388,7 @@ done
 %files -n %{devnm}
 %dir %{_includedir}/libnm
 %{_includedir}/libnm/*.h
-#doc %{_datadir}/gtk-doc/html/libnm
+%doc %{_datadir}/gtk-doc/html/libnm
 %{_datadir}/gir-1.0/NM-1.0.gir
 %{_libdir}/pkgconfig/libnm.pc
 %{_libdir}/libnm.so
@@ -401,8 +402,8 @@ done
 %files -n %{devnm_util}
 %dir %{_includedir}/%{rname}
 %{_includedir}/%{rname}/*.h
-#doc %{_datadir}/gtk-doc/html/%{rname}
-#doc %{_datadir}/gtk-doc/html/libnm-util
+%doc %{_datadir}/gtk-doc/html/%{rname}
+%doc %{_datadir}/gtk-doc/html/libnm-util
 %{_datadir}/gir-1.0/NetworkManager-1.0.gir
 %{_libdir}/pkgconfig/%{rname}.pc
 %{_libdir}/pkgconfig/libnm-util.pc
@@ -420,7 +421,7 @@ done
 %files -n %{devnm_glib}
 %dir %{_includedir}/libnm-glib
 %exclude %{_includedir}/libnm-glib/nm-vpn*.h
-#doc %{_datadir}/gtk-doc/html/libnm-glib
+%doc %{_datadir}/gtk-doc/html/libnm-glib
 %{_includedir}/libnm-glib/*.h
 %{_libdir}/pkgconfig/libnm-glib.pc
 %{_libdir}/libnm-glib.so
