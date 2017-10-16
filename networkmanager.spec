@@ -372,7 +372,6 @@ done
 %{_systemunitdir}/NetworkManager-dispatcher.service
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
-%{_systemunitdir}/network-online.target.wants/NetworkManager-wait-online.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man7/*.7*
