@@ -69,6 +69,7 @@ BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python-gobject3-devel
+BuildRequires:	python3egg(pygobject)
 Requires:	iproute2
 Requires:	iptables
 Requires:	modemmanager
