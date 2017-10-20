@@ -245,6 +245,7 @@ Development files for nm-glib-vpn.
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
+ln -s /proc/self/fd /dev/fd
 make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
 %install
