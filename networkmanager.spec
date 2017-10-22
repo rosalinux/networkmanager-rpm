@@ -37,6 +37,7 @@ Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
+Patch5:	       shell-symbol-fetch-fix.patch
 
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
@@ -68,7 +69,8 @@ BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
-BuildRequires:	python3egg(pygobject)
+#BuildRequires:	python3egg(pygobject
+BuildRequires:	python-gobject3-devel
 Requires:	iproute2
 Requires:	iptables
 Requires:	modemmanager
@@ -245,7 +247,6 @@ Development files for nm-glib-vpn.
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
-ln -s /proc/self/fd /dev/fd
 make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
 %install

@@ -1,0 +1,37 @@
+--- NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh~	2017-09-20 11:59:40.026059840 +0100
++++ NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh	2017-10-22 00:54:29.577363195 +0100
+@@ -47,16 +47,28 @@
+ }
+ 
+ get_symbols_missing() {
+-    (for f in $(find ./src/settings/plugins/*/.libs/ \
+-              ./src/devices/*/.libs/ \
+-              ./src/ppp/.libs/ -name '*.so'); do
+-        call_nm "$f" |
++(	while read -r f; do
++    	    call_nm "$f" |
+             sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p'
+-    done) |
+-        _sort |
++	done < <(find ./src/settings/plugins/*/.libs/ \
++            	     ./src/devices/*/.libs/ \
++            	     ./src/ppp/.libs/ -name '*.so')) |
++       _sort |
+         grep -Fx -f <(get_symbols_explict) -v |
+         grep -Fx -f <(get_symbols_nm)
+ }
++              
++#get_symbols_missing() {
++#    (for f in $(find ./src/settings/plugins/*/.libs/ \
++#              ./src/devices/*/.libs/ \
++#              ./src/ppp/.libs/ -name '*.so'); do
++#        call_nm "$f" |
++#            sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p'
++#    done) |
++#        _sort |
++#        grep -Fx -f <(get_symbols_explict) -v |
++#        grep -Fx -f <(get_symbols_nm)
++#}
+ 
+ pretty() {
+     sed 's/.*/\t\0;/'
