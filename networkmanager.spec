@@ -69,8 +69,8 @@ BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
-BuildRequires:	python3egg(pygobject)
-#BuildRequires:	python-gobject3-devel
+#BuildRequires:	python3egg(pygobject)
+BuildRequires:	python-gobject3-devel
 Requires:	iproute2
 Requires:	iptables
 Requires:	modemmanager
@@ -247,7 +247,7 @@ Development files for nm-glib-vpn.
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
-make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
+%make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
 %install
 %makeinstall_std
