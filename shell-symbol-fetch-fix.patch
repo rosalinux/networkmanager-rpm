@@ -1,5 +1,5 @@
 --- NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh~	2017-09-20 11:59:40.000000000 +0100
-+++ NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh	2017-10-24 23:17:45.637400110 +0100
++++ NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh	2017-10-25 00:21:21.133512749 +0100
 @@ -1,5 +1,5 @@
  #!/bin/bash
 -
@@ -16,7 +16,7 @@
  }
  
  call_nm() {
-@@ -47,15 +47,25 @@
+@@ -47,15 +47,27 @@
  }
  
  get_symbols_missing() {
@@ -34,9 +34,11 @@
 +                     ./src/ppp/.libs/ -name '*.so' >sym_libs
 +
 +	while read LINE; do
-+    	    call_nm "$LINE" |
-+            sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p' >>syms
-+	done < <(cat sym_libs)   
++    	    sym+=`call_nm "$LINE"`
++#            sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p' >>syms
++	done < <(cat sym_libs)
++	
++echo "$sym"	| sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p' >>syms
 +      cat syms | _sort >syms1
 +#      cat syms1 | grep -Fx -f <(get_symbols_nm) | LANG=C sort -u syms2
 +      cat syms1 | grep -Fx -f <(get_symbols_nm) | _sort >syms2     
