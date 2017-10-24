@@ -1,0 +1,53 @@
+--- NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh~	2017-09-20 11:59:40.000000000 +0100
++++ NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh	2017-10-24 23:17:45.637400110 +0100
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+-
++set -x
+ set -e
+ set -o pipefail
+ 
+@@ -26,7 +26,7 @@
+ }
+ 
+ _sort() {
+-    LANG=C sort -u
++    LANG=C sort -u 
+ }
+ 
+ call_nm() {
+@@ -47,15 +47,25 @@
+ }
+ 
+ get_symbols_missing() {
+-    (for f in $(find ./src/settings/plugins/*/.libs/ \
+-              ./src/devices/*/.libs/ \
+-              ./src/ppp/.libs/ -name '*.so'); do
+-        call_nm "$f" |
+-            sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p'
+-    done) |
+-        _sort |
+-        grep -Fx -f <(get_symbols_explict) -v |
+-        grep -Fx -f <(get_symbols_nm)
++find ./src/settings/plugins/*/.libs/ \
++                     ./src/devices/*/.libs/ \
++                     ./src/ppp/.libs/ -name '*.so' >sym_libs
++
++	while read LINE; do
++    	    call_nm "$LINE" |
++            sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p' >>syms
++	done < <(cat sym_libs)   
++      cat syms | _sort >syms1
++#      cat syms1 | grep -Fx -f <(get_symbols_nm) | LANG=C sort -u syms2
++      cat syms1 | grep -Fx -f <(get_symbols_nm) | _sort >syms2     
++      cat syms2 | grep '^NM'  >toprows
++      cat syms2 | grep '^_'  >midrows 
++      cat syms2 | grep '^_' -v >nmrows
++      cat nmrows | grep -Fx -f <(cat toprows) -v >botrows 
++      cat midrows | _sort >>toprows
++      cat botrows | _sort >>toprows
++      /bin/rm midrows nmrows botrows
++      cat toprows
+ }
+ 
+ pretty() {
