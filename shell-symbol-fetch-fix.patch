@@ -1,8 +1,9 @@
 --- NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh~	2017-09-20 11:59:40.000000000 +0100
-+++ NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh	2017-10-25 00:21:21.133512749 +0100
++++ NetworkManager-1.8.4/tools/create-exports-NetworkManager.sh	2017-10-25 09:05:28.710516050 +0100
 @@ -1,5 +1,5 @@
- #!/bin/bash
+-#!/bin/bash
 -
++#!/bin/zsh
 +set -x
  set -e
  set -o pipefail
@@ -41,7 +42,7 @@
 +echo "$sym"	| sed -n 's/^\([U]\) \(\(nm_\|nmp_\|_nm\|NM\|_NM\).*\)$/\2/p' >>syms
 +      cat syms | _sort >syms1
 +#      cat syms1 | grep -Fx -f <(get_symbols_nm) | LANG=C sort -u syms2
-+      cat syms1 | grep -Fx -f <(get_symbols_nm) | _sort >syms2     
++      cat syms1 | grep -Fx -f <(get_symbols_nm) >syms2     
 +      cat syms2 | grep '^NM'  >toprows
 +      cat syms2 | grep '^_'  >midrows 
 +      cat syms2 | grep '^_' -v >nmrows
