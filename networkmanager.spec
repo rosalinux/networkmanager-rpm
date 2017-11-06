@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.8.4
-Release:	3
+Version:	1.9.90
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -373,6 +373,7 @@ done
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
 %{_systemunitdir}/NetworkManager-dispatcher.service
+%{_systemunitdir}/NetworkManager.service.d
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_mandir}/man1/*.1*
