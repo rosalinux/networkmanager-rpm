@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.10.0
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -71,6 +71,8 @@ BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
 BuildRequires:	zsh
+# For wext support
+BuildRequires:	kernel-release-headers
 #BuildRequires:	python-gobject3-devel
 Requires:	iproute2
 Requires:	iptables
