@@ -7,9 +7,9 @@
 -AC_CHECK_TOOLS(AR, [gcc-ar ar], false)
 -AC_CHECK_TOOLS(RANLIB, [gcc-ranlib ranlib], :)
 -AC_CHECK_TOOLS(NM, [$BINUTILS_NM gcc-nm nm])
-+#AC_CHECK_TOOLS(AR, [gcc-ar ar], false)
-+#AC_CHECK_TOOLS(RANLIB, [gcc-ranlib ranlib], :)
-+#AC_CHECK_TOOLS(NM, [$BINUTILS_NM gcc-nm nm])
++AC_CHECK_TOOLS(AR, [llvm-ar gcc-ar ar], false)
++AC_CHECK_TOOLS(RANLIB, [llvm-ranlib gcc-ranlib ranlib], :)
++AC_CHECK_TOOLS(NM, [$BINUTILS_NM llvm-nm gcc-nm nm])
 +# Unless we're on OpenMandriva, which actually fixes things instead of breaking them
 +# gcc-ar and gcc-ranlib break clang lto
  
