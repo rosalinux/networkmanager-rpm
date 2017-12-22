@@ -70,7 +70,6 @@ BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
-BuildRequires:	zsh
 # For wext support
 BuildRequires:	kernel-release-headers
 #BuildRequires:	python-gobject3-devel
