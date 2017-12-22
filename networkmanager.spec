@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.8.4
-Release:	3
+Version:	1.10.2
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -70,7 +70,9 @@ BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
-#BuildRequires:	zsh
+BuildRequires:	zsh
+# For wext support
+BuildRequires:	kernel-release-headers
 #BuildRequires:	python-gobject3-devel
 Requires:	iproute2
 Requires:	iptables
@@ -250,6 +252,29 @@ Development files for nm-glib-vpn.
 # if we're building with LTO
 %make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
+# Don't remove this sanity check unless you know 100%
+# what you're doing...
+# To check for the effect this sanity check prevents,
+# start your newly built NetworkManager and check
+# journalctl -u NetworkManager
+# for messages like
+# <warn>  [1511513843.0482] (/libnm-device-plugin-wifi.so): failed to load plugin: /usr/lib64/NetworkManager/libnm-device-plugin-wifi.so: undefined symbol: _nm_logging_enabled_state
+if ! grep -q _nm_logging_enabled_state src/NetworkManager.ver; then
+	cat <<'EOF'
+It looks like the symbol table was not generated correctly.
+This will cause the plugin loader to fail, causing WiFi not to work.
+
+The usual cause for this problem is the compiler not matching
+the version of nm being used (e.g. gcc with llvm-nm or clang with
+gcc-nm).
+
+Also see networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
+
+Please fix this -- see the spec file for details.
+EOF
+	exit 1
+fi
+
 %install
 %makeinstall_std
 
@@ -373,6 +398,7 @@ done
 /lib/udev/rules.d/*.rules
 %{_systemunitdir}/NetworkManager-wait-online.service
 %{_systemunitdir}/NetworkManager-dispatcher.service
+%{_systemunitdir}/NetworkManager.service.d
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_systemunitdir}/NetworkManager.service
 %{_mandir}/man1/*.1*
