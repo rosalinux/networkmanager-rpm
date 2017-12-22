@@ -37,7 +37,7 @@ Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
-Patch5:	       shell-symbol-fetch-fix.patch
+#Patch5:	       shell-symbol-fetch-fix.patch
 
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
@@ -250,7 +250,7 @@ Development files for nm-glib-vpn.
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
-make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
+%make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
 # Don't remove this sanity check unless you know 100%
 # what you're doing...
