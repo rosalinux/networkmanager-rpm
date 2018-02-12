@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.10.2
+Version:	1.10.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -246,6 +246,13 @@ Development files for nm-glib-vpn.
 	--with-libnm-glib \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
+
+# FIXME this is a workaround for NetworkManager insisting on
+# gcc extensions to _Generic rather than standards compliant _Generic
+if %{__cc} --version |grep -q clang; then
+	sed -i -e 's,D\["_NM_CC_SUPPORT_GENERIC"\]=" 1",D["_NM_CC_SUPPORT_GENERIC"]=" 0",' config.status
+	sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
+fi
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
