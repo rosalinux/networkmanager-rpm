@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.10.8
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -113,6 +113,7 @@ GObject Introspection interface description for NM.
 Summary:	Development files for NM
 Group:		Development/C
 Provides:	nm-devel = %{EVRD}
+Requires:	%{libnm} = %{EVRD}
 Requires:	%{nm_girname} = %{EVRD}
 
 %description -n	%{devnm}
