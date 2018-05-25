@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.10.2
-Release:	1
+Version:	1.10.8
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -70,7 +70,7 @@ BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
-BuildRequires:	zsh
+BuildRequires:	pkgconfig(udev)
 # For wext support
 BuildRequires:	kernel-release-headers
 #BuildRequires:	python-gobject3-devel
@@ -113,6 +113,7 @@ GObject Introspection interface description for NM.
 Summary:	Development files for NM
 Group:		Development/C
 Provides:	nm-devel = %{EVRD}
+Requires:	%{libnm} = %{EVRD}
 Requires:	%{nm_girname} = %{EVRD}
 
 %description -n	%{devnm}
@@ -247,6 +248,13 @@ Development files for nm-glib-vpn.
 	--with-libnm-glib \
 	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
 	--with-dist-version=%{version}-%{release}
+
+# FIXME this is a workaround for NetworkManager insisting on
+# gcc extensions to _Generic rather than standards compliant _Generic
+if %{__cc} --version |grep -q clang; then
+	sed -i -e 's,D\["_NM_CC_SUPPORT_GENERIC"\]=" 1",D["_NM_CC_SUPPORT_GENERIC"]=" 0",' config.status
+	sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
+fi
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
