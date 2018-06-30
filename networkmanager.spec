@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.10.10
+Version:	1.12.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -394,7 +394,11 @@ done
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
-%{_libdir}/NetworkManager/*.so
+%{_libexecdir}/nm-ifup
+%{_libexecdir}/nm-ifdown
+%dir %{_libdir}/NetworkManager
+%dir %{_libdir}/NetworkManager/%{version}-1
+%{_libdir}/NetworkManager/%{version}-1/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
