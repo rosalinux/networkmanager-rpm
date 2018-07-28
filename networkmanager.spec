@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.12.0
+Version:	1.12.2
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -72,7 +72,7 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
 BuildRequires:	pkgconfig(udev)
 # For wext support
-BuildRequires:	kernel-release-headers
+BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
 Requires:	iproute2
 Requires:	iptables
