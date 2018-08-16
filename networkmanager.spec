@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.12.2
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -38,6 +38,7 @@ Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 # from arch
 Patch4:        0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
+Patch6:		version-fix-compile-error-due-to-NM_AVAILABLE_IN_1_12_2-m.patch
 
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
@@ -67,6 +68,7 @@ BuildRequires:	pkgconfig(libnewt)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(bluez)
 BuildRequires:	pkgconfig(libteamdctl)
+BuildRequires:	pkgconfig(libteam)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
