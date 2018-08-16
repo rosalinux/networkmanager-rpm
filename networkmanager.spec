@@ -52,7 +52,6 @@ BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
-BuildRequires:	dbus
 BuildRequires:	pkgconfig(ext2fs)
 BuildRequires:	pkgconfig(gobject-introspection-1.0)
 BuildRequires:	pkgconfig(gudev-1.0)
