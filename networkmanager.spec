@@ -217,7 +217,7 @@ Development files for nm-glib-vpn.
 	--with-resolvconf=no \
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
-	--with-systemdsystemunitdir=%{_systemunitdir} \
+	--with-systemdsystemunitdir=%{_unitdir} \
 	--with-systemd-logind=yes \
 	--with-systemd-journal=yes \
 	--with-logging-backend-default=journal \
@@ -412,11 +412,11 @@ done
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
-%{_systemunitdir}/NetworkManager-wait-online.service
-%{_systemunitdir}/NetworkManager-dispatcher.service
-%{_systemunitdir}/NetworkManager.service.d
+%{_unitdir}/NetworkManager-wait-online.service
+%{_unitdir}/NetworkManager-dispatcher.service
+%{_unitdir}/NetworkManager.service.d
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
-%{_systemunitdir}/NetworkManager.service
+%{_unitdir}/NetworkManager.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
 %{_mandir}/man7/*.7*
