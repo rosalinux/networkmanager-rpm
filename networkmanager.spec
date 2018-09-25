@@ -401,8 +401,8 @@ done
 %{_libexecdir}/nm-ifup
 %{_libexecdir}/nm-ifdown
 %dir %{_libdir}/NetworkManager
-%dir %{_libdir}/NetworkManager/%{version}-2
-%{_libdir}/NetworkManager/%{version}-2/*.so
+%dir %{_libdir}/NetworkManager/%{version}-1
+%{_libdir}/NetworkManager/%{version}-1/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
