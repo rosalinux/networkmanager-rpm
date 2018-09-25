@@ -199,8 +199,8 @@ Conflicts:	%{_lib}nm_glib-devel < 0.7.996
 Development files for nm-glib-vpn.
 
 %prep
-%setup -qn %{rname}-%{version}
-%apply_patches
+%autosetup -p1 -n %{rname}-%{version}
+
 [ -e autogen.sh ] && ./autogen.sh
 
 %build
@@ -260,7 +260,7 @@ fi
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
 # if we're building with LTO
-%make LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
+%make_build LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
 
 # Don't remove this sanity check unless you know 100%
 # what you're doing...
@@ -286,7 +286,7 @@ EOF
 fi
 
 %install
-%makeinstall_std
+%make_install
 
 # ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
