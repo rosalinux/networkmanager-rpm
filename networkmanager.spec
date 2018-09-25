@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.12.2
-Release:	2
+Version:	1.12.4
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -333,9 +333,12 @@ touch %{buildroot}%{_localstatedir}/lib/%{rname}/%{rname}-intern.conf
 install -d %{buildroot}%{_sysconfdir}/%{rname}/dnsmasq.d
 install -d %{buildroot}%{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 
-install -d $%{buildroot}%{_datadir}/gnome-vpn-properties
+install -d %{buildroot}%{_datadir}/gnome-vpn-properties
 
-install -d $%{buildroot}%{_localstatedir}/lib/NetworkManager
+install -d %{buildroot}%{_localstatedir}/lib/NetworkManager
+
+# (tpg) Those are not required with systemd-udevd v210 or newer
+rm -rf %{buildroot}/lib/udev/rules.d/84-nm-drivers.rules
 
 #rhbz#974811
 ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
