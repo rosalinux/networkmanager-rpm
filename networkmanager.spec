@@ -1,7 +1,7 @@
-%define	url_ver %(echo %{version}|cut -d. -f1,2)
+%define url_ver %(echo %{version}|cut -d. -f1,2)
 
-%define	rname NetworkManager
-%define	api 1.0
+%define rname NetworkManager
+%define api 1.0
 
 %define majglib 4
 %define libnm_glib %mklibname nm-glib %{majglib}
@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.14.0
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -58,6 +58,7 @@ BuildRequires:	pkgconfig(libnl-3.0)
 BuildRequires:	pkgconfig(libsoup-2.4)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(libsystemd)
+BuildRequires:	systemd-macros
 BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(nss)
 BuildRequires:	pkgconfig(polkit-gobject-1)
@@ -292,6 +293,9 @@ cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-rh,keyfile
 dhcp=internal
+
+[logging]
+level=WARN
 EOF
 
 # Create netprofile module 
