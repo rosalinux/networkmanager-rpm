@@ -17,11 +17,11 @@
 %define girname %mklibname %{name}-gir %{api}
 %define devnm_util %mklibname -d nm-util
 
-%define	majlibnm 0
-%define	libnm %mklibname nm %{majlibnm}
-%define	nm_girname %mklibname nm-gir %{api}
-%define	devnm %mklibname -d nm
-%define	ppp_version 2.4.7
+%define majlibnm 0
+%define libnm %mklibname nm %{majlibnm}
+%define nm_girname %mklibname nm-gir %{api}
+%define devnm %mklibname -d nm
+%define ppp_version 2.4.7
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
@@ -405,8 +405,8 @@ done
 %{_libexecdir}/nm-ifup
 %{_libexecdir}/nm-ifdown
 %dir %{_libdir}/NetworkManager
-%dir %{_libdir}/NetworkManager/%{version}-1
-%{_libdir}/NetworkManager/%{version}-1/*.so
+%dir %{_libdir}/NetworkManager/%{version}-2
+%{_libdir}/NetworkManager/%{version}-2/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
