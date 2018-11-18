@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.14.0
-Release:	3
+Version:	1.14.4
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -404,9 +404,10 @@ done
 %{_libexecdir}/nm-iface-helper
 %{_libexecdir}/nm-ifup
 %{_libexecdir}/nm-ifdown
+%{_libexecdir}/nm-initrd-generator
 %dir %{_libdir}/NetworkManager
-%dir %{_libdir}/NetworkManager/%{version}-3
-%{_libdir}/NetworkManager/%{version}-3/*.so
+%dir %{_libdir}/NetworkManager/%{version}-1
+%{_libdir}/NetworkManager/%{version}-1/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
