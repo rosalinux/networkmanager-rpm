@@ -25,8 +25,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.10.8
-Release:	2
+Version:	1.10.14
+Release:	0.1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -291,6 +291,9 @@ cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-rh,keyfile
 dhcp=internal
+
+[logging]
+level=WARN
 EOF
 
 # Create netprofile module 
