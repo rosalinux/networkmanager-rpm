@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.14.4
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -83,6 +83,7 @@ Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
 Requires:	wpa_supplicant >= 0.7.3-2
+Requires:	resolvconf >= 1.75-5
 Suggests:	nscd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
@@ -215,7 +216,7 @@ Development files for nm-glib-vpn.
 	--with-docs=yes \
 	--enable-tests=no \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=no \
+	--with-resolvconf=/sbin/nm-resolvconf \
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_unitdir} \
@@ -228,7 +229,7 @@ Development files for nm-glib-vpn.
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
-	--with-config-dns-rc-manager-default=symlink \
+	--with-config-dns-rc-manager-default=resolvconf \
 	--enable-polkit \
 	--enable-polkit-agent \
 	--enable-ppp \
@@ -406,8 +407,8 @@ done
 %{_libexecdir}/nm-ifdown
 %{_libexecdir}/nm-initrd-generator
 %dir %{_libdir}/NetworkManager
-%dir %{_libdir}/NetworkManager/%{version}-1
-%{_libdir}/NetworkManager/%{version}-1/*.so
+%dir %{_libdir}/NetworkManager/%{version}-%{release}
+%{_libdir}/NetworkManager/%{version}-%{release}/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
