@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.14.4
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -83,7 +83,6 @@ Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
 Requires:	wpa_supplicant >= 0.7.3-2
-Requires:	resolvconf >= 1.75-5
 Suggests:	nscd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
@@ -216,7 +215,7 @@ Development files for nm-glib-vpn.
 	--with-docs=yes \
 	--enable-tests=no \
 	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=/sbin/nm-resolvconf \
+	--with-resolvconf=no \
 	--with-session-tracking=systemd \
 	--with-suspend-resume=systemd \
 	--with-systemdsystemunitdir=%{_unitdir} \
@@ -229,7 +228,7 @@ Development files for nm-glib-vpn.
 	--with-dhcpcd=/sbin/dhcpcd \
 	--with-dhclient=/sbin/dhclient \
 	--with-iptables=/sbin/iptables \
-	--with-config-dns-rc-manager-default=resolvconf \
+	--with-config-dns-rc-manager-default=file \
 	--enable-polkit \
 	--enable-polkit-agent \
 	--enable-ppp \
@@ -255,8 +254,8 @@ Development files for nm-glib-vpn.
 # FIXME this is a workaround for NetworkManager insisting on
 # gcc extensions to _Generic rather than standards compliant _Generic
 if %{__cc} --version |grep -q clang; then
-	sed -i -e 's,D\["_NM_CC_SUPPORT_GENERIC"\]=" 1",D["_NM_CC_SUPPORT_GENERIC"]=" 0",' config.status
-	sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
+    sed -i -e 's,D\["_NM_CC_SUPPORT_GENERIC"\]=" 1",D["_NM_CC_SUPPORT_GENERIC"]=" 0",' config.status
+    sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
 fi
 
 # Setting LDFLAGS is necessary to make sure we link with LTO
@@ -294,6 +293,7 @@ cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-rh,keyfile
 dhcp=internal
+dns=systemd-resolved
 
 [logging]
 level=WARN
