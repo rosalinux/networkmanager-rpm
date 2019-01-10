@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.14.4
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -97,11 +97,11 @@ configuration and setup as painless and automatic as possible.  If using DHCP,
 NetworkManager is _intended_ to replace default routes, obtain IP addresses
 from a DHCP server, and change nameservers whenever it sees fit.
 
-%package -n	%{libnm}
+%package -n %{libnm}
 Summary:	Shared library for nm_util
 Group:		System/Libraries
 
-%description -n	%{libnm}
+%description -n %{libnm}
 Shared library for nm.
 
 %package -n %{nm_girname}
@@ -111,23 +111,23 @@ Group:		System/Libraries
 %description -n %{nm_girname}
 GObject Introspection interface description for NM.
 
-%package -n	%{devnm}
+%package -n %{devnm}
 Summary:	Development files for NM
 Group:		Development/C
 Provides:	nm-devel = %{EVRD}
 Requires:	%{libnm} = %{EVRD}
 Requires:	%{nm_girname} = %{EVRD}
 
-%description -n	%{devnm}
+%description -n %{devnm}
 Development files for NM.
 
-%package -n	%{libnm_util}
+%package -n %{libnm_util}
 Summary:	Shared library for nm_util
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-util 0}
 %rename		%{_lib}nm_util1
 
-%description -n	%{libnm_util}
+%description -n %{libnm_util}
 Shared library for nm-util.
 
 %package -n %{girname}
@@ -138,7 +138,7 @@ Conflicts:	%{_lib}nm-util2 < 0.9.8.0-2
 %description -n %{girname}
 GObject Introspection interface description for %{name}.
 
-%package -n	%{devnm_util}
+%package -n %{devnm_util}
 Summary:	Development files for nm_util
 Group:		Development/C
 Obsoletes:	%{mklibname networkmanager-util 0 -d}
@@ -147,15 +147,15 @@ Requires:	%{libnm_util} = %{EVRD}
 Requires:	%{girname} = %{version}-%{release}
 Obsoletes:	%{_lib}nm_util-devel < 0.7.996
 
-%description -n	%{devnm_util}
+%description -n %{devnm_util}
 Development files for nm-util.
 
-%package -n	%{libnm_glib}
+%package -n %{libnm_glib}
 Summary:	Shared library for nm_glib
 Group:		System/Libraries
 Obsoletes:	%{mklibname networkmanager-glib 0}
 
-%description -n	%{libnm_glib}
+%description -n %{libnm_glib}
 This package contains the libraries that make it easier to use some
 NetworkManager functionality from applications that use glib.
 
@@ -167,7 +167,7 @@ Conflicts:	%{_lib}nm-glib4 < 0.9.8.0-2
 %description -n %{girclient}
 GObject Introspection interface description for %{name}.
 
-%package -n	%{devnm_glib}
+%package -n %{devnm_glib}
 Summary:	Development files for nm_glib
 Group:		Development/C
 Provides:	nm-glib-devel = %{EVRD}
@@ -176,26 +176,26 @@ Requires:	%{girclient} = %{version}-%{release}
 Obsoletes:	%{mklibname networkmanager-glib 0 -d}
 Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
 
-%description -n	%{devnm_glib}
+%description -n %{devnm_glib}
 Development files for nm-glib.
 
-%package -n	%{libnm_glib_vpn}
+%package -n %{libnm_glib_vpn}
 Summary:	Shared library for nm-glib-vpn
 Group:		System/Libraries
 Conflicts:	%{_lib}nm-glib1 < 0.7.996
 
-%description -n	%{libnm_glib_vpn}
+%description -n %{libnm_glib_vpn}
 This package contains the libraries that make it easier to use some
 NetworkManager VPN functionality from applications that use glib.
 
-%package -n	%{devnm_glib_vpn}
+%package -n %{devnm_glib_vpn}
 Summary:	Development files for nm-glib-vpn
 Group:		Development/C
 Provides:	nm-glib-vpn-devel = %{EVRD}
 Requires:	%{libnm_glib_vpn} = %{EVRD}
 Conflicts:	%{_lib}nm_glib-devel < 0.7.996
 
-%description -n	%{devnm_glib_vpn}
+%description -n %{devnm_glib_vpn}
 Development files for nm-glib-vpn.
 
 %prep
@@ -204,7 +204,7 @@ Development files for nm-glib-vpn.
 [ -e autogen.sh ] && ./autogen.sh
 
 %build
-%define	_disable_ld_no_undefined 1
+%define _disable_ld_no_undefined 1
 
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
@@ -293,7 +293,8 @@ cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
 [main]
 plugins=ifcfg-rh,keyfile
 dhcp=internal
-dns=systemd-resolved
+dns=default
+rc-manager=file
 
 [logging]
 level=WARN
