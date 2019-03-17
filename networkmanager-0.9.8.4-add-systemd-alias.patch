@@ -1,11 +1,11 @@
-diff -up NetworkManager-1.12.0/data/NetworkManager.service.in.0051~ NetworkManager-1.12.0/data/NetworkManager.service.in
---- NetworkManager-1.12.0/data/NetworkManager.service.in.0051~	2018-06-30 11:46:03.137159190 +0200
-+++ NetworkManager-1.12.0/data/NetworkManager.service.in	2018-06-30 18:40:05.040519953 +0200
+diff -up NetworkManager-1.16.0/data/NetworkManager.service.in.3~ NetworkManager-1.16.0/data/NetworkManager.service.in
+--- NetworkManager-1.16.0/data/NetworkManager.service.in.3~	2019-03-16 23:30:33.878478228 +0100
++++ NetworkManager-1.16.0/data/NetworkManager.service.in	2019-03-16 23:31:22.893400159 +0100
 @@ -25,6 +25,7 @@ ProtectHome=read-only
  [Install]
  WantedBy=multi-user.target
- Alias=dbus-org.freedesktop.NetworkManager.service
-+Alias=network-manager.service
  Also=NetworkManager-dispatcher.service
++Alias=network-manager.service
  
  # We want to enable NetworkManager-wait-online.service whenever this service
+ # is enabled. NetworkManager-wait-online.service has

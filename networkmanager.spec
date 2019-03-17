@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.14.6
+Version:	1.16.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -41,6 +41,7 @@ Patch4:        0001-Add-Requires.private-glib-2.0.patch
 
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
+Patch52:	networkmanager-1.16.0-clang-lto.patch
 
 BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
@@ -415,7 +416,6 @@ done
 %ghost %{_localstatedir}/lib/%{rname}/*
 %{_datadir}/bash-completion/completions/nmcli
 %{_datadir}/dbus-1/interfaces/org.freedesktop.NetworkManager*.xml
-%{_datadir}/dbus-1/system-services/org.freedesktop.NetworkManager.service
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules

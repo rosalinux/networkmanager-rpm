@@ -1,0 +1,14 @@
+diff -up NetworkManager-1.16.0/configure.ac.omv~ NetworkManager-1.16.0/configure.ac
+diff -up NetworkManager-1.16.0/m4/compiler_options.m4.omv~ NetworkManager-1.16.0/m4/compiler_options.m4
+--- NetworkManager-1.16.0/m4/compiler_options.m4.omv~	2019-03-16 23:34:19.245687340 +0100
++++ NetworkManager-1.16.0/m4/compiler_options.m4	2019-03-16 23:34:57.862401906 +0100
+@@ -148,7 +148,8 @@ if (test "${enable_lto}" = "yes"); then
+ 	if (test -n "${lto_flags}"); then
+ 		CFLAGS="-flto -flto-partition=none $CFLAGS"
+ 	else
+-		AC_MSG_ERROR([Link Time Optimization -flto is not supported.])
++		# This is clang -- -flto supported, but no -flto-partition
++		CFLAGS="-flto $CFLAGS"
+ 	fi
+ else
+ 	enable_lto='no'
