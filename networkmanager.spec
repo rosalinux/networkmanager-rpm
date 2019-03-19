@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.16.0
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -283,7 +283,7 @@ Also see networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 
 Please fix this -- see the spec file for details.
 EOF
-	exit 1
+    exit 1
 fi
 
 %install
@@ -357,6 +357,12 @@ pushd %{buildroot}%{_localstatedir}/lib/%{rname} && {
 popd
 }
 
+install -d %{buildroot}%{_presetdir}
+cat > %{buildroot}%{_presetdir}/86-%{name}.preset << EOF
+enable NetworkManager.service
+enable NetworkManager-dispatcher.service
+EOF
+
 %find_lang %{rname}
 
 %post
@@ -419,6 +425,7 @@ done
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
+%{_presetdir}/86-%{name}.preset
 %{_unitdir}/NetworkManager-wait-online.service
 %{_unitdir}/NetworkManager-dispatcher.service
 %{_unitdir}/NetworkManager.service.d
