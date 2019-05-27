@@ -283,9 +283,6 @@ install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 
-install -m755 clients/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
-
-
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
 
@@ -309,10 +306,10 @@ ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
-pushd %{buildroot}%{_localstatedir}/lib/%{rname} && {
+cd %{buildroot}%{_localstatedir}/lib/%{rname} && {
 	touch %{rname}.state
 	touch timestamps
-popd
+cd -
 }
 
 install -d %{buildroot}%{_presetdir}
