@@ -42,7 +42,8 @@ Patch4:        0001-Add-Requires.private-glib-2.0.patch
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	networkmanager-1.16.0-clang-lto.patch
-
+BuildRequires:	meson
+BuildRequires:	ninja
 BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
@@ -202,55 +203,43 @@ Development files for nm-glib-vpn.
 %prep
 %autosetup -p1 -n %{rname}-%{version}
 
-[ -e autogen.sh ] && ./autogen.sh
-
 %build
 %define _disable_ld_no_undefined 1
 
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
+%meson -Dsystemdsystemunitdir="%{_unitdir}" \
+	-Dsystem_ca_path="%{_sysconfdir}/pki/tls/certs" \
+	-Dudev_dir="/lib/udev" \
+	-Diptables="/sbin/iptables" \
+	-Ddist_version="%{version}-%{release}" \
+	-Dsession_tracking=systemd \
+	-Dsuspend_resume=systemd \
+	-Dmodify_system=true \
+	-Dpolkit_agent=true \
+	-Dselinux=false \
+	-Dconfig_logging_backend_default=journal \
+	-Dlibaudit=no \
+	-Diwd=true \
+	-Dpppd_plugin_dir="%{_libdir}/pppd/%{ppp_version}" \
+	-Dteamdctl=true \
+	-Dlibnm_glib=true \
+	-Dbluez5_dun=true \
+	-Debpf=true \
+	-Dconfig_plugins_default="ifcfg_rh" \
+	-Difcfg_rh=true \
+	-Dconfig_dns_rc_manager_default=file \
+	-Ddhclient="/sbin/dhclient" \
+	-Ddhcpcd="/sbin/dhcpcd" \
+	-Dconfig_dhcp_default=internal \
+	-Dvapi=false \
+	-Ddocs=true \
+	-Dtests=no \
+	-Dmore_logging=false \
+	-Dcrypto=nss \
+	-Dqt=false \
+	-G Ninja
 
-%configure \
-	--with-crypto=nss \
-	--enable-more-warnings=no \
-	--with-docs=yes \
-	--enable-tests=no \
-	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=no \
-	--with-session-tracking=systemd \
-	--with-suspend-resume=systemd \
-	--with-systemdsystemunitdir=%{_unitdir} \
-	--with-systemd-logind=yes \
-	--with-systemd-journal=yes \
-	--with-logging-backend-default=journal \
-	--with-libaudit=no \
-	--with-config-dhcp-default=internal \
-	--with-dhcpcd-supports-ipv6=yes \
-	--with-dhcpcd=/sbin/dhcpcd \
-	--with-dhclient=/sbin/dhclient \
-	--with-iptables=/sbin/iptables \
-	--with-config-dns-rc-manager-default=file \
-	--enable-polkit \
-	--enable-polkit-agent \
-	--enable-ppp \
-	--enable-concheck \
-	--with-wext=yes \
-	--enable-modify-system \
-	--with-modem-manager-1=yes \
-	--disable-vala \
-	--with-udev-dir=/lib/udev \
-	--with-system-libndp=yes \
-	--with-nmtui \
-	--enable-ifcfg-rh=yes \
-	--enable-teamdctl \
-	--enable-introspection=yes \
-	--enable-bluez5-dun \
-	--enable-lto \
-	--enable-wifi \
-	--disable-qt \
-	--with-libnm-glib \
-	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
-	--with-dist-version=%{version}-%{release}
 
 # FIXME this is a workaround for NetworkManager insisting on
 # gcc extensions to _Generic rather than standards compliant _Generic
@@ -259,9 +248,7 @@ if %{__cc} --version |grep -q clang; then
     sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
 fi
 
-# Setting LDFLAGS is necessary to make sure we link with LTO
-# if we're building with LTO
-%make_build LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
+%meson_build
 
 # Don't remove this sanity check unless you know 100%
 # what you're doing...
@@ -287,7 +274,7 @@ EOF
 fi
 
 %install
-%make_install
+%meson_install
 
 # ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
 cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
