@@ -236,6 +236,7 @@ Development files for nm-glib-vpn.
 	-Ddocs=true \
 	-Dtests=no \
 	-Dmore_logging=false \
+	-Dld_gc=false \
 	-Dcrypto=nss \
 	-Dqt=false
 
