@@ -237,9 +237,7 @@ Development files for nm-glib-vpn.
 	-Dtests=no \
 	-Dmore_logging=false \
 	-Dcrypto=nss \
-	-Dqt=false \
-	-G Ninja
-
+	-Dqt=false
 
 # FIXME this is a workaround for NetworkManager insisting on
 # gcc extensions to _Generic rather than standards compliant _Generic
