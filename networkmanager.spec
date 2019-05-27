@@ -243,12 +243,6 @@ Development files for nm-glib-vpn.
 	-Dqt=false \
 	-Dlto=true
 
-# FIXME this is a workaround for NetworkManager insisting on
-# gcc extensions to _Generic rather than standards compliant _Generic
-if %{__cc} --version |grep -q clang; then
-    sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h config-extra.h
-fi
-
 %meson_build
 
 # Don't remove this sanity check unless you know 100%
