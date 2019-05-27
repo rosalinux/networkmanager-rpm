@@ -240,8 +240,7 @@ Development files for nm-glib-vpn.
 	-Dmore_logging=false \
 	-Dld_gc=false \
 	-Dcrypto=nss \
-	-Dqt=false \
-	-Db_lto=true
+	-Dqt=false
 
 %meson_build
 
