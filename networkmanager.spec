@@ -43,6 +43,7 @@ Patch4:        0001-Add-Requires.private-glib-2.0.patch
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	networkmanager-1.16.0-clang-lto.patch
 BuildRequires:	meson
+BuildRequires:	cmake
 BuildRequires:	ninja
 BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
@@ -228,6 +229,7 @@ Development files for nm-glib-vpn.
 	-Debpf=true \
 	-Dconfig_plugins_default="ifcfg_rh" \
 	-Difcfg_rh=true \
+	-Dresolvconf="" \
 	-Dconfig_dns_rc_manager_default=file \
 	-Ddhclient="/sbin/dhclient" \
 	-Ddhcpcd="/sbin/dhcpcd" \
@@ -238,13 +240,13 @@ Development files for nm-glib-vpn.
 	-Dmore_logging=false \
 	-Dld_gc=false \
 	-Dcrypto=nss \
-	-Dqt=false
+	-Dqt=false \
+	-Dlto=true
 
 # FIXME this is a workaround for NetworkManager insisting on
 # gcc extensions to _Generic rather than standards compliant _Generic
 if %{__cc} --version |grep -q clang; then
-    sed -i -e 's,D\["_NM_CC_SUPPORT_GENERIC"\]=" 1",D["_NM_CC_SUPPORT_GENERIC"]=" 0",' config.status
-    sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
+    sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h config-extra.h
 fi
 
 %meson_build
