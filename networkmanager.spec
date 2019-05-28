@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.18.1
-Release:	1.1
+Release:	1.2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -50,7 +50,6 @@ BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
-BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
@@ -85,8 +84,8 @@ Requires:	modemmanager
 Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
-Requires:	wpa_supplicant >= 0.7.3-2
-Suggests:	nscd
+Recommends:	nscd
+Recommends:	iwd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
@@ -257,6 +256,10 @@ rc-manager=file
 
 [logging]
 level=WARN
+
+[device]
+wifi.backend=iwd
+
 EOF
 
 # Create netprofile module 
