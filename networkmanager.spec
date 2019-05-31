@@ -33,8 +33,7 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	NetworkManager.conf
 Source2:	00-server.conf
-Source3:	20-connectivity-gnome.conf
-Source4:	00-wifi-backend.conf
+Source3:	00-wifi-backend.conf
 Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 
 # from arch
@@ -305,7 +304,6 @@ cd -
 }
 
 cp %{SOURCE3} %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
-cp %{SOURCE4} %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-%{name}.preset << EOF
