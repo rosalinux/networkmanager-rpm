@@ -26,29 +26,31 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.18.1
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
+Source1:	NetworkManager.conf
 Source2:	00-server.conf
-
+Source3:	00-wifi-backend.conf
 Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 
 # from arch
-Patch4:        0001-Add-Requires.private-glib-2.0.patch
+Patch4:		0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
 
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	networkmanager-1.16.0-clang-lto.patch
-
+BuildRequires:	meson
+BuildRequires:	cmake
+BuildRequires:	ninja
 BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	readline-devel
-BuildRequires:	wpa_supplicant
 BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
@@ -83,8 +85,8 @@ Requires:	modemmanager
 Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
-Requires:	wpa_supplicant >= 0.7.3-2
-Suggests:	nscd
+Recommends:	nscd
+Requires:	iwd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
@@ -202,106 +204,53 @@ Development files for nm-glib-vpn.
 %prep
 %autosetup -p1 -n %{rname}-%{version}
 
-[ -e autogen.sh ] && ./autogen.sh
-
 %build
 %define _disable_ld_no_undefined 1
 
 # --disable-qt below just disables a Qt 4.x based sample.
 # plasma-nm is much nicer anyway.
+%meson -Dsystemdsystemunitdir="%{_unitdir}" \
+	-Dsystem_ca_path="%{_sysconfdir}/pki/tls/certs" \
+	-Dudev_dir="/lib/udev" \
+	-Diptables="/sbin/iptables" \
+	-Ddist_version="%{version}-%{release}" \
+	-Dsession_tracking=systemd \
+	-Dsuspend_resume=systemd \
+	-Dmodify_system=true \
+	-Dpolkit_agent=true \
+	-Dselinux=false \
+	-Dconfig_logging_backend_default=journal \
+	-Dlibaudit=no \
+	-Diwd=true \
+	-Dpppd_plugin_dir="%{_libdir}/pppd/%{ppp_version}" \
+	-Dteamdctl=true \
+	-Dlibnm_glib=true \
+	-Dbluez5_dun=true \
+	-Debpf=true \
+	-Dconfig_plugins_default="ifcfg_rh" \
+	-Difcfg_rh=true \
+	-Dresolvconf="" \
+	-Dconfig_dns_rc_manager_default=file \
+	-Ddhclient="/sbin/dhclient" \
+	-Ddhcpcd="/sbin/dhcpcd" \
+	-Dconfig_dhcp_default=internal \
+	-Dvapi=false \
+	-Ddocs=true \
+	-Dtests=no \
+	-Dmore_logging=false \
+	-Dld_gc=false \
+	-Dcrypto=nss \
+	-Dqt=false
 
-%configure \
-	--with-crypto=nss \
-	--enable-more-warnings=no \
-	--with-docs=yes \
-	--enable-tests=no \
-	--with-system-ca-path=%{_sysconfdir}/pki/tls/certs \
-	--with-resolvconf=no \
-	--with-session-tracking=systemd \
-	--with-suspend-resume=systemd \
-	--with-systemdsystemunitdir=%{_unitdir} \
-	--with-systemd-logind=yes \
-	--with-systemd-journal=yes \
-	--with-logging-backend-default=journal \
-	--with-libaudit=no \
-	--with-config-dhcp-default=internal \
-	--with-dhcpcd-supports-ipv6=yes \
-	--with-dhcpcd=/sbin/dhcpcd \
-	--with-dhclient=/sbin/dhclient \
-	--with-iptables=/sbin/iptables \
-	--with-config-dns-rc-manager-default=file \
-	--enable-polkit \
-	--enable-polkit-agent \
-	--enable-ppp \
-	--enable-concheck \
-	--with-wext=yes \
-	--enable-modify-system \
-	--with-modem-manager-1=yes \
-	--disable-vala \
-	--with-udev-dir=/lib/udev \
-	--with-system-libndp=yes \
-	--with-nmtui \
-	--enable-ifcfg-rh=yes \
-	--enable-teamdctl \
-	--enable-introspection=yes \
-	--enable-bluez5-dun \
-	--enable-lto \
-	--enable-wifi \
-	--disable-qt \
-	--with-libnm-glib \
-	--with-pppd-plugin-dir=%{_libdir}/pppd/%{ppp_version} \
-	--with-dist-version=%{version}-%{release}
-
-# FIXME this is a workaround for NetworkManager insisting on
-# gcc extensions to _Generic rather than standards compliant _Generic
-if %{__cc} --version |grep -q clang; then
-    sed -i -e 's,D\["_NM_CC_SUPPORT_GENERIC"\]=" 1",D["_NM_CC_SUPPORT_GENERIC"]=" 0",' config.status
-    sed -i -e 's,_NM_CC_SUPPORT_GENERIC 1,_NM_CC_SUPPORT_GENERIC 0,' config.h
-fi
-
-# Setting LDFLAGS is necessary to make sure we link with LTO
-# if we're building with LTO
-%make_build LDFLAGS="$(echo %{optflags} |sed -e 's|-Wl,-no-undefined||')"
-
-# Don't remove this sanity check unless you know 100%
-# what you're doing...
-# To check for the effect this sanity check prevents,
-# start your newly built NetworkManager and check
-# journalctl -u NetworkManager
-# for messages like
-# <warn>  [1511513843.0482] (/libnm-device-plugin-wifi.so): failed to load plugin: /usr/lib64/NetworkManager/libnm-device-plugin-wifi.so: undefined symbol: _nm_logging_enabled_state
-if ! grep -q _nm_logging_enabled_state src/NetworkManager.ver; then
-	cat <<'EOF'
-It looks like the symbol table was not generated correctly.
-This will cause the plugin loader to fail, causing WiFi not to work.
-
-The usual cause for this problem is the compiler not matching
-the version of nm being used (e.g. gcc with llvm-nm or clang with
-gcc-nm).
-
-Also see networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
-
-Please fix this -- see the spec file for details.
-EOF
-    exit 1
-fi
+%meson_build
 
 %install
-%make_install
+%meson_install
 
 # ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
-cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
-[main]
-plugins=ifcfg-rh,keyfile
-dhcp=internal
-dns=default
-rc-manager=file
+cp %{SOURCE1} %{buildroot}%{_sysconfdir}/NetworkManager/
 
-[logging]
-level=WARN
-EOF
-
-# Create netprofile module 
+# Create netprofile module
 install -d %{buildroot}%{_sysconfdir}/netprofile/modules/
 cat > %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager << EOF
 # netprofile module
@@ -324,9 +273,6 @@ install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/
 
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
-
-install -m755 clients/.libs/nm-online -D %{buildroot}%{_bindir}/nm-online
-
 
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
@@ -351,11 +297,13 @@ ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_
 
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
-pushd %{buildroot}%{_localstatedir}/lib/%{rname} && {
-	touch %{rname}.state
-	touch timestamps
-popd
+cd %{buildroot}%{_localstatedir}/lib/%{rname} && {
+    touch %{rname}.state
+    touch timestamps
+cd -
 }
+
+cp %{SOURCE3} %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-%{name}.preset << EOF
@@ -366,6 +314,8 @@ EOF
 %find_lang %{rname}
 
 %post
+/usr/bin/udevadm control --reload-rules || :
+/usr/bin/udevadm trigger --subsystem-match=net || :
 
 # bug 1395
 # need to handle upgrade from minimal ifcfg files
@@ -401,6 +351,7 @@ done
 %dir %{_libdir}/NetworkManager
 %endif
 %dir %{_prefix}/lib/%{rname}/conf.d/
+%{_prefix}/lib/%{rname}/conf.d/*.conf
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
