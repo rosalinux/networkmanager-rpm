@@ -304,8 +304,8 @@ cd %{buildroot}%{_localstatedir}/lib/%{rname} && {
 cd -
 }
 
-cp %{SOURCE3} %{_prefix}/lib/%{rname}/conf.d/
-cp %{SOURCE4} %{_prefix}/lib/%{rname}/conf.d/
+cp %{SOURCE3} %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
+cp %{SOURCE4} %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-%{name}.preset << EOF
