@@ -26,17 +26,19 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.18.1
-Release:	1.2
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
+Source1:	NetworkManager.conf
 Source2:	00-server.conf
-
+Source3:	20-connectivity-gnome.conf
+Source4:	00-wifi-backend.conf
 Patch3:		networkmanager-1.6.2-use-proper-ar-and-ranlib.patch
 
 # from arch
-Patch4:        0001-Add-Requires.private-glib-2.0.patch
+Patch4:		0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
 
 # OpenMandriva specific patches
@@ -85,7 +87,7 @@ Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
 Recommends:	nscd
-Recommends:	iwd
+Requires:	iwd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Conflicts:	%{_lib}nm_util1 < 0.7.996
@@ -247,22 +249,9 @@ Development files for nm-glib-vpn.
 %meson_install
 
 # ifcfg-mdv currently broken, so just use ifcfg-rh for now untill it gets fixed
-cat > %{buildroot}%{_sysconfdir}/NetworkManager/NetworkManager.conf << EOF
-[main]
-plugins=ifcfg-rh,keyfile
-dhcp=internal
-dns=default
-rc-manager=file
+cp %{SOURCE1} %{buildroot}%{_sysconfdir}/NetworkManager/
 
-[logging]
-level=WARN
-
-[device]
-wifi.backend=iwd
-
-EOF
-
-# Create netprofile module 
+# Create netprofile module
 install -d %{buildroot}%{_sysconfdir}/netprofile/modules/
 cat > %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager << EOF
 # netprofile module
@@ -310,10 +299,13 @@ ln -sr %{buildroot}%{_unitdir}/NetworkManager-dispatcher.service %{buildroot}%{_
 # (bor) clean up on uninstall
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}
 cd %{buildroot}%{_localstatedir}/lib/%{rname} && {
-	touch %{rname}.state
-	touch timestamps
+    touch %{rname}.state
+    touch timestamps
 cd -
 }
+
+cp %{SOURCE3} %{_prefix}/lib/%{rname}/conf.d/
+cp %{SOURCE4} %{_prefix}/lib/%{rname}/conf.d/
 
 install -d %{buildroot}%{_presetdir}
 cat > %{buildroot}%{_presetdir}/86-%{name}.preset << EOF
@@ -324,6 +316,8 @@ EOF
 %find_lang %{rname}
 
 %post
+/usr/bin/udevadm control --reload-rules || :
+/usr/bin/udevadm trigger --subsystem-match=net || :
 
 # bug 1395
 # need to handle upgrade from minimal ifcfg files
@@ -359,6 +353,7 @@ done
 %dir %{_libdir}/NetworkManager
 %endif
 %dir %{_prefix}/lib/%{rname}/conf.d/
+%{_prefix}/lib/%{rname}/conf.d/*.conf
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
