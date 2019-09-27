@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.18.2
+Version:	1.20.2
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -34,6 +34,8 @@ Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%
 Source1:	NetworkManager.conf
 Source2:	00-server.conf
 Source3:	00-wifi-backend.conf
+# Make it build (from upstream)
+Patch0:		https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/11cf082a6233a5c2f17da1b49457a66266062678.diff
 # from arch
 Patch4:		0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
@@ -85,6 +87,8 @@ Requires:	iwd
 Recommends:	nscd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
+Obsoletes:	%{libnm_glib} < %{EVRD}
+Obsoletes:	%{libnm_glib_vpn} < %{EVRD}
 Conflicts:	%{_lib}nm_util1 < 0.7.996
 Conflicts:	initscripts < 9.24-5
 
@@ -99,6 +103,7 @@ from a DHCP server, and change nameservers whenever it sees fit.
 %package -n %{libnm}
 Summary:	Shared library for nm_util
 Group:		System/Libraries
+Obsoletes:	%{libnm_util} < %{EVRD}
 
 %description -n %{libnm}
 Shared library for nm.
@@ -116,86 +121,20 @@ Group:		Development/C
 Provides:	nm-devel = %{EVRD}
 Requires:	%{libnm} = %{EVRD}
 Requires:	%{nm_girname} = %{EVRD}
+Obsoletes:	%{devnm_util} < %{EVRD}
+Obsoletes:	%{devnm_glib} < %{EVRD}
 
 %description -n %{devnm}
 Development files for NM.
-
-%package -n %{libnm_util}
-Summary:	Shared library for nm_util
-Group:		System/Libraries
-Obsoletes:	%{mklibname networkmanager-util 0}
-%rename		%{_lib}nm_util1
-
-%description -n %{libnm_util}
-Shared library for nm-util.
 
 %package -n %{girname}
 Summary:	GObject Introspection interface description for %{name}
 Group:		System/Libraries
 Conflicts:	%{_lib}nm-util2 < 0.9.8.0-2
+Obsoletes:	%{girclient} < %{EVRD}
 
 %description -n %{girname}
 GObject Introspection interface description for %{name}.
-
-%package -n %{devnm_util}
-Summary:	Development files for nm_util
-Group:		Development/C
-Obsoletes:	%{mklibname networkmanager-util 0 -d}
-Provides:	nm-util-devel = %{EVRD}
-Requires:	%{libnm_util} = %{EVRD}
-Requires:	%{girname} = %{version}-%{release}
-Obsoletes:	%{_lib}nm_util-devel < 0.7.996
-
-%description -n %{devnm_util}
-Development files for nm-util.
-
-%package -n %{libnm_glib}
-Summary:	Shared library for nm_glib
-Group:		System/Libraries
-Obsoletes:	%{mklibname networkmanager-glib 0}
-
-%description -n %{libnm_glib}
-This package contains the libraries that make it easier to use some
-NetworkManager functionality from applications that use glib.
-
-%package -n %{girclient}
-Summary:	GObject Introspection interface description for %{name}
-Group:		System/Libraries
-Conflicts:	%{_lib}nm-glib4 < 0.9.8.0-2
-
-%description -n %{girclient}
-GObject Introspection interface description for %{name}.
-
-%package -n %{devnm_glib}
-Summary:	Development files for nm_glib
-Group:		Development/C
-Provides:	nm-glib-devel = %{EVRD}
-Requires:	%{libnm_glib} = %{EVRD}
-Requires:	%{girclient} = %{version}-%{release}
-Obsoletes:	%{mklibname networkmanager-glib 0 -d}
-Obsoletes:	%{_lib}nm_glib-devel < 0.7.996
-
-%description -n %{devnm_glib}
-Development files for nm-glib.
-
-%package -n %{libnm_glib_vpn}
-Summary:	Shared library for nm-glib-vpn
-Group:		System/Libraries
-Conflicts:	%{_lib}nm-glib1 < 0.7.996
-
-%description -n %{libnm_glib_vpn}
-This package contains the libraries that make it easier to use some
-NetworkManager VPN functionality from applications that use glib.
-
-%package -n %{devnm_glib_vpn}
-Summary:	Development files for nm-glib-vpn
-Group:		Development/C
-Provides:	nm-glib-vpn-devel = %{EVRD}
-Requires:	%{libnm_glib_vpn} = %{EVRD}
-Conflicts:	%{_lib}nm_glib-devel < 0.7.996
-
-%description -n %{devnm_glib_vpn}
-Development files for nm-glib-vpn.
 
 %prep
 %autosetup -p1 -n %{rname}-%{version}
@@ -218,7 +157,6 @@ Development files for nm-glib-vpn.
     -Diwd=true \
     -Dpppd_plugin_dir="%{_libdir}/pppd/%{ppp_version}" \
     -Dteamdctl=true \
-    -Dlibnm_glib=true \
     -Dbluez5_dun=true \
     -Debpf=true \
     -Dconfig_plugins_default="ifcfg_rh" \
@@ -391,45 +329,10 @@ done
 %dir %{_includedir}/libnm
 %{_includedir}/libnm/*.h
 %doc %{_datadir}/gtk-doc/html/libnm
+%doc %{_datadir}/gtk-doc/html/NetworkManager
 %{_datadir}/gir-1.0/NM-1.0.gir
 %{_libdir}/pkgconfig/libnm.pc
 %{_libdir}/libnm.so
 
-%files -n %{libnm_util}
-%{_libdir}/libnm-util.so.%{majutil}*
-
 %files -n %{girname}
-%{_libdir}/girepository-1.0/NetworkManager-%{api}.typelib
-
-%files -n %{devnm_util}
-%dir %{_includedir}/%{rname}
-%{_includedir}/%{rname}/*.h
-%doc %{_datadir}/gtk-doc/html/%{rname}
-%doc %{_datadir}/gtk-doc/html/libnm-util
-%{_datadir}/gir-1.0/NetworkManager-1.0.gir
-%{_libdir}/pkgconfig/%{rname}.pc
-%{_libdir}/pkgconfig/libnm-util.pc
-%{_libdir}/libnm-util.so
-
-%files -n %{libnm_glib}
-%{_libdir}/libnm-glib.so.%{majglib}*
-
-%files -n %{girclient}
-%{_libdir}/girepository-1.0/NMClient-%{api}.typelib
-
-%files -n %{libnm_glib_vpn}
-%{_libdir}/libnm-glib-vpn.so.%{majvpn}*
-
-%files -n %{devnm_glib}
-%dir %{_includedir}/libnm-glib
-%exclude %{_includedir}/libnm-glib/nm-vpn*.h
-%doc %{_datadir}/gtk-doc/html/libnm-glib
-%{_includedir}/libnm-glib/*.h
-%{_libdir}/pkgconfig/libnm-glib.pc
-%{_libdir}/libnm-glib.so
-%{_datadir}/gir-1.0/NMClient-1.0.gir
-
-%files -n %{devnm_glib_vpn}
-%{_includedir}/libnm-glib/nm-vpn*.h
-%{_libdir}/pkgconfig/libnm-glib-vpn.pc
-%{_libdir}/libnm-glib-vpn.so
+%{_libdir}/girepository-1.0/NM-%{api}.typelib
