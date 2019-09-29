@@ -83,7 +83,8 @@ Requires:	modemmanager
 Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
-Requires:	iwd
+# Once iwd becomes better than wireless-tools on non-Intel:
+#Requires:	iwd
 Recommends:	nscd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
