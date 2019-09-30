@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.20.2
+Version:	1.20.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -34,8 +34,6 @@ Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%
 Source1:	NetworkManager.conf
 Source2:	00-server.conf
 Source3:	00-wifi-backend.conf
-# Make it build (from upstream)
-Patch0:		https://gitlab.freedesktop.org/NetworkManager/NetworkManager/commit/11cf082a6233a5c2f17da1b49457a66266062678.diff
 # from arch
 Patch4:		0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
