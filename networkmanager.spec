@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.20.4
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -59,7 +59,7 @@ BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	systemd-macros
 BuildRequires:	pkgconfig(glibmm-2.4)
-BuildRequires:	pkgconfig(nss)
+BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	pkgconfig(polkit-gobject-1)
 BuildRequires:	pkgconfig(uuid)
 BuildRequires:	pkgconfig(libndp)
@@ -170,7 +170,7 @@ GObject Introspection interface description for %{name}.
     -Dtests=no \
     -Dmore_logging=false \
     -Dld_gc=false \
-    -Dcrypto=nss \
+    -Dcrypto=gnutls \
     -Dqt=false
 
 %meson_build
