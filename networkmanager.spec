@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.20.8
+Version:	1.22.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -72,6 +72,7 @@ BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
 BuildRequires:	pkgconfig(udev)
+BuildRequires:  mobile-broadband-provider-info-devel
 # For wext support
 BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
