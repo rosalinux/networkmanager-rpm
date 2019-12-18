@@ -72,6 +72,7 @@ BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3egg(pygobject)
 BuildRequires:	pkgconfig(udev)
+BuildRequires:  mobile-broadband-provider-info-devel
 # For wext support
 BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
