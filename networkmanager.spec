@@ -70,7 +70,7 @@ BuildRequires:	pkgconfig(libteamdctl)
 BuildRequires:	pkgconfig(libteam)
 BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
-BuildRequires:	python3egg(pygobject)
+BuildRequires:	python3dist(pygobject)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:  mobile-broadband-provider-info-devel
 # For wext support
