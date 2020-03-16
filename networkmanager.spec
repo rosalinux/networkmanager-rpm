@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.22.10
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -72,6 +72,7 @@ BuildRequires:	pkgconfig(jansson)
 BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3dist(pygobject)
 BuildRequires:	pkgconfig(udev)
+BuildRequires:	pkgconfig(vapigen)
 BuildRequires:  mobile-broadband-provider-info-devel
 # For wext support
 BuildRequires:	kernel-headers >= 4.11
@@ -166,7 +167,8 @@ GObject Introspection interface description for %{name}.
     -Ddhclient="/sbin/dhclient" \
     -Ddhcpcd="/sbin/dhcpcd" \
     -Dconfig_dhcp_default=internal \
-    -Dvapi=false \
+    -Dintrospection=true \
+    -Dvapi=true \
     -Ddocs=true \
     -Dtests=no \
     -Dmore_logging=false \
