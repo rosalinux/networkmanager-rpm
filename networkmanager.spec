@@ -335,6 +335,8 @@ done
 %{_datadir}/gir-1.0/NM-1.0.gir
 %{_libdir}/pkgconfig/libnm.pc
 %{_libdir}/libnm.so
+%{_datadir}/vala/vapi/libnm.deps
+%{_datadir}/vala/vapi/libnm.vapi
 
 %files -n %{girname}
 %{_libdir}/girepository-1.0/NM-%{api}.typelib
