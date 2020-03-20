@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.22.10
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -73,7 +73,7 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3dist(pygobject)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(vapigen)
-BuildRequires:  mobile-broadband-provider-info-devel
+BuildRequires:	mobile-broadband-provider-info-devel
 # For wext support
 BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
@@ -84,7 +84,8 @@ Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
 Requires:	wireless-tools
 # Once iwd becomes better than wireless-tools on non-Intel:
-#Requires:	iwd
+Requires:	(wpa_supplicant or iwd)
+Suggests:	wpa_supplicant
 Recommends:	nscd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
@@ -183,25 +184,6 @@ GObject Introspection interface description for %{name}.
 
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}/NetworkManager/
 
-# Create netprofile module
-install -d %{buildroot}%{_sysconfdir}/netprofile/modules/
-cat > %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager << EOF
-# netprofile module
-#
-# this module contains settings for saving/restore the NetworkManager configuration
-# in different network profiles
-
-NAME="networkmanager"
-DESCRIPTION="Networkmanager connection settings"
-
-# list of files to be saved by netprofile
-FILES="/etc/NetworkManager/"
-
-# list of services to be restarted by netprofile
-SERVICES="networkmanager"
-EOF
-chmod  755 %{buildroot}%{_sysconfdir}/netprofile/modules/01_networkmanager
-
 install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/00-server.conf
 
 # create a VPN directory
@@ -250,18 +232,18 @@ EOF
 /usr/bin/udevadm control --reload-rules || :
 /usr/bin/udevadm trigger --subsystem-match=net || :
 
+if [ $1 = 2 ]; then
 # bug 1395
 # need to handle upgrade from minimal ifcfg files
 # networkmanager < 0.9.10 treated a file with missing BOOTPROTO
 # as BOOTPROTO=dhcp, later version treat it as IPV4 disabled
 # so we add a BOOTPROTO to any ifcfg files without one
-for x in /etc/sysconfig/network-scripts/ifcfg-*;
-do
-    if [ $(basename $x) != "ifcfg-lo" ]; then
-	grep -q ^BOOTPROTO $x || echo BOOTPROTO=dhcp >> $x
-    fi
-done
-
+    for x in /etc/sysconfig/network-scripts/ifcfg-*; do
+	if [ $(basename $x) != "ifcfg-lo" ]; then
+	    grep -q ^BOOTPROTO $x || echo BOOTPROTO=dhcp >> $x
+	fi
+    done
+fi
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING NEWS README TODO
@@ -270,7 +252,6 @@ done
 %{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
-%config(noreplace) %{_sysconfdir}/netprofile/modules/01_networkmanager
 %dir %{_sysconfdir}/%{rname}/conf.d
 %config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
