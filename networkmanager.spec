@@ -290,6 +290,7 @@ fi
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
+/usr/lib/firewalld/zones/nm-shared.xml
 %{_presetdir}/86-%{name}.preset
 %{_unitdir}/NetworkManager-wait-online.service
 %{_unitdir}/NetworkManager-dispatcher.service
