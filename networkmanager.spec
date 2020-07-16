@@ -259,7 +259,7 @@ fi
 %dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
-%if %{_lib} != "lib64"
+%if "%{_lib}" != "lib64"
 %dir %{_prefix}/lib/%{rname}
 %else
 %dir %{_libdir}/NetworkManager
