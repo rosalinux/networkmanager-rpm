@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.26.0
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -167,7 +167,7 @@ GObject Introspection interface description for %{name}.
     -Dbluez5_dun=true \
     -Debpf=true \
     -Dresolvconf="" \
-    -Dconfig_dns_rc_manager_default=file \
+    -Dconfig_dns_rc_manager_default=symlink \
     -Ddhclient="/sbin/dhclient" \
     -Ddhcpcd="/sbin/dhcpcd" \
     -Dconfig_dhcp_default=internal \
