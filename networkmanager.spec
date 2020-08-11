@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.26.0
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -39,6 +39,7 @@ Patch4:		0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
+Patch52:	networkmanager-1.26.0-no-we-are-not-redhat.patch
 BuildRequires:	meson
 BuildRequires:	cmake
 BuildRequires:	ninja
@@ -92,7 +93,9 @@ Obsoletes:	dhcdbd
 Obsoletes:	%{libnm_glib} < %{EVRD}
 Obsoletes:	%{libnm_glib_vpn} < %{EVRD}
 Conflicts:	%{_lib}nm_util1 < 0.7.996
-Conflicts:	initscripts < 9.24-5
+# For a long time, initscripts has been just a collection
+# of legacy networking scripts. Time to drop it for good.
+Obsoletes:	initscripts < 11.0-1
 
 %description
 NetworkManager attempts to keep an active network connection available at all
@@ -153,6 +156,8 @@ GObject Introspection interface description for %{name}.
     -Dsuspend_resume=systemd \
     -Dmodify_system=true \
     -Dpolkit_agent=true \
+    -Difcfg_rh=false \
+    -Dofono=true \
     -Dselinux=false \
     -Dconfig_logging_backend_default=journal \
     -Dlibaudit=no \
@@ -161,8 +166,6 @@ GObject Introspection interface description for %{name}.
     -Dteamdctl=true \
     -Dbluez5_dun=true \
     -Debpf=true \
-    -Dconfig_plugins_default="ifcfg_rh" \
-    -Difcfg_rh=true \
     -Dresolvconf="" \
     -Dconfig_dns_rc_manager_default=file \
     -Ddhclient="/sbin/dhclient" \
@@ -232,24 +235,10 @@ EOF
 /usr/bin/udevadm control --reload-rules || :
 /usr/bin/udevadm trigger --subsystem-match=net || :
 
-if [ $1 = 2 ]; then
-# bug 1395
-# need to handle upgrade from minimal ifcfg files
-# networkmanager < 0.9.10 treated a file with missing BOOTPROTO
-# as BOOTPROTO=dhcp, later version treat it as IPV4 disabled
-# so we add a BOOTPROTO to any ifcfg files without one
-    for x in /etc/sysconfig/network-scripts/ifcfg-*; do
-	if [ $(basename $x) != "ifcfg-lo" ]; then
-	    grep -q ^BOOTPROTO $x || echo BOOTPROTO=dhcp >> $x
-	fi
-    done
-fi
-
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING NEWS README TODO
 %{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
 %{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
-%{_sysconfdir}/dbus-1/system.d/nm-ifcfg-rh.conf
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
@@ -276,8 +265,6 @@ fi
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
-%{_libexecdir}/nm-ifup
-%{_libexecdir}/nm-ifdown
 %{_libexecdir}/nm-initrd-generator
 %dir %{_libdir}/NetworkManager
 %dir %{_libdir}/NetworkManager/%{version}-%{release}
