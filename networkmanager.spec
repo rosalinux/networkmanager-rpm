@@ -245,7 +245,7 @@ EOF
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
 %config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
-%config(noreplace) %{_sysconfdir}%{rname}/system-connections/default.nmconnection
+%config(noreplace) %{_sysconfdir}/%{rname}/system-connections/default.nmconnection
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/dnsmasq.d/
 %dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
