@@ -195,7 +195,7 @@ install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
-install -m644 %{SOURCE4} %{buildroot}%{_sysconfdir}%{rname}/system-connections/default.nmconnection
+install -m644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{rname}/system-connections/default.nmconnection
 
 install -d %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}/
