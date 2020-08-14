@@ -26,15 +26,13 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.26.0
-Release:	4
+Release:	5
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	NetworkManager.conf
-Source2:	00-server.conf
 Source3:	00-wifi-backend.conf
-Source4:	default.nmconnection
 # from arch
 Patch4:		0001-Add-Requires.private-glib-2.0.patch
 #Patch5:	       shell-symbol-fetch-fix.patch
@@ -188,14 +186,11 @@ GObject Introspection interface description for %{name}.
 
 cp %{SOURCE1} %{buildroot}%{_sysconfdir}/NetworkManager/
 
-install -m644 -p %{SOURCE2} -D %{buildroot}%{_sysconfdir}/NetworkManager/conf.d/00-server.conf
-
 # create a VPN directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/VPN
 
 # create keyfile plugin system-settings directory
 install -d %{buildroot}%{_sysconfdir}/%{rname}/system-connections
-install -m644 %{SOURCE4} %{buildroot}%{_sysconfdir}/%{rname}/system-connections/default.nmconnection
 
 install -d %{buildroot}%{_prefix}/lib/%{rname}/conf.d/
 install -d %{buildroot}%{_localstatedir}/lib/%{rname}/
@@ -244,8 +239,6 @@ EOF
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
-%config(noreplace) %{_sysconfdir}/%{rname}/conf.d/00-server.conf
-%config(noreplace) %{_sysconfdir}/%{rname}/system-connections/default.nmconnection
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
 %dir %{_sysconfdir}/%{rname}/dnsmasq.d/
 %dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
