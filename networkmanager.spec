@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.26.4
+Version:	1.28.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -46,7 +46,7 @@ BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
 BuildRequires:	iptables
-BuildRequires:	readline-devel
+BuildRequires:	pkgconfig(readline)
 BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
@@ -149,8 +149,9 @@ GObject Introspection interface description for %{name}.
 %meson -Dsystemdsystemunitdir="%{_unitdir}" \
     -Dsystem_ca_path="%{_sysconfdir}/pki/tls/certs" \
     -Dudev_dir="/lib/udev" \
-    -Diptables="/sbin/iptables" \
+    -Diptables="%{_sbindir}/iptables" \
     -Ddist_version="%{version}-%{release}" \
+    -Dsession_tracking_consolekit=false \
     -Dsession_tracking=systemd \
     -Dsuspend_resume=systemd \
     -Dmodify_system=true \
@@ -165,8 +166,8 @@ GObject Introspection interface description for %{name}.
     -Dteamdctl=true \
     -Dbluez5_dun=true \
     -Debpf=true \
-    -Dresolvconf="" \
-    -Dconfig_dns_rc_manager_default=symlink \
+    -Dresolvconf=no \
+    -Dconfig_dns_rc_manager_default=auto \
     -Ddhclient="/sbin/dhclient" \
     -Ddhcpcd="/sbin/dhcpcd" \
     -Dconfig_dhcp_default=internal \
