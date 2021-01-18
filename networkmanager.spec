@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.28.0
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -167,7 +167,7 @@ GObject Introspection interface description for %{name}.
     -Dbluez5_dun=true \
     -Debpf=true \
     -Dresolvconf=no \
-    -Dconfig_dns_rc_manager_default=auto \
+    -Dconfig_dns_rc_manager_default=symlink \
     -Ddhclient="/sbin/dhclient" \
     -Ddhcpcd="/sbin/dhcpcd" \
     -Dconfig_dhcp_default=internal \
@@ -230,8 +230,10 @@ EOF
 %find_lang %{rname}
 
 %post
-/usr/bin/udevadm control --reload-rules || :
-/usr/bin/udevadm trigger --subsystem-match=net || :
+if [ -S /run/udev/control ]; then
+    /bin/udevadm control --reload-rules || :
+    /bin/udevadm trigger --subsystem-match=net || :
+fi
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING NEWS README TODO
