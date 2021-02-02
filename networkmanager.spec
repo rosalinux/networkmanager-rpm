@@ -26,7 +26,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.28.0
-Release:	2
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -234,6 +234,15 @@ if [ -S /run/udev/control ]; then
     /bin/udevadm control --reload-rules || :
     /bin/udevadm trigger --subsystem-match=net || :
 fi
+%systemd_post NetworkManager.service NetworkManager-dispatcher.service
+
+%preun
+%systemd_preun NetworkManager-dispatcher.service
+
+%postun
+/bin/udevadm control --reload-rules || :
+/bin/udevadm trigger --subsystem-match=net || :
+%systemd_postun NetworkManager.service NetworkManager-dispatcher.service
 
 %files -f %{rname}.lang
 %doc AUTHORS CONTRIBUTING NEWS README TODO
