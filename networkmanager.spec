@@ -79,13 +79,7 @@ BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
 Requires:	iproute2
 Requires:	iptables
-Requires:	modemmanager
-Requires:	ppp = %{ppp_version}
 Requires(post,preun,postun):	rpm-helper
-Requires:	wireless-tools
-# Once iwd becomes better than wireless-tools on non-Intel:
-Requires:	(wpa_supplicant or iwd)
-Suggests:	wpa_supplicant
 Recommends:	nscd
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
@@ -95,6 +89,9 @@ Conflicts:	%{_lib}nm_util1 < 0.7.996
 # For a long time, initscripts has been just a collection
 # of legacy networking scripts. Time to drop it for good.
 Obsoletes:	initscripts < 11.0-1
+# Let's not give people upgrading from monolithic NM (shipped until 4.2)
+# a nasty surprise...
+Recommends:	%{name}-wifi = %{EVRD}
 
 %description
 NetworkManager attempts to keep an active network connection available at all
@@ -139,6 +136,69 @@ Obsoletes:	%{girclient} < %{EVRD}
 
 %description -n %{girname}
 GObject Introspection interface description for %{name}.
+
+%package adsl
+Summary:	Support for controlling ADSL connections with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+
+%description adsl
+Support for controlling ADSL connections with NetworkManager
+
+%package bluetooth
+Summary:	Support for controlling BlueTooth connections with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+
+%description bluetooth
+Support for controlling BlueTooth connections with NetworkManager
+
+%package openvswitch
+Summary:	Support for controlling OpenVSwitch with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+
+%description openvswitch
+Support for controlling OpenVSwitch with NetworkManager
+
+%package team
+Summary:	Support for teaming network connections with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+
+%description team
+Support for teaming network connections with NetworkManager
+
+%package wifi
+Summary:	Support for controlling WiFi connections with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+Requires:	wireless-tools
+Requires:	(wpa_supplicant or iwd)
+# Change once iwd becomes better than wireless-tools on non-Intel:
+Suggests:	wpa_supplicant
+
+%description wifi
+Support for controlling WiFi connections with NetworkManager
+
+%package wwan
+Summary:	Support for controlling WWAN connections with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+Requires:	modemmanager
+
+%description wwan
+Support for controlling WWAN connections with NetworkManager
+
+%package ppp
+Summary:	Support for controlling PPP connections with NetworkManager
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+Requires:	ppp = %{ppp_version}
+Requires:	modemmanager
+
+%description ppp
+Support for controlling PPP connections with NetworkManager
 
 %prep
 %autosetup -p1 -n %{rname}-%{version}
@@ -262,7 +322,6 @@ fi
 %dir %{_libdir}/NetworkManager
 %endif
 %dir %{_prefix}/lib/%{rname}/conf.d/
-%{_prefix}/lib/%{rname}/conf.d/*.conf
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
@@ -276,7 +335,6 @@ fi
 %{_libexecdir}/nm-initrd-generator
 %dir %{_libdir}/NetworkManager
 %dir %{_libdir}/NetworkManager/%{version}-%{release}
-%{_libdir}/NetworkManager/%{version}-%{release}/*.so
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
 %dir %{_localstatedir}/lib/%{rname}
 %ghost %{_localstatedir}/lib/%{rname}/*
@@ -289,14 +347,39 @@ fi
 %{_presetdir}/86-%{name}.preset
 %{_unitdir}/NetworkManager-wait-online.service
 %{_unitdir}/NetworkManager-dispatcher.service
-%{_unitdir}/NetworkManager.service.d
+%dir %{_unitdir}/NetworkManager.service.d
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_unitdir}/NetworkManager.service
 %{_mandir}/man1/*.1*
 %{_mandir}/man5/*.5*
-%{_mandir}/man7/*.7*
+%{_mandir}/man7/nmcli-examples.7*
 %{_mandir}/man8/*.8*
 %{_datadir}/doc/NetworkManager/examples/server.conf
+
+%files adsl
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-adsl.so
+
+%files bluetooth
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-bluetooth.so
+
+%files openvswitch
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-ovs.so
+%{_unitdir}/NetworkManager.service.d/NetworkManager-ovs.conf
+%{_mandir}/man7/nm-openvswitch.7*
+
+%files team
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-team.so
+
+%files wifi
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-wifi.so
+%{_prefix}/lib/%{rname}/conf.d/00-wifi-backend.conf
+
+%files wwan
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-wwan.so
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-wwan.so
+
+%files ppp
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-ppp-plugin.so
 
 %files -n %{libnm}
 %{_libdir}/libnm.so.%{majlibnm}*
