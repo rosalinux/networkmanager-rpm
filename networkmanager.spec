@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.30.2
+Version:	1.30.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -78,9 +78,7 @@ BuildRequires:	mobile-broadband-provider-info-devel
 BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
 Requires:	iproute2
-Requires:	iptables
-Requires(post,preun,postun):	rpm-helper
-Recommends:	nscd
+%systemd_requires
 Provides:	NetworkManager = %{EVRD}
 Obsoletes:	dhcdbd
 Obsoletes:	%{libnm_glib} < %{EVRD}
@@ -149,6 +147,7 @@ Support for controlling ADSL connections with NetworkManager
 Summary:	Support for controlling BlueTooth connections with NetworkManager
 Group:		System/Libraries
 Requires:	%{name} = %{EVRD}
+Requires:	bluez
 
 %description bluetooth
 Support for controlling BlueTooth connections with NetworkManager
@@ -174,6 +173,7 @@ Summary:	Support for controlling WiFi connections with NetworkManager
 Group:		System/Libraries
 Requires:	%{name} = %{EVRD}
 Requires:	wireless-tools
+Requires:	wireless-regdb
 Requires:	(wpa_supplicant or iwd)
 # Change once iwd becomes better than wireless-tools on non-Intel:
 Suggests:	wpa_supplicant
@@ -297,7 +297,11 @@ fi
 %systemd_post NetworkManager.service NetworkManager-dispatcher.service
 
 %preun
-%systemd_preun NetworkManager-dispatcher.service
+if [ $1 -eq 0 ]; then
+# Package removal, not upgrade
+    /bin/systemctl --no-reload disable NetworkManager.service >/dev/null 2>&1 || :
+fi
+%systemd_preun NetworkManager-wait-online.service NetworkManager-dispatcher.service
 
 %postun
 /bin/udevadm control --reload-rules || :
