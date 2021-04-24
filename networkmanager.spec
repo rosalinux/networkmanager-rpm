@@ -316,16 +316,12 @@ fi
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
 %dir %{_sysconfdir}/%{rname}/dispatcher.d
-%dir %{_sysconfdir}/%{rname}/dnsmasq.d/
-%dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d/
+%dir %{_sysconfdir}/%{rname}/dnsmasq.d
+%dir %{_sysconfdir}/%{rname}/dnsmasq-shared.d
 %dir %{_sysconfdir}/%{rname}/system-connections
 %dir %{_sysconfdir}/NetworkManager/VPN
-%if "%{_lib}" != "lib64"
 %dir %{_prefix}/lib/%{rname}
-%else
-%dir %{_libdir}/NetworkManager
-%endif
-%dir %{_prefix}/lib/%{rname}/conf.d/
+%dir %{_prefix}/lib/%{rname}/conf.d
 %{_bindir}/nmcli
 %{_bindir}/nmtui
 %{_bindir}/nmtui-connect
