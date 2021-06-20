@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.30.4
+Version:	1.32.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -309,9 +309,7 @@ fi
 %systemd_postun NetworkManager.service NetworkManager-dispatcher.service
 
 %files -f %{rname}.lang
-%doc AUTHORS CONTRIBUTING NEWS README TODO
-%{_sysconfdir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
-%{_sysconfdir}/dbus-1/system.d/nm-dispatcher.conf
+%doc AUTHORS NEWS README TODO
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
@@ -329,6 +327,7 @@ fi
 %{_bindir}/nmtui-hostname
 %{_bindir}/nm-online
 %{_sbindir}/%{rname}
+%{_libexecdir}/nm-daemon-helper
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
@@ -341,6 +340,8 @@ fi
 %{_datadir}/bash-completion/completions/nmcli
 %{_datadir}/dbus-1/interfaces/org.freedesktop.NetworkManager*.xml
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
+%{_datadir}/dbus-1/system.d/nm-dispatcher.conf
+%{_datadir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
 /usr/lib/firewalld/zones/nm-shared.xml
