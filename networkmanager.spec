@@ -57,6 +57,7 @@ BuildRequires:	pkgconfig(libnl-3.0)
 BuildRequires:	pkgconfig(libsoup-2.4)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(libsystemd)
+BuildRequires:	pkgconfig(nss)
 BuildRequires:	systemd-macros
 BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(gnutls)
