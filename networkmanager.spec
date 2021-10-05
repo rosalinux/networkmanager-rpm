@@ -25,7 +25,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.32.8
+Version:	1.32.12
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -41,7 +41,6 @@ Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	networkmanager-1.26.0-no-we-are-not-redhat.patch
 BuildRequires:	meson
 BuildRequires:	cmake
-BuildRequires:	ninja
 BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
@@ -58,7 +57,7 @@ BuildRequires:	pkgconfig(libsoup-2.4)
 BuildRequires:	pkgconfig(mm-glib)
 BuildRequires:	pkgconfig(libsystemd)
 BuildRequires:	pkgconfig(nss)
-BuildRequires:	systemd-macros
+BuildRequires:	systemd-rpm-macros
 BuildRequires:	pkgconfig(glibmm-2.4)
 BuildRequires:	pkgconfig(gnutls)
 BuildRequires:	pkgconfig(polkit-gobject-1)
@@ -74,7 +73,7 @@ BuildRequires:	pkgconfig(libcurl)
 BuildRequires:	python3dist(pygobject)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(vapigen)
-BuildRequires:	mobile-broadband-provider-info-devel
+BuildRequires:	pkgconfig(mobile-broadband-provider-info)
 # For wext support
 BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
@@ -209,7 +208,7 @@ Support for controlling PPP connections with NetworkManager
 
 %meson -Dsystemdsystemunitdir="%{_unitdir}" \
     -Dsystem_ca_path="%{_sysconfdir}/pki/tls/certs" \
-    -Dudev_dir="/lib/udev" \
+    -Dudev_dir="$(dirname %{_udevrulesdir})" \
     -Diptables="%{_sbindir}/iptables" \
     -Ddist_version="%{version}-%{release}" \
     -Dsession_tracking_consolekit=false \
@@ -352,10 +351,10 @@ fi
 %dir %{_unitdir}/NetworkManager.service.d
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_unitdir}/NetworkManager.service
-%{_mandir}/man1/*.1*
-%{_mandir}/man5/*.5*
-%{_mandir}/man7/nmcli-examples.7*
-%{_mandir}/man8/*.8*
+%doc %{_mandir}/man1/*.1*
+%doc %{_mandir}/man5/*.5*
+%doc %{_mandir}/man7/nmcli-examples.7*
+%doc %{_mandir}/man8/*.8*
 %{_datadir}/doc/NetworkManager/examples/server.conf
 
 %files adsl
@@ -367,7 +366,7 @@ fi
 %files openvswitch
 %{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-ovs.so
 %{_unitdir}/NetworkManager.service.d/NetworkManager-ovs.conf
-%{_mandir}/man7/nm-openvswitch.7*
+%doc %{_mandir}/man7/nm-openvswitch.7*
 
 %files team
 %{_libdir}/NetworkManager/%{version}-%{release}/libnm-device-plugin-team.so
