@@ -206,6 +206,8 @@ Support for controlling PPP connections with NetworkManager
 %autosetup -p1 -n %{rname}-%{version}
 
 %build
+export CC=gcc
+export CXX=g++
 %define _disable_ld_no_undefined 1
 
 %meson -Dsystemdsystemunitdir="%{_unitdir}" \
