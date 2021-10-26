@@ -1,5 +1,7 @@
 %define url_ver %(echo %{version}|cut -d. -f1,2)
 
+%define _disable_lto 1
+
 %define rname NetworkManager
 %define api 1.0
 
