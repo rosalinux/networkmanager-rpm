@@ -30,7 +30,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.32.12
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -78,6 +78,8 @@ BuildRequires:	python3dist(pygobject)
 BuildRequires:	pkgconfig(udev)
 BuildRequires:	pkgconfig(vapigen)
 BuildRequires:	pkgconfig(mobile-broadband-provider-info)
+# So we can locate polkit-agent-helper-1
+BuildRequires:	polkit
 # For wext support
 BuildRequires:	kernel-headers >= 4.11
 #BuildRequires:	python-gobject3-devel
@@ -204,6 +206,19 @@ Requires:	modemmanager
 %description ppp
 Support for controlling PPP connections with NetworkManager
 
+%package ifcfg-rh
+Summary:	NetworkManager support for Red Hat style ifcfg-* config files
+Group:		System/Libraries
+Requires:	%{name} = %{EVRD}
+
+%description ifcfg-rh
+NetworkManager support for Red Hat style ifcfg-* config files
+
+OpenMandriva does not use Red Hat style ifcfg-* config files, but some
+third party applications (such as cloud-init) do. Install this package
+if you need to run those applications.
+
+
 %prep
 %autosetup -p1 -n %{rname}-%{version}
 
@@ -219,8 +234,7 @@ Support for controlling PPP connections with NetworkManager
     -Dsession_tracking=systemd \
     -Dsuspend_resume=systemd \
     -Dmodify_system=true \
-    -Dpolkit_agent=true \
-    -Difcfg_rh=false \
+    -Difcfg_rh=true \
     -Dofono=true \
     -Dselinux=false \
     -Dconfig_logging_backend_default=journal \
@@ -405,3 +419,9 @@ fi
 
 %files -n %{girname}
 %{_libdir}/girepository-1.0/NM-%{api}.typelib
+
+%files ifcfg-rh
+%{_libdir}/NetworkManager/%{version}-%{release}/libnm-settings-plugin-ifcfg-rh.so
+%{_prefix}/libexec/nm-ifdown
+%{_prefix}/libexec/nm-ifup
+%{_datadir}/dbus-1/system.d/nm-ifcfg-rh.conf
