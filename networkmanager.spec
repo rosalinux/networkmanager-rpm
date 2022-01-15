@@ -29,8 +29,8 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.32.12
-Release:	2
+Version:	1.34.0
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
