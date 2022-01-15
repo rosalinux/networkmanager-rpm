@@ -37,9 +37,7 @@ Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	NetworkManager.conf
 Source3:	00-wifi-backend.conf
-# from arch
-#Patch4:		0001-Add-Requires.private-glib-2.0.patch
-#Patch5:	       shell-symbol-fetch-fix.patch
+
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	networkmanager-1.26.0-no-we-are-not-redhat.patch
