@@ -29,17 +29,15 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.32.12
-Release:	2
+Version:	1.34.0
+Release:	1
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
 Source0:	https://download.gnome.org/sources/NetworkManager/%{url_ver}/%{rname}-%{version}.tar.xz
 Source1:	NetworkManager.conf
 Source3:	00-wifi-backend.conf
-# from arch
-Patch4:		0001-Add-Requires.private-glib-2.0.patch
-#Patch5:	       shell-symbol-fetch-fix.patch
+
 # OpenMandriva specific patches
 Patch51:	networkmanager-0.9.8.4-add-systemd-alias.patch
 Patch52:	networkmanager-1.26.0-no-we-are-not-redhat.patch
@@ -350,6 +348,7 @@ fi
 %{_libexecdir}/nm-dispatcher
 %{_libexecdir}/nm-iface-helper
 %{_libexecdir}/nm-initrd-generator
+%{_libexecdir}/nm-priv-helper
 %dir %{_libdir}/NetworkManager
 %dir %{_libdir}/NetworkManager/%{version}-%{release}
 %{_libdir}/pppd/*.*.*/nm-pppd-plugin.so
@@ -360,12 +359,15 @@ fi
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/dbus-1/system.d/nm-dispatcher.conf
 %{_datadir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
+%{_datadir}/dbus-1/system-services/org.freedesktop.nm-priv-helper.service
+%{_datadir}/dbus-1/system.d/nm-priv-helper.conf
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
 /usr/lib/firewalld/zones/nm-shared.xml
 %{_presetdir}/86-%{name}.preset
 %{_unitdir}/NetworkManager-wait-online.service
 %{_unitdir}/NetworkManager-dispatcher.service
+%{_unitdir}/nm-priv-helper.service
 %dir %{_unitdir}/NetworkManager.service.d
 %{_unitdir}/dbus-org.freedesktop.nm-dispatcher.service
 %{_unitdir}/NetworkManager.service
