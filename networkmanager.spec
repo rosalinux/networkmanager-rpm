@@ -359,7 +359,7 @@ fi
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/dbus-1/system.d/nm-dispatcher.conf
 %{_datadir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
-#{_datadir}/dbus-1/system-services/org.freedesktop.nm-priv-helper.service
+%{_datadir}/dbus-1/system-services/org.freedesktop.nm_priv_helper.service
 %{_datadir}/dbus-1/system.d/nm-priv-helper.conf
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
