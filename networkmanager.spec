@@ -29,7 +29,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.34.0
+Version:	1.36.2
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -346,7 +346,7 @@ fi
 %{_libexecdir}/nm-daemon-helper
 %{_libexecdir}/nm-dhcp-helper
 %{_libexecdir}/nm-dispatcher
-%{_libexecdir}/nm-iface-helper
+#{_libexecdir}/nm-iface-helper
 %{_libexecdir}/nm-initrd-generator
 %{_libexecdir}/nm-priv-helper
 %dir %{_libdir}/NetworkManager
@@ -359,7 +359,7 @@ fi
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_dispatcher.service
 %{_datadir}/dbus-1/system.d/nm-dispatcher.conf
 %{_datadir}/dbus-1/system.d/org.freedesktop.NetworkManager.conf
-%{_datadir}/dbus-1/system-services/org.freedesktop.nm-priv-helper.service
+%{_datadir}/dbus-1/system-services/org.freedesktop.nm_priv_helper.service
 %{_datadir}/dbus-1/system.d/nm-priv-helper.conf
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
 /lib/udev/rules.d/*.rules
