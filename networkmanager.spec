@@ -29,7 +29,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.36.2
+Version:	1.36.4
 Release:	1
 Group:		System/Base
 License:	GPLv2+
