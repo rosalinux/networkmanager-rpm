@@ -325,7 +325,7 @@ fi
 %systemd_postun NetworkManager.service NetworkManager-dispatcher.service
 
 %files -f %{rname}.lang
-%doc AUTHORS NEWS README TODO
+%doc AUTHORS NEWS README* TODO
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
