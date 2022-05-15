@@ -29,7 +29,7 @@
 
 Name:		networkmanager
 Summary:	Network connection manager and user applications
-Version:	1.36.4
+Version:	1.38.0
 Release:	1
 Group:		System/Base
 License:	GPLv2+
@@ -325,7 +325,7 @@ fi
 %systemd_postun NetworkManager.service NetworkManager-dispatcher.service
 
 %files -f %{rname}.lang
-%doc AUTHORS NEWS README TODO
+%doc AUTHORS NEWS README* TODO
 %dir %{_sysconfdir}/%{rname}
 %config(noreplace) %{_sysconfdir}/%{rname}/NetworkManager.conf
 %dir %{_sysconfdir}/%{rname}/conf.d
