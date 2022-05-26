@@ -30,7 +30,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.38.0
-Release:	1
+Release:	3
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -48,7 +48,6 @@ BuildRequires:	docbook-dtd42-xml
 BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	pkgconfig(readline)
-BuildRequires:	libiw-devel
 BuildRequires:	ppp-devel = %{ppp_version}
 BuildRequires:	pkgconfig(dbus-glib-1)
 BuildRequires:	pkgconfig(ext2fs)
@@ -176,7 +175,6 @@ Support for teaming network connections with NetworkManager
 Summary:	Support for controlling WiFi connections with NetworkManager
 Group:		System/Libraries
 Requires:	%{name} = %{EVRD}
-Requires:	wireless-tools
 Requires:	wireless-regdb
 Requires:	(wpa_supplicant or iwd)
 # Change once iwd becomes better than wireless-tools on non-Intel:
@@ -216,14 +214,14 @@ OpenMandriva does not use Red Hat style ifcfg-* config files, but some
 third party applications (such as cloud-init) do. Install this package
 if you need to run those applications.
 
-
 %prep
 %autosetup -p1 -n %{rname}-%{version}
 
 %build
 %define _disable_ld_no_undefined 1
 
-%meson -Dsystemdsystemunitdir="%{_unitdir}" \
+%meson \
+    -Dsystemdsystemunitdir="%{_unitdir}" \
     -Dsystem_ca_path="%{_sysconfdir}/pki/tls/certs" \
     -Dudev_dir="$(dirname %{_udevrulesdir})" \
     -Diptables="%{_sbindir}/iptables" \
@@ -244,8 +242,10 @@ if you need to run those applications.
     -Debpf=true \
     -Dresolvconf=no \
     -Dconfig_dns_rc_manager_default=symlink \
-    -Ddhclient="/sbin/dhclient" \
-    -Ddhcpcd="/sbin/dhcpcd" \
+    -Ddhcpcanon=no \
+    -Ddhcpcd=no \
+    -Dnft=%{_sbindir}/nft \
+    -Diptables=%{_sbinsir}/iptables \
     -Dconfig_dhcp_default=internal \
     -Dintrospection=true \
     -Dvapi=true \
@@ -362,7 +362,7 @@ fi
 %{_datadir}/dbus-1/system-services/org.freedesktop.nm_priv_helper.service
 %{_datadir}/dbus-1/system.d/nm-priv-helper.conf
 %{_datadir}/polkit-1/actions/org.freedesktop.NetworkManager.policy
-/lib/udev/rules.d/*.rules
+%{_udevrulesdir}/*.rules
 /usr/lib/firewalld/zones/nm-shared.xml
 %{_presetdir}/86-%{name}.preset
 %{_unitdir}/NetworkManager-wait-online.service
