@@ -30,7 +30,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.38.0
-Release:	3
+Release:	4
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -241,7 +241,7 @@ if you need to run those applications.
     -Dbluez5_dun=true \
     -Debpf=true \
     -Dresolvconf=no \
-    -Dconfig_dns_rc_manager_default=symlink \
+    -Dconfig_dns_rc_manager_default=auto \
     -Ddhcpcanon=no \
     -Ddhcpcd=no \
     -Dnft=%{_sbindir}/nft \
