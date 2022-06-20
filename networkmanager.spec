@@ -30,7 +30,7 @@
 Name:		networkmanager
 Summary:	Network connection manager and user applications
 Version:	1.38.2
-Release:	1
+Release:	2
 Group:		System/Base
 License:	GPLv2+
 Url:		http://www.gnome.org/projects/NetworkManager/
@@ -224,7 +224,7 @@ if you need to run those applications.
     -Dsystemdsystemunitdir="%{_unitdir}" \
     -Dsystem_ca_path="%{_sysconfdir}/pki/tls/certs" \
     -Dudev_dir="$(dirname %{_udevrulesdir})" \
-    -Diptables="%{_sbindir}/iptables" \
+    -Diptables="%{_bindir}/iptables-nft" \
     -Ddist_version="%{version}-%{release}" \
     -Dsession_tracking_consolekit=false \
     -Dsession_tracking=systemd \
@@ -245,7 +245,6 @@ if you need to run those applications.
     -Ddhcpcanon=no \
     -Ddhcpcd=no \
     -Dnft=%{_sbindir}/nft \
-    -Diptables=%{_sbinsir}/iptables \
     -Dconfig_dhcp_default=internal \
     -Dintrospection=true \
     -Dvapi=true \
