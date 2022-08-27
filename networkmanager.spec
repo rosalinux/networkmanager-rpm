@@ -45,7 +45,6 @@ BuildRequires:	meson
 BuildRequires:	cmake
 BuildRequires:	gtk-doc
 BuildRequires:	docbook-dtd42-xml
-BuildRequires:	intltool
 BuildRequires:	iptables
 BuildRequires:	pkgconfig(readline)
 BuildRequires:	ppp-devel = %{ppp_version}
